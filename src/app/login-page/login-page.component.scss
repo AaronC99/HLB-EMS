@@ -1,0 +1,50 @@
+.example-card {
+    max-width: 400px;
+    top:50%;
+    left:50%; 
+    transform:translate(-50%,-50%);
+    margin-top: 400px;
+    border-radius: 20px;
+    background-image: linear-gradient(#DAE2F8,#D6A4A4);
+    mat-card-actions{
+        padding-left:16px;
+        padding-right:16px;
+        .login{
+            //font-size: 50px;
+            width:100%;
+            border-radius: 50px;
+        }
+    }
+    .errorMessage {
+        color: red;
+        display: none;
+        text-align: center;
+    }
+}  
+.example-full-width {
+    width: 100%;
+}
+.header{
+    justify-content: center;
+    margin: 15px 15px 60px;
+    text-align: center;
+}
+  input.example-right-align::-webkit-outer-spin-button,
+input.example-right-align::-webkit-inner-spin-button {
+  display: none;
+}
+
+input.example-right-align {
+  -moz-appearance: textfield;
+}
+@-webkit-keyframes autofill {
+    0%,100% {
+        color: black;
+        background: transparent;
+    }
+}
+input:-webkit-autofill {
+    -webkit-animation-delay: 1s; /* Safari support - any positive time runs instantly */
+    -webkit-animation-name: autofill;
+    -webkit-animation-fill-mode: both;
+}

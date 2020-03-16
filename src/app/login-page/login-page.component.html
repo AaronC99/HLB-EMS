@@ -1,0 +1,27 @@
+<mat-card class="example-card">
+    <mat-card-header>
+      <mat-card-title class="header">{{ title }}</mat-card-title>
+    </mat-card-header>
+    <form [formGroup]="loginForm" (ngSubmit)= "onSubmit()"> 
+        <mat-card-content>
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>{{ placeholderName }}</mat-label>
+                    <input matInput placeholder="Domain Name" formControlName="domainName"> 
+                </mat-form-field>
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>{{ placeholderPass }}</mat-label>
+                    <input matInput placeholder="Domain Password" [type]="hide ? 'password' : 'text'" formControlName="domainPass"> 
+                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" type ="button">
+                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                </mat-form-field>
+                <mat-card-actions>
+                    <button mat-raised-button class="login" type="submit" [disabled]="!loginForm.valid" color="primary">Login</button>
+                    <!-- <input class="login" type="submit" [disabled]="!loginForm.valid" value="Login"/> -->
+                </mat-card-actions>
+                <div class="errorMessage" [ngStyle]="{'display': (login==true) ? 'none' : 'block'}">
+                    {{ errorMessage }}
+                </div>
+        </mat-card-content>
+    </form>
+</mat-card>
