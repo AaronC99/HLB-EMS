@@ -29,14 +29,14 @@ export class LoginPageComponent implements OnInit {
   createForm(){
     this.loginForm = this.formBuilder.group({
       domainName: ['',[Validators.required,Validators.pattern('[a-zA-Z ]*')]],
-      domainPass: ['',[Validators.required,Validators.pattern('[a-zA-Z ]*')]],
+      domainPass: ['',[Validators.required]]
     });
   }
 
   onSubmit(){
     console.table(this.loginForm.value);
     //if username && password not found then... 
-    //this.login = false;
+    this.login = false;
     //else
     //this.router.navigateByUrl('/check-in-out-page');
   }
