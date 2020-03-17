@@ -36,9 +36,9 @@ export class LoginPageComponent implements OnInit {
   onSubmit(){
     console.table(this.loginForm.value);
     //if username && password not found then... 
-    this.login = false;
+    //this.login = false;
     //else
-    //this.router.navigateByUrl('/check-in-out-page');
+    this.router.navigateByUrl('/home');
   }
 
 }

@@ -12,12 +12,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { MatIconModule } from '@angular/material/icon';
+import { HeaderComponent } from './header/header.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { FlexLayoutModule } from '@angular/flex-layout'; 
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @NgModule({
   declarations: [
     AppComponent,
     CheckInOutPageComponent,
-    LoginPageComponent
+    LoginPageComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -29,6 +34,9 @@ import { MatIconModule } from '@angular/material/icon';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatIconModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    FlexLayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]
