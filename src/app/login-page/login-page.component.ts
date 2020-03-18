@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-
+// import {HeaderComponent } from '../header/header.component'
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
@@ -20,7 +20,9 @@ export class LoginPageComponent implements OnInit {
   });
   constructor(
     private formBuilder:FormBuilder,
-    private router:Router) {
+    private router:Router,
+    // private headerCom: HeaderComponent
+    ) {
     this.createForm();
    }
 
@@ -39,6 +41,7 @@ export class LoginPageComponent implements OnInit {
     //this.login = false;
     //else
     this.router.navigateByUrl('/home');
+    //this.headerCom.show = true;
   }
 
 }
