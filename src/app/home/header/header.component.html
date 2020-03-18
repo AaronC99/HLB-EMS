@@ -1,0 +1,62 @@
+  <div class="nav-bar">
+    <mat-toolbar color="primary">
+      <mat-toolbar-row>
+        <!-- <button mat-icon-button (click)="sidenav.toggle()" fxShow="true" fxHide.gt-sm>
+            <mat-icon>menu</mat-icon>
+          </button> -->
+        <span class="title">{{ title }}</span>
+        <span class="spacer"></span>
+        <div fxShow="true" fxHide.lt-md="true">
+          <a routerLink='check-in-out' mat-button>
+            <mat-icon>input</mat-icon>
+            {{ clockIn_Out }}
+          </a> 
+          <a href="#" mat-button>
+            <mat-icon>calendar_today</mat-icon>
+            {{ timesheet }}
+          </a>
+          <a href="#" mat-button>
+            <mat-icon>account_circle</mat-icon>
+            {{ account }}
+          </a>
+          <a href="#" mat-raised-button color="warn" class="log-out">
+            Log Out
+          </a>
+        </div>
+      </mat-toolbar-row>
+    </mat-toolbar>
+
+      <!-- <mat-sidenav-container fxFlexFill class="container">
+        <mat-sidenav #sidenav>
+          <mat-nav-list>
+            <a [routerLink]="['../check-in-out']" mat-list-item>
+              <mat-icon>input</mat-icon>
+              {{ clockIn_Out }}
+            </a>
+            <a href="#" mat-list-item>
+              <mat-icon>calendar_today</mat-icon>
+              {{ timesheet }}</a>
+            <a href="#" mat-list-item>
+              <mat-icon>account_circle</mat-icon>
+              {{ account }}
+            </a>
+            <a (click)="sidenav.toggle()" mat-list-item>
+              <mat-icon>close</mat-icon> Close
+            </a>
+          </mat-nav-list>
+        </mat-sidenav>
+      </mat-sidenav-container> -->
+      <!-- <div class="sidebar">
+        <a [routerLink]="['../check-in-out']" mat-list-item>
+          <mat-icon>input</mat-icon>
+          {{ clockIn_Out }}
+        </a>
+        <a href="#" mat-list-item>
+          <mat-icon>calendar_today</mat-icon>
+          {{ timesheet }}</a>
+        <a href="#" mat-list-item>
+          <mat-icon>account_circle</mat-icon>
+          {{ account }}
+        </a>
+      </div> -->
+  </div>
