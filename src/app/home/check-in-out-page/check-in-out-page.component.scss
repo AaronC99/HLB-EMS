@@ -1,22 +1,54 @@
-.cheader{
+.clock-card{
   border-radius: 20px;
   background-image: linear-gradient(-90deg, #355C7D, #6c5b7b,#c06c84);
-  width: 40%;
-}
-h1{
-  // display: flex;
+  //width: 100%;
   color:white;
-  font-size: 50px;
-  font-family: sans-serif;
   text-align: center;
 }
+h1{
+  font-size: 60px;
+  font-family: 'Montserrat', sans-serif;
+  padding: 20px;
+}
 h2{
-  color:white;
   font-size: 30px;
-  font-family: sans-serif;
-  display:inline;
-  //padding: 0px;
+  font-family: 'Ubuntu', sans-serif;
 }
 .border{
   margin: 50px;
+  height: 0px;
+  //display: inline-block;
+}
+mat-card-actions{
+  padding: 20px;
+  .clock-in-out-button{
+    font-family: 'Ubuntu', sans-serif;
+    border-radius: 50px;
+    width:50%;
+    margin-bottom:20px;
+    background-color: #00fdcb;
+  }
+  .clock-out-button{
+    background-color: #f44336;
+    color: white;
+    border-radius: 50px;
+    width:50%;
+    margin-bottom:20px;
+    font-family: 'Ubuntu', sans-serif;
+  }
+}
+.card-2{
+  margin: 50px;
+  
+}
+.clock-in-out{
+  border-radius: 20px;
+  background-image: linear-gradient(-90deg, #355C7D, #6c5b7b,#c06c84);
+  text-align: center;
+}
+.parentDiv {
+  margin: 30px;
+}
+table{
+  width:100%;
 }

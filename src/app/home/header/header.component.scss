@@ -3,14 +3,20 @@
 }
 .nav-bar{
     //height: 100vh;
-    
     .title,a{
         font-family: 'Ubuntu', sans-serif;
+        margin-left: 40px;
     }
     a{
         border-radius: 50px;
         &:hover{
             color: #3f51b5;
+            background-color: white;
+        }
+    }
+    .log-out{
+        &:hover{
+            color: #f44336;
             background-color: white;
         }
     }

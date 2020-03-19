@@ -8,7 +8,14 @@ const routes: Routes = [
   { 
     path:'', 
     component: HomeComponent,
+    // redirectTo:'check-in-out',
+    // pathMatch:'full',
     children: [
+      {
+        path: '',
+        redirectTo:'check-in-out',
+        pathMatch:'full'
+      },
       { 
         path: 'check-in-out',
         component: CheckInOutPageComponent },

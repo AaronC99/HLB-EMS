@@ -1,10 +1,51 @@
-<div class="border">
-  <mat-card class="cheader">
-    <mat-card-title>
-      <h1>{{ time | async | date:'hh:mm:ss a' }}</h1><br>
-      <h2 style="padding: 20px;font-size: 30px;">{{ time | async | date:'EEEE' }}</h2> 
-      <h2 style="padding: 20px;font-size: 30px;">{{ time | async | date:'d LLLL y'}}</h2>
-    </mat-card-title>
-  </mat-card>
+<div class = "container-fluid">
+  <div class = "row parentDiv">
+    <div class = "col">
+      <mat-card class="clock-card">
+        <mat-card-title>
+          <h1>{{ time | async | date:'hh:mm:ss a' }}</h1><br>
+          <h2>{{ time | async | date:'EEEE' }} | {{ time | async | date:'d LLLL y'}}</h2> 
+        </mat-card-title>
+        <mat-card-actions>
+          <button mat-raised-button class="clock-in-out-button" *ngIf="this.clockInVisible" (click)="onClockIn()">Clock In</button>
+          <button mat-raised-button class="clock-out-button" *ngIf="this.clockOutVisible" (click)="onClockOut()">Clock Out</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+    <div class = "col col-lg-8">
+      <mat-card class="clock-in-out">
+        <mat-card-title>
+          Record
+        </mat-card-title>
+          <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <!-- Date Column -->
+            <ng-container matColumnDef="date">
+              <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{ currDate }} </mat-cell>
+            </ng-container>
+          
+            <!-- Day Column -->
+            <ng-container matColumnDef="day">
+              <mat-header-cell *matHeaderCellDef> Day </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{ currDay }} </mat-cell>
+            </ng-container>
+          
+            <!-- Time Column -->
+            <ng-container matColumnDef="timeIn">
+              <mat-header-cell *matHeaderCellDef> Time In </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{ currTime }} </mat-cell>
+            </ng-container>
+          
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="timeOut">
+              <mat-header-cell *matHeaderCellDef> Time Out </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{ clockOut }} </mat-cell>
+            </ng-container>
+          
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+      </mat-card>
+    </div>
+  </div> 
 </div>
-  
