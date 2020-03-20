@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  //show = false;
+
   title = 'Employee Management System';
   clockIn_Out = 'Clock In/Out';
   timesheet = 'Timesheet';

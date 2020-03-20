@@ -1,8 +1,8 @@
 <div class = "container-fluid">
-  <div class = "row parentDiv">
+  <div class = "row">
     <div class = "col">
       <mat-card class="clock-card">
-        <mat-card-title>
+        <mat-card-title class="timer">
           <h1>{{ time | async | date:'hh:mm:ss a' }}</h1><br>
           <h2>{{ time | async | date:'EEEE' }} | {{ time | async | date:'d LLLL y'}}</h2> 
         </mat-card-title>
@@ -14,9 +14,9 @@
     </div>
     <div class = "col col-lg-8">
       <mat-card class="clock-in-out">
-        <mat-card-title>
+        <!-- <mat-card-title>
           Record
-        </mat-card-title>
+        </mat-card-title> -->
           <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
             <!-- Date Column -->
             <ng-container matColumnDef="date">

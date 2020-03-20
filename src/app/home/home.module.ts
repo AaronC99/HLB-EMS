@@ -5,7 +5,7 @@ import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
 import { HeaderComponent } from './header/header.component';
 import { CheckInOutPageComponent } from './check-in-out-page/check-in-out-page.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AccountComponent } from './account/account.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -23,7 +23,8 @@ import { MatTableModule } from '@angular/material/table';
   declarations: [
     HomeComponent,
     HeaderComponent,
-    CheckInOutPageComponent
+    CheckInOutPageComponent,
+    AccountComponent
   ],
   imports: [
     CommonModule,

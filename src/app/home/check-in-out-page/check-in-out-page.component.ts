@@ -37,7 +37,6 @@ export class CheckInOutPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.dataSource = this.model;
   }
   onClockIn(){
     this.clockInVisible = false;
@@ -45,10 +44,6 @@ export class CheckInOutPageComponent implements OnInit {
     // console.log(this.currDate);
     // console.log(this.currDay);
     this.clockOutVisible = true;
-    // this.model.clockInTime = this.currTime;
-    // this.model.date = this.currDate;
-    // this.model.day = this.currDay;
-    // console.log(this.model);
     let newArrayList = [];
     newArrayList.push(this.model);
     this.dataSource = newArrayList;
@@ -56,8 +51,6 @@ export class CheckInOutPageComponent implements OnInit {
   onClockOut(){
     this.clockOutVisible = false;
     //console.log('Clock Out Time: ' + this.currTime);
-    this.model.clockOutTime = this.currTime;
-    console.table(this.model);
     this.clockOut = this.currTime;
   }
 }
