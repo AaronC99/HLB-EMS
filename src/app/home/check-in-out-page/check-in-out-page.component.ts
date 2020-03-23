@@ -1,7 +1,7 @@
 import { Component, OnInit, NgModule } from '@angular/core';
-import { Observable } from 'rxjs/internal/Observable';
 import { DatePipe } from '@angular/common';
 import { Timesheet } from '../timesheet';
+import * as moment from 'moment';
 
 export interface clockInOutElement{
   date: any;
@@ -17,9 +17,6 @@ const ELEMENT_DATA: clockInOutElement[] = [];
   styleUrls: ['./check-in-out-page.component.scss']
 })
 export class CheckInOutPageComponent implements OnInit {
-  time: any = new Observable(observer =>
-    window.setInterval(() => observer.next(new Date().toString()), 1000).toString
-  );
   model = new Timesheet('','','','');
   clockInVisible = true;
   clockOutVisible = false;
@@ -31,22 +28,18 @@ export class CheckInOutPageComponent implements OnInit {
   currDay = this.localTime.transform(this.clockIn,'EEEE');
   displayedColumns: string[] = ['date','day','timeIn','timeOut'];
   dataSource = ELEMENT_DATA;
-  timeTest: string = 'test'; 
-
+  now:String;
   constructor() { 
+    setInterval(()=>{
+       this.now = moment().format('hh:mm:ss a');
+    },1000);
   }
 
   ngOnInit(): void {
   }
   onClockIn(){
     this.clockInVisible = false;
-    // console.log('Clock In Time: ' + this.currTime);
-    // console.log(this.currDate);
-    // console.log(this.currDay);
     this.clockOutVisible = true;
-    let newArrayList = [];
-    newArrayList.push(this.model);
-    this.dataSource = newArrayList;
   }
   onClockOut(){
     this.clockOutVisible = false;

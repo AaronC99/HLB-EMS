@@ -3,8 +3,8 @@
     <div class = "col">
       <mat-card class="clock-card">
         <mat-card-title class="timer">
-          <h1>{{ time | async | date:'hh:mm:ss a' }}</h1><br>
-          <h2>{{ time | async | date:'EEEE' }} | {{ time | async | date:'d LLLL y'}}</h2> 
+          <h1>{{ now }}</h1><br>
+          <h2>{{ currDay }} | {{ currDate }}</h2> 
         </mat-card-title>
         <mat-card-actions>
           <button mat-raised-button class="clock-in-out-button" *ngIf="this.clockInVisible" (click)="onClockIn()">Clock In</button>
