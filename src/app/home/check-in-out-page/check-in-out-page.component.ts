@@ -40,6 +40,9 @@ export class CheckInOutPageComponent implements OnInit {
   onClockIn(){
     this.clockInVisible = false;
     this.clockOutVisible = true;
+    let timesheet = [];
+    timesheet.push(this.model);
+    this.dataSource = timesheet;
   }
   onClockOut(){
     this.clockOutVisible = false;
