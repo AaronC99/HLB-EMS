@@ -14,9 +14,6 @@
     </div>
     <div class = "col col-lg-8">
       <mat-card class="clock-in-out">
-        <!-- <mat-card-title>
-          Record
-        </mat-card-title> -->
           <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
             <!-- Date Column -->
             <ng-container matColumnDef="date">
@@ -30,13 +27,13 @@
               <mat-cell *matCellDef="let element"> {{ currDay }} </mat-cell>
             </ng-container>
           
-            <!-- Time Column -->
+            <!-- Time In Column -->
             <ng-container matColumnDef="timeIn">
               <mat-header-cell *matHeaderCellDef> Time In </mat-header-cell>
               <mat-cell *matCellDef="let element"> {{ currTime }} </mat-cell>
             </ng-container>
           
-            <!-- Symbol Column -->
+            <!-- Time Out Column -->
             <ng-container matColumnDef="timeOut">
               <mat-header-cell *matHeaderCellDef> Time Out </mat-header-cell>
               <mat-cell *matCellDef="let element"> {{ clockOut }} </mat-cell>

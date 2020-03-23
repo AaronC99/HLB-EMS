@@ -18,6 +18,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 import { TimesheetComponent } from './timesheet/timesheet.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 
 
 @NgModule({
@@ -41,7 +43,9 @@ import { TimesheetComponent } from './timesheet/timesheet.component';
     MatSidenavModule,
     FlexLayoutModule,
     MatListModule,
-    MatTableModule
+    MatTableModule,
+    MatSelectModule,
+    MatOptionModule
   ],
   providers:[],
   exports: [

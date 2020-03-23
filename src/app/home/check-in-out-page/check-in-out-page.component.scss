@@ -6,7 +6,6 @@
 }
 .time-box{
   display: flexbox;
-  //position: relative;
 }
 h1{
   font-size: 60px;
@@ -18,26 +17,22 @@ h2{
   font-size: 30px;
   font-family: 'Ubuntu', sans-serif;
 }
-.border{
-  margin: 50px;
-  height: 0px;
+button{
+  font-family: 'Ubuntu', sans-serif;
+  border-radius: 50px;
+  width:50%;
+  padding: 5px;
+  font-size: 20px;
 }
 mat-card-actions{
-  padding: 20px;
+  // margin: 0px;
+  // padding: 20px;
   .clock-in-out-button{
-    font-family: 'Ubuntu', sans-serif;
-    border-radius: 50px;
-    width:50%;
-    margin-bottom:20px;
     background-color: #00fdcb;
   }
   .clock-out-button{
     background-color: #f44336;
     color: white;
-    border-radius: 50px;
-    width:50%;
-    margin-bottom:20px;
-    font-family: 'Ubuntu', sans-serif;
   }
 }
 .clock-in-out{
