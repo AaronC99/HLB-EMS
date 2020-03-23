@@ -17,6 +17,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
+import { TimesheetComponent } from './timesheet/timesheet.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { MatTableModule } from '@angular/material/table';
     HomeComponent,
     HeaderComponent,
     CheckInOutPageComponent,
-    AccountComponent
+    AccountComponent,
+    TimesheetComponent
   ],
   imports: [
     CommonModule,

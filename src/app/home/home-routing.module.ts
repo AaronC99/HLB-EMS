@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home.component';
 import { CheckInOutPageComponent } from './check-in-out-page/check-in-out-page.component';
 import { AccountComponent } from './account/account.component';
+import { TimesheetComponent } from './timesheet/timesheet.component';
 
 
 const routes: Routes = [
@@ -22,6 +23,10 @@ const routes: Routes = [
       {
         path: 'my-account',
         component: AccountComponent
+      },
+      {
+        path:'timesheet',
+        component: TimesheetComponent
       }
     ]}
 ];
