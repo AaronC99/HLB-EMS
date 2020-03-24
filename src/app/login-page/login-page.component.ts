@@ -21,7 +21,6 @@ export class LoginPageComponent implements OnInit {
   constructor(
     private formBuilder:FormBuilder,
     private router:Router,
-    // private headerCom: HeaderComponent
     ) {
     this.createForm();
    }
