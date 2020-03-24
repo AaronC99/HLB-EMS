@@ -15,6 +15,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { AuthenticationModule } from './authentication/authentication.module';
+import { EmployeeModule } from './employee/employee.module';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
     AppRoutingModule,
     BrowserAnimationsModule,
     AuthenticationModule,
+    EmployeeModule,
     MatCardModule,
     MatButtonModule,
     MatInputModule,

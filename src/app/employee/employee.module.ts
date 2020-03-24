@@ -40,15 +40,6 @@ import { MatCardModule } from '@angular/material/card';
     MatTableModule,
     MatSelectModule,
     MatOptionModule
-  ],
-  providers:[],
-  exports: []
+  ]
 })
-export class EmployeeModule {
-  public static forRoot(){
-    return{
-      ngModule: EmployeeModule,
-      providers: []
-    };
-  }
- }
+export class EmployeeModule {}
