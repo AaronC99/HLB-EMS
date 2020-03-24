@@ -9,32 +9,34 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
-import { LoginPageComponent } from './login-page/login-page.component';
+import { LoginPageComponent } from './authentication/login-page/login-page.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { FlexLayoutModule } from '@angular/flex-layout'; 
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import { AuthenticationModule } from './authentication/authentication.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginPageComponent,
+    //LoginPageComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatCardModule,
-    MatButtonModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatToolbarModule,
-    MatSidenavModule,
-    FlexLayoutModule,
-    MatListModule
+    AuthenticationModule
+    // MatCardModule,
+    // MatButtonModule,
+    // MatInputModule,
+    // ReactiveFormsModule,
+    // MatFormFieldModule,
+    // MatIconModule,
+    // MatToolbarModule,
+    // MatSidenavModule,
+    // FlexLayoutModule,
+    // MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]
