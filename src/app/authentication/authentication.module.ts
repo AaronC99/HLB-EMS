@@ -25,11 +25,7 @@ import { LoginPageComponent } from './login-page/login-page.component';
     MatInputModule,
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatIconModule,
-    MatToolbarModule,
-    MatSidenavModule,
-    FlexLayoutModule,
-    MatListModule
+    MatIconModule
   ]
 })
 export class AuthenticationModule { }
