@@ -7,7 +7,7 @@
         <span class="title">{{ title }}</span>
         <span class="spacer"></span>
         <div fxShow="true" fxHide.lt-md="true">
-          <a routerLink="check-in-out" mat-button >
+          <a routerLink="check-in-out" mat-button *ngIf="">
             <mat-icon>input</mat-icon>
             {{ clockIn_Out }}
           </a> 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { DatePipe } from '@angular/common';
 
@@ -23,10 +23,18 @@ export class CreateEmployeeComponent implements OnInit {
     workingHours: new FormControl('')
   });
 
-  constructor() {
+  constructor(private formBuilder:FormBuilder) {
   }
 
   ngOnInit(): void {
+  }
+  createForm(){
+    this.createEmployeeFormGroup = this.formBuilder.group({
+      name: ['',Validators.required],
+      domainId: ['',Validators.required],
+      ic_passportNo: ['',Validators.required],
+      dob:['',Validators.required]
+    });
   }
   
   addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
