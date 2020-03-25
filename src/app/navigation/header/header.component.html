@@ -15,12 +15,20 @@
             <mat-icon>calendar_today</mat-icon>
             {{ timesheet }}
           </a>
+          <a routerLink="" mat-button>
+            <mat-icon>supervised_user_circle</mat-icon>
+            {{ employeeList }}
+          </a>
           <a routerLink="my-account" mat-button >
             <mat-icon>account_circle</mat-icon>
             {{ account }}
           </a>
+          <a routerLink="#" mat-button >
+            <mat-icon>add_circle</mat-icon>
+            {{ addEmployee }}
+          </a>
           <a routerLink='' mat-raised-button color="warn" class="log-out">
-            Log Out
+            {{ logout }}
           </a>
         </div>
       </mat-toolbar-row>

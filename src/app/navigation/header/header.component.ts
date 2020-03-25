@@ -11,6 +11,9 @@ export class HeaderComponent implements OnInit {
   clockIn_Out = 'Clock In/Out';
   timesheet = 'Timesheet';
   account = 'My Account';
+  employeeList = 'Employee List';
+  addEmployee = 'New Employee';
+  logout = 'Log Out';
   constructor() { }
 
   ngOnInit(): void {
