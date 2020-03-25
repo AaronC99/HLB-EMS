@@ -4,6 +4,7 @@ import { CheckInOutPageComponent } from '../employee/check-in-out-page/check-in-
 import { AccountComponent } from '../employee/account/account.component';
 import { TimesheetComponent } from '../employee/timesheet/timesheet.component';
 import { NavigationComponent } from './navigation.component';
+import { CreateEmployeeComponent } from '../admin/create-employee/create-employee.component';
 
 
 const routes: Routes = [
@@ -27,6 +28,10 @@ const routes: Routes = [
       {
         path:'timesheet',
         component: TimesheetComponent
+      },
+      {
+        path:'new-employee',
+        component: CreateEmployeeComponent
       }
     ]}
 ];
