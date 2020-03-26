@@ -9,3 +9,9 @@ mat-card-title{
     font-family: 'Ubuntu', sans-serif;
     text-transform: uppercase;
 }
+mat-card-content{
+    padding: 20px;
+}
+table, .filter-textbox{
+    width: 100%;
+}
