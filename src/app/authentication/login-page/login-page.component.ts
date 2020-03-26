@@ -35,17 +35,21 @@ export class LoginPageComponent implements OnInit {
       domainPass: ['',[Validators.required]]
     });
   }
+  get userInput(){
+    return this.loginForm.controls;
+  }
 
+  get isUser():boolean{
+    return this.authService.validateUser(this.userInput.domainId.value,this.userInput.domainPass.value);
+  }
   onSubmit(){
-    //console.table(this.loginForm.value);
-    //if username && password not found then... 
-    //this.login = false;
-    //else
-    this.router.navigateByUrl('/home');
-
-    // if(this.loginForm.valid){
-    //   this.authService.login(this.loginForm.value);
-    // }
+    console.log(this.isUser);
+    if (this.isUser === false){
+      this.login = false;
+    }else {
+      this.login = true;
+      this.router.navigateByUrl('/home');
+    }
   }
 
 }
