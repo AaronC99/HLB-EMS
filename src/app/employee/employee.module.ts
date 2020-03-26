@@ -16,6 +16,7 @@ import { AccountComponent } from './account/account.component';
 import { CheckInOutPageComponent } from './check-in-out-page/check-in-out-page.component';
 import { TimesheetComponent } from './timesheet/timesheet.component';
 import { MatCardModule } from '@angular/material/card';
+import { EmployeeListComponent } from './employee-list/employee-list.component';
 
 
 
@@ -23,7 +24,8 @@ import { MatCardModule } from '@angular/material/card';
   declarations: [
     AccountComponent,
     CheckInOutPageComponent,
-    TimesheetComponent
+    TimesheetComponent,
+    EmployeeListComponent
   ],
   imports: [
     CommonModule,
