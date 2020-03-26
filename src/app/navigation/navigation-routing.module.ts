@@ -6,7 +6,7 @@ import { TimesheetComponent } from '../employee/timesheet/timesheet.component';
 import { NavigationComponent } from './navigation.component';
 import { CreateEmployeeComponent } from '../admin/create-employee/create-employee.component';
 import { EmployeeListComponent } from '../employee/employee-list/employee-list.component';
-import { AuthenticationGuard } from '../authentication/authentication.guard';
+import { AuthenticationGuard } from '../authentication/service/authentication.guard';
 
 
 const routes: Routes = [
