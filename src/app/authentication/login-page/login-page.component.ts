@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthenticationService } from '../service/authentication.service';
 // import {HeaderComponent } from '../header/header.component'
 @Component({
   selector: 'app-login-page',
@@ -15,12 +16,13 @@ export class LoginPageComponent implements OnInit {
   errorMessage = '*Incorrect Domain Name/Password';
   login = true;
   loginForm = new FormGroup ({
-    domainName: new FormControl(''),
+    domainId: new FormControl(''),
     domainPass: new FormControl(''),
   });
   constructor(
     private formBuilder:FormBuilder,
     private router:Router,
+    private authService:AuthenticationService
     ) {
     this.createForm();
    }
@@ -29,18 +31,21 @@ export class LoginPageComponent implements OnInit {
   }
   createForm(){
     this.loginForm = this.formBuilder.group({
-      domainName: ['',[Validators.required,Validators.pattern('[a-zA-Z ]*')]],
+      domainId: ['',[Validators.required,Validators.pattern('[a-zA-Z ]*')]],
       domainPass: ['',[Validators.required]]
     });
   }
 
   onSubmit(){
-    console.table(this.loginForm.value);
+    //console.table(this.loginForm.value);
     //if username && password not found then... 
     //this.login = false;
     //else
     this.router.navigateByUrl('/home');
-    //this.headerCom.show = true;
+
+    // if(this.loginForm.valid){
+    //   this.authService.login(this.loginForm.value);
+    // }
   }
 
 }
