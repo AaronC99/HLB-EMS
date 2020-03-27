@@ -3,6 +3,7 @@ import { CanActivate, CanActivateChild, CanDeactivate, CanLoad, Route, UrlSegmen
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { AuthenticationService } from './authentication.service';
+import { LoginPageComponent } from '../login-page/login-page.component';
 
 @Injectable({
   providedIn: 'root'
@@ -10,13 +11,17 @@ import { AuthenticationService } from './authentication.service';
 export class AuthenticationGuard implements CanActivate{ //CanActivateChild, CanDeactivate<unknown>, CanLoad 
   
   constructor(
+    private login: LoginPageComponent,
     private authService: AuthenticationService,
     private router:Router
   ){}
   canActivate(
-      next: ActivatedRouteSnapshot,
-      state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      return true;
+      next: ActivatedRouteSnapshot, state: RouterStateSnapshot){
+      if (this.login.isUser() === true){
+        return true;
+      }
+     
+      this.router.navigateByUrl('/login-page');
    }
   // canActivateChild(
   //   next: ActivatedRouteSnapshot,

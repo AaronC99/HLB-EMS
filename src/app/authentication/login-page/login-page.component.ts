@@ -39,7 +39,7 @@ export class LoginPageComponent implements OnInit {
     return this.loginForm.controls;
   }
 
-  get isUser():boolean{
+  get isUser():any{
     return this.authService.validateUser(this.userInput.domainId.value,this.userInput.domainPass.value);
   }
   onSubmit(){
