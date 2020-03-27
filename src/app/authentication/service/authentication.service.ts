@@ -20,8 +20,8 @@ export class AuthenticationService {
     private httpClient: HttpClient
   ) { }
 
-  public getLoginDetails(loginID:string){
-    return this.httpClient.get(this.REST_API_SERVER+'/login/'+loginID);
+  public getLoginDetails(loginID:string, pwd:string){
+    return this.httpClient.get(this.REST_API_SERVER+'/login/'+loginID+'/'+pwd);
   }
 
   validateUser(domainId:String, domainPass:String){
@@ -34,7 +34,7 @@ export class AuthenticationService {
     //   this.loggedIn.next(false);
     //   return false;
     // }
-    this.getLoginDetails(String(domainId)).subscribe((data)=>{
+    this.getLoginDetails(String(domainId),String(domainPass)).subscribe((data)=>{
       console.log(data);
     });
   }
