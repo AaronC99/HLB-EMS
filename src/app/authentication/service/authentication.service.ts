@@ -36,6 +36,8 @@ export class AuthenticationService {
     // }
     this.getLoginDetails(String(domainId),String(domainPass)).subscribe((data)=>{
       console.log(data);
+      this.loggedIn.next(true);
+      return true;
     });
   }
 }

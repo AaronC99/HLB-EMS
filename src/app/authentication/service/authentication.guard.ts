@@ -21,6 +21,7 @@ export class AuthenticationGuard implements CanActivate{ //CanActivateChild, Can
           take(123),
           map((isLoggedIn:Boolean)=>{
             if(!isLoggedIn){
+              //location.href = "/login-page";
               this.router.navigateByUrl('/login-page');
               return false;
             }
