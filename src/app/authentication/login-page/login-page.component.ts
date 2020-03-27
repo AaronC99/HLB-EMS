@@ -43,7 +43,7 @@ export class LoginPageComponent implements OnInit {
     return this.authService.validateUser(this.userInput.domainId.value,this.userInput.domainPass.value);
   }
   onSubmit(){
-    console.log(this.isUser);
+    //console.log(this.isUser);
     if (this.isUser === false){
       this.login = false;
     }else {
