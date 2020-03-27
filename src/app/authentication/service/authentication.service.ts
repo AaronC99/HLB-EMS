@@ -7,6 +7,11 @@ import { Employee } from 'src/app/employee/employee';
   providedIn: 'root'
 })
 export class AuthenticationService {
+  private loggedIn = new BehaviorSubject<boolean>(false);
+  
+  get isLoggedIn(){
+    return this.loggedIn.asObservable();
+  }
   constructor(
     private router:Router
   ) { }
@@ -14,8 +19,10 @@ export class AuthenticationService {
   validateUser(domainId:String, domainPass:String){
     //console.log(domainId,domainPass);
     if (domainId === 'user' && domainPass === '123'){
+      this.loggedIn.next(true);
       return true;
     } else {
+      this.loggedIn.next(false);
       return false;
     }
   }

@@ -11,17 +11,27 @@ import { LoginPageComponent } from '../login-page/login-page.component';
 export class AuthenticationGuard implements CanActivate{ //CanActivateChild, CanDeactivate<unknown>, CanLoad 
   
   constructor(
-    private login: LoginPageComponent,
     private authService: AuthenticationService,
     private router:Router
   ){}
   canActivate(
-      next: ActivatedRouteSnapshot, state: RouterStateSnapshot){
-      if (this.login.isUser() === true){
-        return true;
-      }
+      next: ActivatedRouteSnapshot, state: RouterStateSnapshot):Observable<boolean>{
+      return this.authService.isLoggedIn
+        .pipe(
+          take(123),
+          map((isLoggedIn:Boolean)=>{
+            if(!isLoggedIn){
+              this.router.navigateByUrl('/login-page');
+              return false;
+            }
+            return true;
+          })
+        )
+        // if (this.login.isUser() === true){
+      //   return true;
+      // }
      
-      this.router.navigateByUrl('/login-page');
+      // this.router.navigateByUrl('/login-page');
    }
   // canActivateChild(
   //   next: ActivatedRouteSnapshot,

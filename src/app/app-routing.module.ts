@@ -8,7 +8,7 @@ import { AuthenticationGuard } from './authentication/service/authentication.gua
 const routes: Routes = [
   {path: '', redirectTo:'login-page', pathMatch: 'full'},
   {path: 'login-page', component: LoginPageComponent},
-  {path: 'home',loadChildren: ()=> NavigationModule}
+  {path: 'home',canActivate:[AuthenticationGuard],loadChildren: ()=> NavigationModule}
 ];
 
 @NgModule({
