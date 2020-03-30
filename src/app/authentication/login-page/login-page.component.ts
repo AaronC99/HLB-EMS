@@ -22,7 +22,7 @@ export class LoginPageComponent implements OnInit {
   constructor(
     private formBuilder:FormBuilder,
     private router:Router,
-    private authService:AuthenticationService
+    public authService:AuthenticationService
     ) {
     this.createForm();
    }
@@ -39,16 +39,13 @@ export class LoginPageComponent implements OnInit {
     return this.loginForm.controls;
   }
 
-  get isUser():any{
-    return this.authService.validateUser(this.userInput.domainId.value,this.userInput.domainPass.value);
+  get isUser(){
+    return this.authService.validateUser(this.userInput.domainId.value,this.userInput.domainPass.value); 
   }
   onSubmit(){
-    //console.log(this.isUser);
-    if (this.isUser === false){
+    this.authService.validateUser(this.userInput.domainId.value,this.userInput.domainPass.value);
+    if (this.authService.loggedIn){
       this.login = false;
-    }else {
-      this.login = true;
-      this.router.navigateByUrl('/home');
     }
   }
 

@@ -3,15 +3,14 @@ import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Employee } from 'src/app/employee/employee';
-import { LoginPageComponent } from '../login-page/login-page.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
   private REST_API_SERVER = "http://localhost:3000";
-  private loggedIn = new BehaviorSubject<boolean>(false);
-  access:boolean = false;
+  public loggedIn = new BehaviorSubject<boolean>(false);
+  public isEmployee:boolean = true;
   get isLoggedIn(){
     return this.loggedIn.asObservable();
   }
@@ -25,19 +24,13 @@ export class AuthenticationService {
   }
 
   validateUser(domainId:String, domainPass:String){
-    //console.log(domainId,domainPass);
-    // if (domainId === 'user' && domainPass === '123'){
-    //   this.loggedIn.next(true);
-    //   this.access = true;
-    //   return true;
-    // } else {
-    //   this.loggedIn.next(false);
-    //   return false;
-    // }
     this.getLoginDetails(String(domainId),String(domainPass)).subscribe((data)=>{
       console.log(data);
-      this.loggedIn.next(true);
-      return true;
+      if (data !== null){
+        this.loggedIn.next(true);
+        this.router.navigateByUrl('/home');
+      }else 
+        this.loggedIn.next(false);
     });
   }
 }
