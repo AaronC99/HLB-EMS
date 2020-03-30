@@ -16,12 +16,12 @@ export class HeaderComponent implements OnInit {
   employeeList = 'Employee List';
   addEmployee = 'New Employee';
   logout = 'Log Out';
-  employeeAccess:boolean = null;
+  employeeAccess:any;
   constructor(public authService: AuthenticationService) { }
 
   ngOnInit(): void {
-    this.employeeAccess =this.authService.access;
-    console.log(this.authService.access);
+    // this.employeeAccess =this.authService.isLoggedIn;
+    // console.log(this.employeeAccess);
   }
 
 }
