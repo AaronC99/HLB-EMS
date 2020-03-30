@@ -1,0 +1,38 @@
+.row{
+    margin:30px;
+}
+mat-card{
+    border-radius: 20px;
+}
+.generate-form{
+    background-image: linear-gradient(-90deg, #FFFFFF,#FFEFBA);
+}
+.timesheet-card{
+    background-image: linear-gradient(-90deg,  #FFEFBA, #FFFFFF);
+}
+mat-card-title{
+    text-align: center;
+    font-family: 'Ubuntu', sans-serif;
+}
+mat-card-content{
+    padding:20px;
+}
+mat-label,mat-select{
+    font-size: 17px;
+}
+.month,.year{
+    width: 100%;
+    padding: 10px;
+}
+button{
+    border-radius: 50px;
+}
+.generate-button{
+    width: 100%;
+    background-color: #00fdcb;
+    color: black;
+    padding:5px;
+}
+table{
+    width:100%;
+}

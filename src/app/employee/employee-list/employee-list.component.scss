@@ -1,0 +1,17 @@
+.row{
+    margin: 50px;
+}
+.employee-list-card{
+    border-radius: 20px;
+}
+mat-card-title{
+    text-align: center;
+    font-family: 'Ubuntu', sans-serif;
+    text-transform: uppercase;
+}
+mat-card-content{
+    padding: 20px;
+}
+table, .filter-textbox{
+    width: 100%;
+}

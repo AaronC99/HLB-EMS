@@ -1,0 +1,72 @@
+<div class="container-fluid">
+    <div class="row justify-content-between">
+        <div class="col-4">
+          <mat-card class="generate-form">
+            <mat-card-title>Generate Timesheet</mat-card-title>
+            <form [formGroup]="genTimesheetForm" (ngSubmit)="onSubmit()">
+              <mat-card-content>
+                <div class="row">
+                  <div class="col">
+                    <mat-form-field appearance="fill" class="month">
+                      <mat-label>Select Month</mat-label>
+                      <mat-select formControlName="selectedMonth" required>
+                        <mat-option   *ngFor="let mon of months" [value]="mon">{{ mon }}</mat-option>
+                      </mat-select>
+                  </mat-form-field>
+                  </div>
+                  <div class="w-100"></div>
+                  <div class="col">
+                    <mat-form-field appearance="fill" class="year">
+                      <mat-label>Select Year</mat-label>
+                      <mat-select formControlName="selectedYear" required>
+                        <mat-option  *ngFor="let yr of years" [value]="yr">{{ yr }}</mat-option>
+                      </mat-select>
+                  </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <button mat-raised-button class="generate-button" type="submit" [disabled]="!genTimesheetForm.valid">Generate</button>
+                  </div>
+                </div>
+              </mat-card-content>
+            </form>
+          </mat-card>
+        </div>
+        <div class="col-8">
+          <mat-card class="timesheet-card">
+          <mat-card-title>
+            <button mat-raised-button class="download-button" *ngIf="visible" 
+            color="primary" (click)="generateExcelFile()">Download</button> 
+            <h2></h2>
+          </mat-card-title>
+            
+            <mat-card-content>
+              <div #TABLE class="mat-elevation-z8">
+                <table mat-table  [dataSource]="dataSource" >
+
+                  <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef> Date </th>
+                    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+                  </ng-container>
+                
+                  <ng-container matColumnDef="clockIn">
+                    <th mat-header-cell *matHeaderCellDef> Time In </th>
+                    <td mat-cell *matCellDef="let element"> {{element.clockIn}} </td>
+                  </ng-container>
+                
+                  <ng-container matColumnDef="clockOut">
+                    <th mat-header-cell *matHeaderCellDef> Time Out </th>
+                    <td mat-cell *matCellDef="let element"> {{element.clockOut}} </td>
+                  </ng-container>
+                
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+              </div>
+              
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+</div>

@@ -1,4 +1,4 @@
-.example-card {
+.login-card {
     max-width: 400px;
     top:50%;
     left:50%; 
@@ -9,8 +9,7 @@
     mat-card-actions{
         padding-left:16px;
         padding-right:16px;
-        .login{
-            //font-size: 50px;
+        .login-button{
             width:100%;
             border-radius: 50px;
         }
@@ -21,13 +20,15 @@
         text-align: center;
     }
 }  
-.example-full-width {
+.text-field{
     width: 100%;
 }
 .header{
+    font-family: 'Montserrat', sans-serif;
     justify-content: center;
     margin: 15px 15px 60px;
     text-align: center;
+    text-transform: uppercase;
 }
   input.example-right-align::-webkit-outer-spin-button,
 input.example-right-align::-webkit-inner-spin-button {
