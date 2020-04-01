@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../service/authentication.service';
+import { BehaviorSubject } from 'rxjs';
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
@@ -9,7 +10,7 @@ import { AuthenticationService } from '../service/authentication.service';
 })
 export class LoginPageComponent implements OnInit {
   hide = true;
-  showErrorMessage:boolean = false;
+  showErrorMessage = false;
   title = 'Employee Management System Login'
   placeholderName = 'Domain Name';
   placeholderPass = 'Domain Password';
@@ -44,5 +45,9 @@ export class LoginPageComponent implements OnInit {
    */
   onSubmit() {
     this.authService.getLoginDetails(this.userInput.domainId.value,this.userInput.domainPass.value);
+    this.authService.loggedIn.subscribe((data)=>{
+      //this.showErrorMessage.next(data);  
+      console.log(data);
+      });
   }
 }
