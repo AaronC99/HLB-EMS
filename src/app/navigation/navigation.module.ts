@@ -17,6 +17,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { HeaderComponent } from './header/header.component';
+import { AuthenticationModule } from '../authentication/module/authentication.module';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { HeaderComponent } from './header/header.component';
     MatListModule,
     MatTableModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    AuthenticationModule
   ],
   providers:[],
   exports: [

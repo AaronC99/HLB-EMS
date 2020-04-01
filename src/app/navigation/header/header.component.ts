@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
-import { Observable } from 'rxjs/internal/Observable';
+import { AuthModel } from 'src/app/model/Authentication.model';
 
 @Component({
   selector: 'app-header',
@@ -17,11 +17,15 @@ export class HeaderComponent implements OnInit {
   addEmployee = 'New Employee';
   logout = 'Log Out';
   employeeAccess:any;
-  constructor(public authService: AuthenticationService) { }
+
+  private _authDetails: AuthModel;
+
+  constructor(public authService: AuthenticationService) { 
+    this.authService.userAuthDetails.subscribe(details => this._authDetails = details);
+  }
 
   ngOnInit(): void {
-    // this.employeeAccess =this.authService.isLoggedIn;
-    // console.log(this.employeeAccess);
+    console.log(this._authDetails.username, this._authDetails.role);
   }
 
 }

@@ -28,6 +28,7 @@ export class LoginPageComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
   createForm(){
     this.loginForm = this.formBuilder.group({
       domainId: ['',[Validators.required,Validators.pattern('[a-zA-Z ]*')]],
@@ -38,11 +39,10 @@ export class LoginPageComponent implements OnInit {
     return this.loginForm.controls;
   }
 
-  // public isUser(){
-  //   return this.authService.getLoginDetails(this.userInput.domainId.value,this.userInput.domainPass.value);
-  // }
-
-  onSubmit(){
-    this.authService.validateUser(this.userInput.domainId.value,this.userInput.domainPass.value);
+  /**
+   * Method for Loggin In
+   */
+  onSubmit() {
+    this.authService.getLoginDetails(this.userInput.domainId.value,this.userInput.domainPass.value);
   }
 }

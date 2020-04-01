@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { LoginPageComponent } from '../login-page/login-page.component';
+import { AuthenticationService } from '../service/authentication.service';
 
 
 
@@ -22,6 +23,9 @@ import { LoginPageComponent } from '../login-page/login-page.component';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatIconModule
+  ],
+  providers: [
+    AuthenticationService
   ]
 })
 export class AuthenticationModule { }

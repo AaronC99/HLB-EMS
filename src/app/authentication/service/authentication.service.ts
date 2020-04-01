@@ -4,10 +4,9 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Employee } from 'src/app/employee/employee';
 import { map, catchError } from 'rxjs/operators';
+import { AuthModel } from 'src/app/model/Authentication.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthenticationService {
   private REST_API_SERVER = "http://localhost:3000";
   public loggedIn = new BehaviorSubject<boolean>(false);
@@ -16,8 +15,16 @@ export class AuthenticationService {
   public access:boolean;
   public role:string;
 
+
+  private _authObj: AuthModel = new AuthModel();
+  private _authSubj: BehaviorSubject<AuthModel>;
+  
   get isLoggedIn(){
     return this.loggedIn.asObservable();
+  }
+
+  get userAuthDetails() {
+    return this._authSubj.asObservable();
   }
 
   constructor(
@@ -26,6 +33,9 @@ export class AuthenticationService {
   ) {
     this.currentUserSubject = new BehaviorSubject<Employee>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
+
+    this._authSubj = new BehaviorSubject(this._authObj);
+    this._authSubj.next(this._authObj);
    }
 
   public getLoginDetails(loginID:string, pwd:string){//Observable
@@ -33,31 +43,17 @@ export class AuthenticationService {
     .subscribe((data) => {
       if (data === null){
         console.log("User Not Found");
-        return false
-      }else{
+        return false;
+      } else {
         this.role = data['role']; //get role in string
-        if (this.role ===  "Manager"){
-          console.log(this.role);
-        } else if (this.role === "Admin"){
-          console.log(this.role);
-        } 
+
+        this._authObj = {
+          username: loginID, 
+          role: this.role
+        };
+
+        this._authSubj.next(this._authObj);
       }
     });    
   }
-
-  validateUser(domainId:string, domainPass:string){
-    this.getLoginDetails(domainId,domainPass);
-    // this.getRole(domainId,domainPass).then((data)=>{
-    //   this.role = data['role'].toString();
-    // })
-    console.log("VU Function: " + this.role);
-
-    // this.getLoginDetails(domainId,domainPass).then((data)=>{
-    //   this.role = data;
-    //   return this.role;
-    // });
-    // console.log(this.role)
-    
-  }
-
 }
