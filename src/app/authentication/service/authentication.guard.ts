@@ -16,23 +16,18 @@ export class AuthenticationGuard implements CanActivate{ //CanActivateChild, Can
   ){}
   canActivate(
       next: ActivatedRouteSnapshot, state: RouterStateSnapshot):Observable<boolean>{
+
       return this.authService.isLoggedIn
         .pipe(
           take(123),
           map((isLoggedIn:Boolean)=>{
             if(!isLoggedIn){
-              //location.href = "/login-page";
               this.router.navigateByUrl('/login-page');
               return false;
             }
             return true;
           })
         )
-        // if (this.login.isUser() === true){
-      //   return true;
-      // }
-     
-      // this.router.navigateByUrl('/login-page');
    }
   // canActivateChild(
   //   next: ActivatedRouteSnapshot,

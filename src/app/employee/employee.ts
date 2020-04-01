@@ -1,4 +1,4 @@
-export interface Employee{
+export class Employee{
     domainId: string;
     domainPass: string;
 }
