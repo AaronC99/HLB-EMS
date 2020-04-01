@@ -50,6 +50,7 @@ export class AuthenticationService {
         };
         console.log(this._authObj.username,this._authObj.role)
         this._authSubj.next(this._authObj);
+        this.loggedIn.next(true);
         this.router.navigateByUrl('/home');
 
       }
