@@ -21,11 +21,17 @@ export class HeaderComponent implements OnInit {
   private _authDetails: AuthModel;
 
   constructor(public authService: AuthenticationService) { 
-    this.authService.userAuthDetails.subscribe(details => this._authDetails = details);
+    this.authService.userAuthDetails.subscribe((details) => {
+      this._authDetails = details
+      console.log(details.role,details.username);
+    });
   }
 
   ngOnInit(): void {
-    console.log(this._authDetails.username, this._authDetails.role);
+    //console.log(this._authDetails.username, this._authDetails.role);
+  }
+  ngAfterContentInit():void{
+    //console.log(this._authDetails.username, this._authDetails.role);
   }
 
 }

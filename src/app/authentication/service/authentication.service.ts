@@ -10,9 +10,9 @@ import { AuthModel } from 'src/app/model/Authentication.model';
 export class AuthenticationService {
   private REST_API_SERVER = "http://localhost:3000";
   public loggedIn = new BehaviorSubject<boolean>(false);
-  private currentUserSubject:BehaviorSubject<Employee>;
-  public currentUser:Observable<Employee>;
-  public access:boolean;
+  // private currentUserSubject:BehaviorSubject<Employee>;
+  // public currentUser:Observable<Employee>;
+  // public access:boolean;
   public role:string;
 
 
@@ -31,9 +31,6 @@ export class AuthenticationService {
     private router:Router,
     private httpClient: HttpClient
   ) {
-    this.currentUserSubject = new BehaviorSubject<Employee>(JSON.parse(localStorage.getItem('currentUser')));
-    this.currentUser = this.currentUserSubject.asObservable();
-
     this._authSubj = new BehaviorSubject(this._authObj);
     this._authSubj.next(this._authObj);
    }
@@ -51,8 +48,10 @@ export class AuthenticationService {
           username: loginID, 
           role: this.role
         };
-
+        console.log(this._authObj.username,this._authObj.role)
         this._authSubj.next(this._authObj);
+        this.router.navigateByUrl('/home');
+
       }
     });    
   }
