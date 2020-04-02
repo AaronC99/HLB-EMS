@@ -12,11 +12,11 @@ import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-import { AccountComponent } from './account/account.component';
-import { CheckInOutPageComponent } from './check-in-out-page/check-in-out-page.component';
-import { TimesheetComponent } from './timesheet/timesheet.component';
+import { AccountComponent } from '../account/account.component';
+import { CheckInOutPageComponent } from '../check-in-out-page/check-in-out-page.component';
+import { TimesheetComponent } from '../timesheet/timesheet.component';
 import { MatCardModule } from '@angular/material/card';
-import { EmployeeListComponent } from './employee-list/employee-list.component';
+import { EmployeeListComponent } from '../employee-list/employee-list.component';
 
 
 
