@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterContentInit } from '@angular/core';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { AuthModel } from 'src/app/model/Authentication.model';
 
@@ -7,7 +7,7 @@ import { AuthModel } from 'src/app/model/Authentication.model';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements AfterContentInit {
 
   title = 'Employee Management System';
   clockIn_Out = 'Clock In/Out';
@@ -16,22 +16,19 @@ export class HeaderComponent implements OnInit {
   employeeList = 'Employee List';
   addEmployee = 'New Employee';
   logout = 'Log Out';
-  employeeAccess:any;
+  employeeAccess: any;
 
-  private _authDetails: AuthModel;
+  _authDetails: AuthModel;
 
-  constructor(public authService: AuthenticationService) { 
+  constructor(public authService: AuthenticationService) {
     this.authService.userAuthDetails.subscribe((details) => {
-      this._authDetails = details
-      console.log(details.role,details.username);
+      this._authDetails = details;
+      console.log(details.role, details.username);
     });
   }
 
-  ngOnInit(): void {
-    //console.log(this._authDetails.username, this._authDetails.role);
-  }
-  ngAfterContentInit():void{
-    //console.log(this._authDetails.username, this._authDetails.role);
+  ngAfterContentInit() {
+    console.log(this._authDetails);
   }
 
 }

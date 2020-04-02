@@ -18,7 +18,7 @@ import { AdminModule } from './admin/admin.module';
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    AuthenticationModule,
+    AuthenticationModule.forRoot(),
     EmployeeModule,
     AdminModule
   ],

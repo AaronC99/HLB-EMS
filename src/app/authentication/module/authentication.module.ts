@@ -9,8 +9,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { LoginPageComponent } from '../login-page/login-page.component';
 import { AuthenticationService } from '../service/authentication.service';
 
-
-
 @NgModule({
   declarations: [
     LoginPageComponent
@@ -28,4 +26,13 @@ import { AuthenticationService } from '../service/authentication.service';
     AuthenticationService
   ]
 })
-export class AuthenticationModule { }
+export class AuthenticationModule {
+  public static forRoot() {
+    return{
+      ngModule: AuthenticationModule,
+      providers: [
+        AuthenticationService
+      ]
+    };
+  }
+ }

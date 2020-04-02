@@ -43,13 +43,13 @@ import { AuthenticationModule } from '../authentication/module/authentication.mo
     MatOptionModule,
     AuthenticationModule
   ],
-  providers:[],
+  providers: [],
   exports: [
     NavigationComponent,
   ]
 })
 export class NavigationModule {
-  public static forRoot(){
+  public static forRoot() {
     return{
       ngModule: NavigationModule,
       providers: []
