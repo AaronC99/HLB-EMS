@@ -16,5 +16,9 @@ export class EmployeeService {
     return this.httpClient.get(this.REST_API_SERVER+'/profile/'+ProfileID);
   }
 
+  public getAllEmployees(DomainID:string){
+    return this.httpClient.get(this.REST_API_SERVER+'/allEmployees/'+DomainID);
+  }
+
   
 }
