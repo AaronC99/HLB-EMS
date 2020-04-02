@@ -17,7 +17,6 @@ export class HeaderComponent implements AfterContentInit {
   addEmployee = 'New Employee';
   logout = 'Log Out';
   employeeAccess: any;
-
   _authDetails: AuthModel;
 
   constructor(public authService: AuthenticationService) {

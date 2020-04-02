@@ -13,13 +13,13 @@ export class AuthenticationService {
   // private currentUserSubject:BehaviorSubject<Employee>;
   // public currentUser:Observable<Employee>;
   // public access:boolean;
-  public role:string;
+  public role: string;
 
 
   private _authObj: AuthModel = new AuthModel();
   private _authSubj: BehaviorSubject<AuthModel>;
-  
-  get isLoggedIn(){
+
+  get isLoggedIn() {
     return this.loggedIn.asObservable();
   }
 
@@ -28,17 +28,17 @@ export class AuthenticationService {
   }
 
   constructor(
-    private router:Router,
+    private router: Router,
     private httpClient: HttpClient
   ) {
     this._authSubj = new BehaviorSubject(this._authObj);
     this._authSubj.next(this._authObj);
    }
 
-  public getLoginDetails(loginID:string, pwd:string){//Observable
+  public getLoginDetails(loginID: string, pwd: string){
     return this.httpClient.get(this.REST_API_SERVER+'/login/'+loginID+'/'+pwd)
     .subscribe((data) => {
-      if (data === null){
+      if (data === undefined) {
         console.log("User Not Found");
         return false;
       } else {
@@ -48,11 +48,12 @@ export class AuthenticationService {
           username: loginID, 
           role: this.role
         };
-        console.log(this._authObj.username,this._authObj.role)
+
+        console.log(this._authObj.username,this._authObj.role);
+
         this._authSubj.next(this._authObj);
         this.loggedIn.next(true);
-        this.router.navigateByUrl('/home');
-
+        this.router.navigateByUrl('/home'); // Do not do navigation on services
       }
     });    
   }
