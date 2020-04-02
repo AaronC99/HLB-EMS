@@ -26,5 +26,9 @@ export class EmployeeService {
     });
   }
 
-  
+  public updateEmployee(SelectedEmpID: string, updateDetails:any){
+    this.httpClient.patch(this.REST_API_SERVER+'/updateEmployee/'+SelectedEmpID, updateDetails).subscribe((data:any)=>{
+      console.log(data);
+    });
+  }
 }
