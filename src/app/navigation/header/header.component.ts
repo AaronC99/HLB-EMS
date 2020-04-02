@@ -12,7 +12,7 @@ export class HeaderComponent implements AfterContentInit {
   title = 'Employee Management System';
   clockIn_Out = 'Clock In/Out';
   timesheet = 'Timesheet';
-  account = 'My Account';
+  account:String;
   employeeList = 'Employee List';
   addEmployee = 'New Employee';
   logout = 'Log Out';
@@ -22,12 +22,13 @@ export class HeaderComponent implements AfterContentInit {
   constructor(private authService: AuthenticationService) {
     this.authService.userAuthDetails.subscribe((details) => {
       this._authDetails = details;
-      console.log(details.role, details.username);
+      this.account = details.username;
+      //console.log(details.role, details.username);
     });
   }
 
   ngAfterContentInit() {
-    console.log(this._authDetails);
+    //console.log(this._authDetails);
   }
 
 }
