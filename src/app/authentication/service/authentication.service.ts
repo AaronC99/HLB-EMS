@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthModel } from 'src/app/model/Authentication.model';
@@ -8,22 +8,12 @@ import { AuthModel } from 'src/app/model/Authentication.model';
 export class AuthenticationService {
   private REST_API_SERVER = "http://localhost:3000";
   public loggedIn = new BehaviorSubject<boolean>(false);
-  // private currentUserSubject:BehaviorSubject<Employee>;
-  // public currentUser:Observable<Employee>;
-  // public access:boolean;
+
   public role: string;
 
 
   private _authObj: AuthModel = new AuthModel();
   private _authSubj: BehaviorSubject<AuthModel>;
-
-  get isLoggedIn() {
-    return this.loggedIn.asObservable();
-  }
-
-  get userAuthDetails() {
-    return this._authSubj.asObservable();
-  }
 
   constructor(
     private router: Router,
@@ -33,7 +23,18 @@ export class AuthenticationService {
     this._authSubj.next(this._authObj);
    }
 
-  public getLoginDetails(loginID: string, pwd: string){
+  
+
+  get isLoggedIn() {
+    return this.loggedIn.asObservable();
+  }
+
+  get userAuthDetails() {
+    return this._authSubj.asObservable();
+  }
+
+
+  getLoginDetails = (loginID: string, pwd: string) => {
     this.httpClient.get(this.REST_API_SERVER+'/login/'+loginID+'/'+pwd)
     .subscribe((data) => {
       if (data === undefined) {
