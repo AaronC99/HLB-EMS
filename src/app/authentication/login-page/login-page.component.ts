@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../service/authentication.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
@@ -26,10 +26,14 @@ export class LoginPageComponent implements OnInit {
     ) {
     this.createForm();
     this.authService.loggedIn.subscribe((data)=>{
-      if(data === false){
-        this.showErrorMessage = true;
-        console.log(data);
+      if(data !== false){
+       this.router.navigateByUrl('/home');
       }
+      });
+      this.authService.getLoginErrors().subscribe(error=>{
+        if (error !== null){
+          this.showErrorMessage = true;
+        }  
       });
    }
 
@@ -41,6 +45,15 @@ export class LoginPageComponent implements OnInit {
       domainId: ['',[Validators.required,Validators.pattern('[a-zA-Z ]*')]],
       domainPass: ['',[Validators.required]]
     });
+  }
+  getDomainIdError(){
+    if(this.userInput.domainId.hasError('required'))
+      return 'Domain Id is required';
+    else return 'Invalid Domain Id';
+  }
+  getDomainPassError(){
+    if (this.userInput.domainPass.hasError('required'))
+      return 'Domain Password is required';
   }
   get userInput(){
     return this.loginForm.controls;

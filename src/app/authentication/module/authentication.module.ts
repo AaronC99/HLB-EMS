@@ -4,7 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatFormFieldModule, MatError } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { LoginPageComponent } from '../login-page/login-page.component';
 import { AuthenticationService } from '../service/authentication.service';
@@ -20,7 +20,7 @@ import { AuthenticationService } from '../service/authentication.service';
     MatInputModule,
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatIconModule
+    MatIconModule,
   ]
 })
 export class AuthenticationModule {

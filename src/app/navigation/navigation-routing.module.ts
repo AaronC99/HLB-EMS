@@ -7,6 +7,7 @@ import { NavigationComponent } from './navigation.component';
 import { CreateEmployeeComponent } from '../admin/create-employee/create-employee.component';
 import { EmployeeListComponent } from '../employee/employee-list/employee-list.component';
 import { AuthenticationGuard } from '../authentication/service/authentication.guard';
+import { AuthModel } from '../model/Authentication.model';
 
 
 const routes: Routes = [
@@ -33,7 +34,7 @@ const routes: Routes = [
       },
       {
         path:'new-employee',
-        component: CreateEmployeeComponent
+        component: CreateEmployeeComponent,
       },
       {
         path:'employee-list',

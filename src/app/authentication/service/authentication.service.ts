@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthModel } from 'src/app/model/Authentication.model';
@@ -8,12 +8,10 @@ import { AuthModel } from 'src/app/model/Authentication.model';
 export class AuthenticationService {
   private REST_API_SERVER = "http://localhost:3000";
   public loggedIn = new BehaviorSubject<boolean>(false);
-
   public role: string;
-
-
   private _authObj: AuthModel = new AuthModel();
   private _authSubj: BehaviorSubject<AuthModel>;
+  private loginErrorSubject = new Subject<string>();
 
   constructor(
     private router: Router,
@@ -23,6 +21,9 @@ export class AuthenticationService {
     this._authSubj.next(this._authObj);
    }
 
+  getLoginErrors():Subject<string>{
+    return this.loginErrorSubject;
+  } 
   get isLoggedIn() {
     return this.loggedIn.asObservable();
   }
@@ -36,22 +37,20 @@ export class AuthenticationService {
     this.httpClient.get(this.REST_API_SERVER+'/login/'+loginID+'/'+pwd)
     .subscribe((data) => {
       if (data === null) {
-        console.log("User Not Found");
+        this.loginErrorSubject.next("Invalid User");
         this.loggedIn.next(false);
       } else {
         this.role = data['role']; //get role in string
-
         this._authObj = {
           username: loginID, 
           role: this.role
         };
-
         console.log(this._authObj.username,this._authObj.role);
-
         this._authSubj.next(this._authObj);
         this.loggedIn.next(true);
-        this.router.navigateByUrl('/home'); // Do not do navigation on services
       }
+    },error => {
+      this.loginErrorSubject.next(error.message);
     });    
   }
 }
