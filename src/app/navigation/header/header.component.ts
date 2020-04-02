@@ -19,7 +19,7 @@ export class HeaderComponent implements AfterContentInit {
   employeeAccess: any;
   _authDetails: AuthModel;
 
-  constructor(public authService: AuthenticationService) {
+  constructor(private authService: AuthenticationService) {
     this.authService.userAuthDetails.subscribe((details) => {
       this._authDetails = details;
       console.log(details.role, details.username);

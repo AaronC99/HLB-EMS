@@ -27,6 +27,7 @@ import { AuthenticationModule } from '../authentication/module/authentication.mo
   ],
   imports: [
     CommonModule,
+    AuthenticationModule,
     NavigationRoutingModule,
     MatCardModule,
     MatButtonModule,

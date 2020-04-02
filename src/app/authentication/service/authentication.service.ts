@@ -23,8 +23,6 @@ export class AuthenticationService {
     this._authSubj.next(this._authObj);
    }
 
-  
-
   get isLoggedIn() {
     return this.loggedIn.asObservable();
   }
@@ -37,8 +35,9 @@ export class AuthenticationService {
   getLoginDetails = (loginID: string, pwd: string) => {
     this.httpClient.get(this.REST_API_SERVER+'/login/'+loginID+'/'+pwd)
     .subscribe((data) => {
-      if (data === undefined) {
+      if (data === null) {
         console.log("User Not Found");
+        this.loggedIn.next(false);
       } else {
         this.role = data['role']; //get role in string
 

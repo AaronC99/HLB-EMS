@@ -22,9 +22,15 @@ export class LoginPageComponent implements OnInit {
   constructor(
     private formBuilder:FormBuilder,
     private router:Router,
-    public authService:AuthenticationService
+    private authService:AuthenticationService
     ) {
     this.createForm();
+    this.authService.loggedIn.subscribe((data)=>{
+      if(data === false){
+        this.showErrorMessage = true;
+        console.log(data);
+      }
+      });
    }
 
   ngOnInit(): void {
@@ -45,9 +51,5 @@ export class LoginPageComponent implements OnInit {
    */
   onSubmit() {
     this.authService.getLoginDetails(this.userInput.domainId.value,this.userInput.domainPass.value);
-    this.authService.loggedIn.subscribe((data)=>{
-      //this.showErrorMessage.next(data);  
-      console.log(data);
-      });
   }
 }

@@ -21,9 +21,6 @@ import { AuthenticationService } from '../service/authentication.service';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatIconModule
-  ],
-  providers: [
-    AuthenticationService
   ]
 })
 export class AuthenticationModule {
