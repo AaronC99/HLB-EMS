@@ -16,8 +16,14 @@ export class EmployeeService {
     return this.httpClient.get(this.REST_API_SERVER+'/profile/'+ProfileID);
   }
 
-  public getAllEmployees(DomainID:string){
+  public getAllEmployees(DomainID:string){ //pass in the id of current user to check if its admin or manager
     return this.httpClient.get(this.REST_API_SERVER+'/allEmployees/'+DomainID);
+  }
+
+  public addEmployee(employeeDetails:any){ //pass in the employee object
+    this.httpClient.post(this.REST_API_SERVER+'/addEmployee',employeeDetails).subscribe((data)=>{
+      console.log(data);
+    });
   }
 
   
