@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Employee } from 'src/app/employee/employee';
-import { map, catchError } from 'rxjs/operators';
 import { AuthModel } from 'src/app/model/Authentication.model';
 
 @Injectable()
@@ -36,11 +34,10 @@ export class AuthenticationService {
    }
 
   public getLoginDetails(loginID: string, pwd: string){
-    return this.httpClient.get(this.REST_API_SERVER+'/login/'+loginID+'/'+pwd)
+    this.httpClient.get(this.REST_API_SERVER+'/login/'+loginID+'/'+pwd)
     .subscribe((data) => {
       if (data === undefined) {
         console.log("User Not Found");
-        return false;
       } else {
         this.role = data['role']; //get role in string
 

@@ -41,7 +41,6 @@ import { AuthenticationModule } from '../authentication/module/authentication.mo
     MatTableModule,
     MatSelectModule,
     MatOptionModule,
-    AuthenticationModule
   ],
   providers: [],
   exports: [
