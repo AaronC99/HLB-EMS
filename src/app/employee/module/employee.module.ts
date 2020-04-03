@@ -17,6 +17,8 @@ import { CheckInOutPageComponent } from '../check-in-out-page/check-in-out-page.
 import { TimesheetComponent } from '../timesheet/timesheet.component';
 import { MatCardModule } from '@angular/material/card';
 import { EmployeeListComponent } from '../employee-list/employee-list.component';
+import { EmployeeService } from '../service/employee.service';
+import { AuthenticationModule } from 'src/app/authentication/module/authentication.module';
 
 
 
@@ -29,6 +31,7 @@ import { EmployeeListComponent } from '../employee-list/employee-list.component'
   ],
   imports: [
     CommonModule,
+    AuthenticationModule,
     MatCardModule,
     MatButtonModule,
     MatInputModule,
@@ -44,4 +47,13 @@ import { EmployeeListComponent } from '../employee-list/employee-list.component'
     MatOptionModule
   ]
 })
-export class EmployeeModule {}
+export class EmployeeModule {
+  public static forRoot() {
+    return{
+      ngModule: EmployeeModule,
+      providers: [
+        EmployeeService
+      ]
+    };
+  }
+}

@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { EmployeeService } from '../service/employee.service';
+import { AuthModel } from 'src/app/model/Authentication.model';
+import { Employee } from 'src/app/model/Employee.model';
+import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
+import { Schedule } from 'src/app/model/Schedule.model';
 
 @Component({
   selector: 'app-account',
@@ -6,19 +11,33 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./account.component.scss']
 })
 export class AccountComponent implements OnInit {
-  currName = 'John Doe';
-  currDomainId = 'tjohndoe';
-  currAddress = '67, PJS 7/9, 77777, Bandar Sunway';
-  currIdNo = '11223344';
-  workingDays = 'Mon - Fri';
-  startTime = '9 AM';
-  endTime = '6 PM';
-  dptName ='IT CoE';
-  dptLocation = '23A';
-  supervisor = 'Jane Doe';
-  constructor() { }
+  currUser: Employee;
+  currUserSchedule: Schedule;
+  currUserName:String;
+  constructor(
+    private employeeService: EmployeeService,
+    private authService: AuthenticationService
+  ) {
+    this.employeeService.currUserDetils.subscribe((details)=>{
+      this.currUser = details;
+      this.currUserSchedule = details.schedule;
+      // this.currUserSchedule = {
+      //   scheduleId: details.schedule['schedule_id'],
+      //   workingDays: details.schedule['days_of_work'],
+      //   startTime: details.schedule['start_time'],
+      //   endTime: details.schedule['end_time']
+      // };
+      //console.log(this.currUser.schedule);
+      console.log(this.currUserSchedule);
+    });
+    this.authService.userAuthDetails.subscribe(user=>{
+      this.currUserName = user.username;
+    });
+   }
 
   ngOnInit(): void {
+    this.employeeService.getProfileDetails(this.currUserName);
   }
+
 
 }

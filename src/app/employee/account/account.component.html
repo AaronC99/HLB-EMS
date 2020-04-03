@@ -4,21 +4,21 @@
             <mat-card class="profile">
                 <mat-card-title>Profile</mat-card-title>
                 <mat-card-content>
-                    <div class="row">
-                        <div class="col"><h2>Name :</h2></div>
-                        <div class="col"><h2>{{ currName }}</h2></div>
-                        <div class="col"><h2>Domain ID:</h2></div>
-                        <div class="col"><h2>{{ currDomainId }}</h2></div>
+                    <div class="row align-items-start">
+                        <div class="col-3"><h2>Name :</h2></div>
+                        <div class="col-3"><h2>{{ currUser.name }}</h2></div>
+                        <div class="col-3"><h2>Domain ID:</h2></div>
+                        <div class="col-3"><h2>{{ currUser.domainId }}</h2></div>
                         <div class="w-100"></div>
-                        <div class="col"><h2>Gender :</h2></div>
-                        <div class="col"><h2>{{ currGender }}</h2></div>
-                        <div class="col"><h2>Email:</h2></div>
-                        <div class="col"><h2>{{ currEmail }}</h2></div>
+                        <div class="col-3"><h2>IC/Passport No :</h2></div>
+                        <div class="col-3"><h2>{{ currUser.icNumber }}</h2></div>
+                        <div class="col-3"><h2>Email:</h2></div>
+                        <div class="col-3"><h2>{{ currUser.email }}</h2></div>
                         <div class="w-100"></div>
-                        <div class="col"><h2>Address:</h2></div>
-                        <div class="col"><h2>{{ currAddress }}</h2></div>
-                        <div class="col"><h2>IC/Passport No:</h2></div>
-                        <div class="col"><h2>{{ currIdNo }}</h2></div>
+                        <div class="col-3"><h2>Address:</h2></div>
+                        <div class="col-3"><h2>{{ currUser.address }}</h2></div>
+                        <div class="col-3"><h2>Role:</h2></div>
+                        <div class="col-3"><h2>{{ currUser.role }}</h2></div>
                     </div>
                 </mat-card-content>
             </mat-card>
@@ -31,13 +31,13 @@
                 <mat-card-content>
                     <div class="row">
                         <div class="col"><h2>Working Days:</h2></div>
-                        <div class="col"><h2>{{ workingDays }}</h2></div>
+                        <div class="col"><h2>{{ currUserSchedule.workingDays }}</h2></div>
                         <div class="w-100"></div>
                         <div class="col"><h2>Start Time:</h2></div>
-                        <div class="col"><h2>{{ startTime }}</h2></div>
+                        <div class="col"><h2></h2></div>
                         <div class="w-100"></div>
                         <div class="col"><h2>End Time:</h2></div>
-                        <div class="col"><h2>{{ endTime }}</h2></div>
+                        <div class="col"><h2></h2></div>
                     </div>
                 </mat-card-content>
             </mat-card>
@@ -48,13 +48,13 @@
                 <mat-card-content>
                     <div class="row">
                         <div class="col"><h2>Name:</h2></div>
-                        <div class="col"><h2>{{ dptName }}</h2></div>
+                        <div class="col"><h2></h2></div>
                         <div class="w-100"></div>
                         <div class="col"><h2>Location:</h2></div>
-                        <div class="col"><h2>{{ dptLocation }}</h2></div>
+                        <div class="col"><h2></h2></div>
                         <div class="w-100"></div>
                         <div class="col"><h2>Supervisor:</h2></div>
-                        <div class="col"><h2>{{ supervisor }}</h2></div>
+                        <div class="col"><h2></h2></div>
                     </div>
                 </mat-card-content>
             </mat-card>
