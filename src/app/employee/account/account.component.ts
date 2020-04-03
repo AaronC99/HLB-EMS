@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeeService } from '../service/employee.service';
-import { AuthModel } from 'src/app/model/Authentication.model';
 import { Employee } from 'src/app/model/Employee.model';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { Schedule } from 'src/app/model/Schedule.model';
+import { Department } from 'src/app/model/Department.model';
 
 @Component({
   selector: 'app-account',
@@ -13,6 +13,7 @@ import { Schedule } from 'src/app/model/Schedule.model';
 export class AccountComponent implements OnInit {
   currUser: Employee;
   currUserSchedule: Schedule;
+  currUserDepartment: Department;
   currUserName:String;
   constructor(
     private employeeService: EmployeeService,
@@ -20,8 +21,13 @@ export class AccountComponent implements OnInit {
   ) {
     this.employeeService.currUserDetils.subscribe((details)=>{
       this.currUser = details;
-      this.currUserSchedule = details.schedule;
-      console.log(this.currUserSchedule);
+      this.currUserSchedule = {
+          scheduleName: details.schedule['schedule_name'],
+          workingDays: details.schedule['days_of_work'],
+          startTime: details.schedule['start_time'],
+          endTime: details.schedule['end_time']
+      }
+      this.currUserDepartment = details.department;
     });
     this.authService.userAuthDetails.subscribe(user=>{
       this.currUserName = user.username;

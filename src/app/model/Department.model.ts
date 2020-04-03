@@ -1,11 +1,11 @@
 import { Employee } from './Employee.model';
 
 export class Department{
-    public name: string;
-    public location: string;
-    public supervisorName:Employee;
-    
-    constructor() {
-        this.supervisorName = new Employee();
+    public department_name: string;
+    public level: string;
+    public department_head: Employee;
+
+    constructor(){
+        this.department_head = new Employee();
     }
 }

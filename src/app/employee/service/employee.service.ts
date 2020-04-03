@@ -25,16 +25,16 @@ export class EmployeeService {
   public getProfileDetails(ProfileID:String){
     this.httpClient.get(this.REST_API_SERVER+'/profile/'+ProfileID)
       .subscribe((data) => {
-        console.log(data);
         this.currUserObj = {
           name: data['name'],
           domainId: data['domain_id'],
           icNumber: data['ic'],
           address: data['address'],
+          gender: data['gender'],
           email: data['email'],
           role: data['role'],
-          schedule: data['schedule_id'],
-          department: data['department_id'] 
+          schedule: data['schedule'],
+          department: data['department'] 
         };
         this.currUserSubj.next(this.currUserObj);
       });

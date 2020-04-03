@@ -6,6 +6,7 @@ export class Employee{
     public domainId: string;
     public icNumber: string;
     public address: string;
+    public gender: string;
     public email: string;
     public role: string;
     public schedule: Schedule;
