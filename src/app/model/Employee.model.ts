@@ -10,4 +10,8 @@ export class Employee{
     public role: string;
     public schedule: Schedule;
     public department: Department;
+
+    constructor() {
+        this.schedule = new Schedule();
+    }
 }
