@@ -55,4 +55,12 @@ export class EmployeeService {
       console.log(data);
     });
   }
+
+  public getAllDepartments(){
+    return this.httpClient.get(this.REST_API_SERVER+'/alldepartments');
+  }
+
+  public getAllSchedules(){
+    return this.httpClient.get(this.REST_API_SERVER+'/allschedules');
+  }
 }
