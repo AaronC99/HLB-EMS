@@ -19,7 +19,6 @@
                 </mat-form-field>
                 <mat-card-actions>
                     <button mat-raised-button class="login-button" type="submit" [disabled]="!loginForm.valid" color="primary">Login</button>
-                    <!-- <input class="login" type="submit" [disabled]="!loginForm.valid" value="Login"/> -->
                 </mat-card-actions>
                 <div class="errorMessage" [ngStyle]="{'display': (showErrorMessage==false) ? 'none' : 'block'}">
                     {{ errorMessage }}

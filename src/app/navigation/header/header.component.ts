@@ -7,7 +7,7 @@ import { AuthModel } from 'src/app/model/Authentication.model';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements AfterContentInit {
+export class HeaderComponent{
 
   title = 'Employee Management System';
   clockIn_Out = 'Clock In/Out';
@@ -23,12 +23,6 @@ export class HeaderComponent implements AfterContentInit {
     this.authService.userAuthDetails.subscribe((details) => {
       this._authDetails = details;
       this.account = details.username;
-      //console.log(details.role, details.username);
     });
   }
-
-  ngAfterContentInit() {
-    //console.log(this._authDetails);
-  }
-
 }

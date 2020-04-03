@@ -1,6 +1,6 @@
 import { Component, OnInit, NgModule } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { Timesheet } from '../timesheet';
+import { Timesheet } from '../../model/Timesheet.model';
 import * as moment from 'moment';
 
 export interface clockInOutElement{
@@ -46,7 +46,6 @@ export class CheckInOutPageComponent implements OnInit {
   }
   onClockOut(){
     this.clockOutVisible = false;
-    //console.log('Clock Out Time: ' + this.currTime);
     this.clockOut = this.currTime;
   }
 }

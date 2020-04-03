@@ -34,20 +34,9 @@ export class EmployeeService {
           email: data['email'],
           role: data['role'],
           schedule: data['schedule_id'],
-          // schedule: {
-          //   scheduleId: data['schedule_id'],
-          //   workingDays: data['days_of_work'],
-          //   startTime: data['start_time'],
-          //   endTime: data['end_time']
-          // },
           department: data['department_id'] 
         };
         this.currUserSubj.next(this.currUserObj);
-        //console.log(data['schedule_id']['days_of_work']);
-        // console.log(JSON.parse(`{ schedule_id: 'S001',
-        // days_of_work: [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday' ],
-        // start_time: '8:30 am',
-        // end_time: '5:30 pm' }`));
       });
   }
 

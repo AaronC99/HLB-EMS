@@ -2,7 +2,6 @@
     flex: 1 1 auto;
 }
 .nav-bar{
-    //height: 100vh;
     .title,a{
         font-family: 'Ubuntu', sans-serif;
         margin-left: 40px;
@@ -21,19 +20,3 @@
         }
     }
 }
-// @media screen and (max-width: 700px) {
-//     .sidebar {
-//       width: 100%;
-//       height: auto;
-//       position: relative;
-//     }
-//     .sidebar a {float: left;}
-//     div.content {margin-left: 0;}
-//   }
-  
-//   @media screen and (max-width: 400px) {
-//     .sidebar a {
-//       text-align: center;
-//       float: none;
-//     }
-// }

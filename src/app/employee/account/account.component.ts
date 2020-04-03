@@ -21,13 +21,6 @@ export class AccountComponent implements OnInit {
     this.employeeService.currUserDetils.subscribe((details)=>{
       this.currUser = details;
       this.currUserSchedule = details.schedule;
-      // this.currUserSchedule = {
-      //   scheduleId: details.schedule['schedule_id'],
-      //   workingDays: details.schedule['days_of_work'],
-      //   startTime: details.schedule['start_time'],
-      //   endTime: details.schedule['end_time']
-      // };
-      //console.log(this.currUser.schedule);
       console.log(this.currUserSchedule);
     });
     this.authService.userAuthDetails.subscribe(user=>{
