@@ -40,7 +40,7 @@ export class EmployeeService {
       });
   }
 
-  public getAllEmployees(DomainID:string){ //pass in the id of current user to check if its admin or manager
+  public getAllEmployees(DomainID:String){ //pass in the id of current user to check if its admin or manager
     return this.httpClient.get(this.REST_API_SERVER+'/allEmployees/'+DomainID);
   }
 
