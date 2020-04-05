@@ -5,18 +5,18 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-import { AccountComponent } from './account/account.component';
-import { CheckInOutPageComponent } from './check-in-out-page/check-in-out-page.component';
-import { TimesheetComponent } from './timesheet/timesheet.component';
+import { AccountComponent } from '../account/account.component';
+import { CheckInOutPageComponent } from '../check-in-out-page/check-in-out-page.component';
+import { TimesheetComponent } from '../timesheet/timesheet.component';
 import { MatCardModule } from '@angular/material/card';
-import { EmployeeListComponent } from './employee-list/employee-list.component';
+import { EmployeeListComponent } from '../employee-list/employee-list.component';
+import { EmployeeService } from '../service/employee.service';
+import { AuthenticationModule } from 'src/app/authentication/module/authentication.module';
+import { MatSortModule } from '@angular/material/sort';
 
 
 
@@ -29,19 +29,27 @@ import { EmployeeListComponent } from './employee-list/employee-list.component';
   ],
   imports: [
     CommonModule,
+    AuthenticationModule,
     MatCardModule,
     MatButtonModule,
     MatInputModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatIconModule,
-    MatToolbarModule,
-    MatSidenavModule,
-    FlexLayoutModule,
     MatListModule,
     MatTableModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    MatSortModule
   ]
 })
-export class EmployeeModule {}
+export class EmployeeModule {
+  public static forRoot() {
+    return{
+      ngModule: EmployeeModule,
+      providers: [
+        EmployeeService
+      ]
+    };
+  }
+}

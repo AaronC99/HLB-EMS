@@ -1,27 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterContentInit } from '@angular/core';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
-import { Observable } from 'rxjs/internal/Observable';
+import { AuthModel } from 'src/app/model/Authentication.model';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent{
 
   title = 'Employee Management System';
   clockIn_Out = 'Clock In/Out';
   timesheet = 'Timesheet';
-  account = 'My Account';
+  account:String;
   employeeList = 'Employee List';
   addEmployee = 'New Employee';
   logout = 'Log Out';
-  employeeAccess:any;
-  constructor(public authService: AuthenticationService) { }
+  employeeAccess: any;
+  _authDetails: AuthModel;
 
-  ngOnInit(): void {
-    // this.employeeAccess =this.authService.isLoggedIn;
-    // console.log(this.employeeAccess);
+  constructor(private authService: AuthenticationService) {
+    this.authService.userAuthDetails.subscribe((details) => {
+      this._authDetails = details;
+      this.account = details.username;
+    });
   }
-
 }

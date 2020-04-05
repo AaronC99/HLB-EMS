@@ -21,34 +21,11 @@ export class AuthenticationGuard implements CanActivate{ //CanActivateChild, Can
           take(123),
           map((isLoggedIn:Boolean)=>{
             if(!isLoggedIn){
-              //location.href = "/login-page";
               this.router.navigateByUrl('/login-page');
               return false;
             }
             return true;
           })
         )
-        // if (this.login.isUser() === true){
-      //   return true;
-      // }
-     
-      // this.router.navigateByUrl('/login-page');
    }
-  // canActivateChild(
-  //   next: ActivatedRouteSnapshot,
-  //   state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-  //   return true;
-  // }
-  // canDeactivate(
-  //   component: unknown,
-  //   currentRoute: ActivatedRouteSnapshot,
-  //   currentState: RouterStateSnapshot,
-  //   nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-  //   return true;
-  // }
-  // canLoad(
-  //   route: Route,
-  //   segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
-  //   return true;
-  // }
 }

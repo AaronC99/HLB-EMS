@@ -7,6 +7,7 @@
                 <mat-form-field class="text-field" appearance="outline">
                     <mat-label>{{ placeholderName }}</mat-label>
                     <input matInput placeholder="{{ placeholderName }}" formControlName="domainId"> 
+                    <mat-error *ngIf="loginForm.invalid">{{ getDomainIdError() }}</mat-error>
                 </mat-form-field>
                 <mat-form-field class="text-field" appearance="outline">
                     <mat-label>{{ placeholderPass }}</mat-label>
@@ -14,12 +15,12 @@
                     <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" type ="button">
                         <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
                     </button>
+                    <mat-error *ngIf="loginForm.invalid">{{ getDomainPassError() }}</mat-error>
                 </mat-form-field>
                 <mat-card-actions>
                     <button mat-raised-button class="login-button" type="submit" [disabled]="!loginForm.valid" color="primary">Login</button>
-                    <!-- <input class="login" type="submit" [disabled]="!loginForm.valid" value="Login"/> -->
                 </mat-card-actions>
-                <div class="errorMessage" [ngStyle]="{'display': (login==true) ? 'none' : 'block'}"><!--[ngStyle]="{'display': (login==true) ? 'none' : 'block'}"-->
+                <div class="errorMessage" [ngStyle]="{'display': (showErrorMessage==false) ? 'none' : 'block'}">
                     {{ errorMessage }}
                 </div>
         </mat-card-content>
