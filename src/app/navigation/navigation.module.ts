@@ -9,6 +9,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HeaderComponent } from './header/header.component';
 import { AuthenticationModule } from '../authentication/module/authentication.module';
+import { MatMenuModule } from '@angular/material/menu';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import { AuthenticationModule } from '../authentication/module/authentication.mo
     MatIconModule,
     MatToolbarModule,
     FlexLayoutModule,
+    MatMenuModule
   ],
   providers: [],
   exports: [

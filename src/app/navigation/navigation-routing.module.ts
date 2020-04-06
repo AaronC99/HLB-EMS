@@ -6,8 +6,7 @@ import { TimesheetComponent } from '../employee/timesheet/timesheet.component';
 import { NavigationComponent } from './navigation.component';
 import { CreateEmployeeComponent } from '../admin/create-employee/create-employee.component';
 import { EmployeeListComponent } from '../employee/employee-list/employee-list.component';
-import { AuthenticationGuard } from '../authentication/service/authentication.guard';
-import { AuthModel } from '../model/Authentication.model';
+import { AllEmployeeListComponent } from '../admin/all-employee-list/all-employee-list.component';
 
 
 const routes: Routes = [
@@ -39,6 +38,10 @@ const routes: Routes = [
       {
         path:'employee-list',
         component: EmployeeListComponent
+      },
+      {
+        path: 'all-employee',
+        component: AllEmployeeListComponent
       }
     ]}
 ];
