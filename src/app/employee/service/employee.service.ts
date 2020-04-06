@@ -44,23 +44,10 @@ export class EmployeeService {
     return this.httpClient.get(this.REST_API_SERVER+'/allEmployees/'+DomainID);
   }
 
-  public addEmployee(employeeDetails:any){ //pass in the employee object
-    this.httpClient.post(this.REST_API_SERVER+'/addEmployee',employeeDetails).subscribe((data)=>{
-      console.log(data);
-    });
-  }
-
   public updateEmployee(SelectedEmpID: string, updateDetails:any){
     this.httpClient.patch(this.REST_API_SERVER+'/updateEmployee/'+SelectedEmpID, updateDetails).subscribe((data:any)=>{
       console.log(data);
     });
   }
 
-  public getAllDepartments(){
-    return this.httpClient.get(this.REST_API_SERVER+'/alldepartments');
-  }
-
-  public getAllSchedules(){
-    return this.httpClient.get(this.REST_API_SERVER+'/allschedules');
-  }
 }

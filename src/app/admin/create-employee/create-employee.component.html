@@ -4,112 +4,137 @@
             <mat-card class="new-emp-form">
                 <mat-card-title class="title"> Create New Employee </mat-card-title>
                 <mat-card-content>
-                    <mat-horizontal-stepper  #stepper>
-                        <mat-step [stepControl]="createEmployeeFormGroup">
-                          <form [formGroup]="createEmployeeFormGroup">
-                            <ng-template matStepLabel>Personal Details</ng-template>
-                            <div class="row justify-content-center">
-                                <div class="col-5">
-                                    <mat-form-field appearance="fill">
-                                        <mat-label>Name</mat-label>
-                                        <input matInput placeholder="Name" formControlName="name" required> 
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-5">
-                                    <mat-form-field appearance="fill">
-                                    <mat-label>Domain ID</mat-label>
-                                    <input matInput placeholder="Domain ID" formControlName="domainId" required> 
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-5">
-                                    <mat-form-field appearance="fill">
-                                        <mat-label>IC/Passport No</mat-label>
-                                        <input matInput placeholder="Name" formControlName="ic_passportNo" required> 
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-5">
-                                    <mat-form-field appearance="fill">
-                                        <mat-label>Date of Birth</mat-label>
-                                        <input matInput [matDatepicker]="dp3" disabled (dateInput)="addEvent('input', $event)" 
-                                         (dateChange)="addEvent('change', $event)" formControlName="dob">
-                                        <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
-                                        <mat-datepicker #dp3 disabled="false" startView="year" [startAt]="startDate"  ngDefaultControl></mat-datepicker>
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                            <div class="next-button">
-                              <button mat-raised-button matStepperNext color="primary">Next</button>
-                            </div>
-                          </form>
-                        </mat-step>
-                        <mat-step [stepControl]="createEmployeeFormGroup">
-                          <form [formGroup]="createEmployeeFormGroup">
-                            <ng-template matStepLabel>Department Details</ng-template>
-                            <div class="row justify-content-center">
-                                <div class="col-5">
-                                    <mat-form-field>
-                                        <mat-label>Department Name</mat-label>
-                                        <input matInput formControlName="dptName" placeholder="Department Name"
-                                               required>
-                                      </mat-form-field>
-                                </div>
-                                <div class="col-5">
-                                    <mat-form-field>
-                                        <mat-label>Department Location</mat-label>
-                                        <input matInput formControlName="dptLocation" placeholder="Department Location"
-                                               required>
-                                      </mat-form-field>
-                                </div>
-                                <div class="col-5">
-                                    <mat-form-field>
-                                        <mat-label>Supervisor Name</mat-label>
-                                        <input matInput formControlName="supervisor" placeholder="Supervisor"
-                                               required>
-                                      </mat-form-field>
-                                </div>
-                            </div>
-                            <div class="next-button">
-                              <button mat-button matStepperPrevious>Back</button>
-                              <button mat-raised-button matStepperNext color="primary">Next</button>
-                            </div>
-                          </form>
-                        </mat-step>
-                        <mat-step [stepControl]="createEmployeeFormGroup">
-                            <form [formGroup]="createEmployeeFormGroup">
-                                <ng-template matStepLabel>Schedule Details</ng-template>
+                    <form [formGroup]="createEmployeeFormGroup" (ngSubmit)= "onSubmit()">
+                        <mat-horizontal-stepper #stepper formArrayName="formArray" [linear]="true">
+                            <mat-step formGroupName="0" [stepControl]="formArray.get([0])">
+                                <ng-template matStepLabel>Personal Details</ng-template>
                                 <div class="row justify-content-center">
                                     <div class="col-5">
                                         <mat-form-field appearance="fill">
-                                            <mat-label>Working Days</mat-label>
-                                            <input matInput placeholder="Working Days" formControlName="workingDays"> 
+                                            <mat-label>Name</mat-label>
+                                            <input matInput placeholder="Enter Full Name" formControlName="name" required> 
                                         </mat-form-field>
                                     </div>
                                     <div class="col-5">
                                         <mat-form-field appearance="fill">
-                                            <mat-label>Working Hours</mat-label>
-                                            <input matInput placeholder="Working Hours" formControlName="workingHours"> 
+                                        <mat-label>Domain ID</mat-label>
+                                        <input matInput placeholder="Enter Domain ID" formControlName="domainId" required> 
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-5">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>IC/Passport No</mat-label>
+                                            <input matInput placeholder="Enter IC/Passport No" formControlName="ic_passportNo" required> 
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-5">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Email Address</mat-label>
+                                            <input matInput placeholder="Enter Email" formControlName="email" required> 
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-5">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Address</mat-label>
+                                            <input matInput placeholder="Enter Address" formControlName="address" required> 
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-5">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Gender</mat-label>
+                                            <mat-select formControlName="gender" required>
+                                                <mat-option *ngFor="let gndr of gender" [value]="gndr">{{ gndr }}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-5">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Position</mat-label>
+                                            <mat-select formControlName="role" required>
+                                                <mat-option *ngFor="let position of role" [value]="position">{{ position }}</mat-option>
+                                            </mat-select>
                                         </mat-form-field>
                                     </div>
                                 </div>
                                 <div class="next-button">
-                                    <button mat-button matStepperPrevious>Back</button>
-                                    <button mat-raised-button matStepperNext color="primary">Next</button>
-                                  </div>
-                            </form>
-                        </mat-step>
-                        <mat-step>
-                          <ng-template matStepLabel>Done</ng-template>
-                          <p>You are now done.</p>
-                          <div>
-                            <button mat-button matStepperPrevious>Back</button>
-                          </div>
-                        </mat-step>
-                      </mat-horizontal-stepper>
-                      
-                    
+                                  <button mat-raised-button matStepperNext color="primary" type="button">Next</button>
+                                </div>
+                            </mat-step>
+                            <mat-step formGroupName="1" [stepControl]="formArray.get([1])">
+                                <ng-template matStepLabel>Department Details</ng-template>
+                                <div class="row justify-content-center">
+                                    <div class="col-5">
+                                        <mat-form-field>
+                                            <mat-label>Department Name</mat-label>
+                                            <mat-select formControlName="department" required>
+                                                <mat-option *ngFor="let dpt of dpt_name" [value]="dpt" (click)="getDptDetails(dpt)">{{ dpt.department_name }}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="w-100"></div>
+                                    <div class="col-5">
+                                        <div *ngIf="showDptDetails" class="show-details">
+                                            <div class="row">
+                                                <div class="col-6"><h2>Level:</h2></div>
+                                                <div class="col-6"><h3>{{ dpt_level }}</h3></div>
+                                                <div class="w-100"></div>
+                                                <div class="col-6"><h2>Supervisor:</h2></div>
+                                                <div class="col-6"><h3>{{ dpt_head.name }}</h3></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="next-button">
+                                  <button mat-button matStepperPrevious type="button">Back</button>
+                                  <button mat-raised-button matStepperNext color="primary" type="button">Next</button>
+                                </div>
+                            </mat-step>
+                            <mat-step formGroupName="2" [stepControl]="formArray.get([2])">
+                                    <ng-template matStepLabel>Schedule Details</ng-template>
+                                    <div class="row justify-content-center">
+                                        <div class="col-5">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Schedule Name</mat-label>
+                                                <mat-select formControlName="schedule" required>
+                                                    <mat-option *ngFor="let schedule of schedule_name" (click)="getSchDetails(schedule)" [value]="schedule">{{ schedule.schedule_name }}</mat-option>
+                                                </mat-select> 
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="w-100"></div>
+                                        <div class="col-5">
+                                            <div *ngIf="showSchDetails">
+                                                <div class="row">
+                                                    <div class="col-6"><h2>Days of Work:</h2></div>
+                                                    <div class="col-6">
+                                                        <h3><ul>
+                                                            <li *ngFor="let days of working_days"> 
+                                                                {{ days }}
+                                                            </li>
+                                                        </ul></h3>
+                                                    </div>
+                                                    <div class="w-100"></div>
+                                                    <div class="col-6"><h2>Working Hours:</h2></div>
+                                                    <div class="col-6"><h3>{{ start_time }} - {{ end_time }}</h3></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="next-button">
+                                        <button mat-button matStepperPrevious type="button">Back</button>
+                                        <button mat-raised-button matStepperNext color="primary" type="submit">Register</button>
+                                    </div>
+                            </mat-step>
+                            <mat-step>
+                              <ng-template matStepLabel>Done</ng-template>
+                              <p>A new employee has been registered.</p>
+                              <!-- <div>
+                                <button mat-button matStepperPrevious>Back</button>
+                              </div> -->
+                            </mat-step>
+                          </mat-horizontal-stepper>
+                    </form>  
                 </mat-card-content>
             </mat-card>
-        </div>
-        
+        </div> 
     </div>
 </div>
