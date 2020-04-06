@@ -8,10 +8,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthenticationModule } from './authentication/module/authentication.module';
 import { EmployeeModule } from './employee/module/employee.module';
 import { AdminModule } from './admin/module/admin.module';
+import { AllEmployeeListComponent } from './admin/all-employee-list/all-employee-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    AllEmployeeListComponent,
   ],
   imports: [
     BrowserModule,
@@ -20,7 +22,7 @@ import { AdminModule } from './admin/module/admin.module';
     BrowserAnimationsModule,
     AuthenticationModule.forRoot(),
     EmployeeModule,
-    AdminModule
+    AdminModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -8,7 +8,9 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 
@@ -25,7 +27,10 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatButtonModule,
     ReactiveFormsModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatCheckboxModule,
   ]
 })
 export class AdminModule { }
