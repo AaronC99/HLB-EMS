@@ -24,4 +24,8 @@ export class AdminService {
       console.log(data);
     });
   }
+
+  public checkDuplicate(userInput:string){
+    return this.httpClient.get(this.REST_API_SERVER+'/employee/checkduplicate/'+userInput);
+  }
 }
