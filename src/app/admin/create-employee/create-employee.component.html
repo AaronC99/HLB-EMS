@@ -13,31 +13,36 @@
                                         <mat-form-field appearance="fill">
                                             <mat-label>Name</mat-label>
                                             <input matInput placeholder="Enter Full Name" formControlName="name" required> 
-                                            <!-- <mat-error *ngIf="formArray.controls[0].name.hasError('required')">Name invalid</mat-error> -->
+                                            <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-5">
                                         <mat-form-field appearance="fill">
-                                        <mat-label>Domain ID</mat-label>
-                                        <input matInput placeholder="Enter Domain ID" formControlName="domainId" required> 
+                                            <mat-label>Domain ID</mat-label>
+                                            <input matInput placeholder="Enter Domain ID" formControlName="domainId" required (blur)="checkDuplicateValues(formArray.value[0].domainId)">
+                                            <!-- <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error> -->
+                                            <mat-error *ngIf="exist|| formArray.invalid">Invalid</mat-error>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-5">
                                         <mat-form-field appearance="fill">
                                             <mat-label>IC/Passport No</mat-label>
-                                            <input matInput placeholder="Enter IC/Passport No" formControlName="ic_passportNo" required> 
+                                            <input matInput placeholder="Enter IC/Passport No" formControlName="ic_passportNo" required (blur)="checkDuplicateValues(formArray.value[0].ic_passportNo)">
+                                            <mat-error *ngIf="exist || formArray.invalid">Invalid</mat-error>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-5">
                                         <mat-form-field appearance="fill">
                                             <mat-label>Email Address</mat-label>
-                                            <input matInput placeholder="Enter Email" formControlName="email" required> 
+                                            <input matInput placeholder="Enter Email" formControlName="email" required > 
+                                            <!-- (blur)="checkDuplicateValues(formArray.value[0].email)" -->
                                         </mat-form-field>
                                     </div>
                                     <div class="col-5">
                                         <mat-form-field appearance="fill">
                                             <mat-label>Address</mat-label>
                                             <input matInput placeholder="Enter Address" formControlName="address" required> 
+                                            <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-5">
@@ -46,6 +51,7 @@
                                             <mat-select formControlName="gender" required>
                                                 <mat-option *ngFor="let gndr of gender" [value]="gndr">{{ gndr }}</mat-option>
                                             </mat-select>
+                                            <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-5">
@@ -54,6 +60,7 @@
                                             <mat-select formControlName="role" required>
                                                 <mat-option *ngFor="let position of role" [value]="position">{{ position }}</mat-option>
                                             </mat-select>
+                                            <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -70,6 +77,7 @@
                                             <mat-select formControlName="department" required>
                                                 <mat-option *ngFor="let dpt of dpt_name" [value]="dpt" (click)="displayDptDetails(dpt)">{{ dpt.department_name }}</mat-option>
                                             </mat-select>
+                                            <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
                                         </mat-form-field>
                                     </div>
                                     <div class="w-100"></div>
@@ -99,6 +107,7 @@
                                                 <mat-select formControlName="schedule" required>
                                                     <mat-option *ngFor="let schedule of schedule_name" (click)="displaySchDetails(schedule)" [value]="schedule">{{ schedule.schedule_name }}</mat-option>
                                                 </mat-select> 
+                                                <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
                                             </mat-form-field>
                                         </div>
                                         <div class="w-100"></div>

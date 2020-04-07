@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl, ControlContainer } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { AdminService } from '../service/admin.service';
 import { Employee } from 'src/app/model/Employee.model';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-employee',
@@ -10,7 +11,8 @@ import { Employee } from 'src/app/model/Employee.model';
 })
 export class CreateEmployeeComponent implements OnInit {
   gender:string[]=['Male','Female'];
-  role:string[]=['Admin', 'Manager', 'Staff'];
+  role:string[]=['Admin','Staff'];
+  exist = true;
   employee:Employee;
   editable: boolean = true;
   showDptDetails = false;
@@ -42,6 +44,7 @@ export class CreateEmployeeComponent implements OnInit {
     this.createForm();
     this.getDepartments();
     this.getSchedules();
+    this.checkDuplicateValues(this.formArray.value);
   }
 
   ngOnInit(): void {
@@ -111,8 +114,23 @@ export class CreateEmployeeComponent implements OnInit {
     console.log(this.employee);
     this.adminService.addEmployee(this.employee);
   }
-  showError_Name(){
-    if (this.formArray.value[0].name.hasError('required'))
-      return 'Name is required'
+  showErrorMessage(){
+    if (this.formArray.hasError('required'))
+      return 'Field is required!!';
+    // else if (this.formArray.hasError('duplicate'))
+    //   return 'Already Exist!!';
+    else
+      return 'Field does not contain numeric values';
+  }
+
+  public checkDuplicateValues(input:any){
+    this.adminService.checkDuplicate(input)
+      .subscribe((result)=>{
+      if (result !== null){
+        console.log("ID Exist");
+        this.exist = true;
+      } else 
+        this.exist = false;
+    });
   }
 }
