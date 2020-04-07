@@ -27,8 +27,8 @@ export class EmployeeService {
       .subscribe((data) => {
         this.currUserObj = {
           name: data['name'],
-          domainId: data['domain_id'],
-          icNumber: data['ic'],
+          domain_id: data['domain_id'],
+          ic: data['ic'],
           address: data['address'],
           gender: data['gender'],
           email: data['email'],
@@ -41,11 +41,11 @@ export class EmployeeService {
   }
 
   public getAllEmployees(DomainID:String){ //pass in the id of current user to check if its admin or manager
-    return this.httpClient.get(this.REST_API_SERVER+'/allEmployees/'+DomainID);
+    return this.httpClient.get(this.REST_API_SERVER+'/employee/allEmployees/'+DomainID);
   }
 
   public updateEmployee(SelectedEmpID: string, updateDetails:any){
-    this.httpClient.patch(this.REST_API_SERVER+'/updateEmployee/'+SelectedEmpID, updateDetails).subscribe((data:any)=>{
+    this.httpClient.patch(this.REST_API_SERVER+'/employee/updateEmployee/'+SelectedEmpID, updateDetails).subscribe((data:any)=>{
       console.log(data);
     });
   }

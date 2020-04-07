@@ -20,7 +20,7 @@ export class AdminService {
   }
   
   public addEmployee(employeeDetails:any){ //pass in the employee object
-    this.httpClient.post(this.REST_API_SERVER+'/addEmployee',employeeDetails).subscribe((data)=>{
+    this.httpClient.post(this.REST_API_SERVER+'/employee/addEmployee',employeeDetails).subscribe((data)=>{
       console.log(data);
     });
   }
