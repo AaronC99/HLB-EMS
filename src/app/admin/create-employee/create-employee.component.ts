@@ -46,25 +46,25 @@ export class CreateEmployeeComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public getDepartments(){
+  public getDepartments(){//get department detials from API
     this.adminService.getAllDepartments().subscribe(dptDetails =>{
       this.dpt_name = dptDetails;
     });
   }
-  getDptDetails(data){
+  public displayDptDetails(data){//display department details when schedule name is selected
     this.showDptDetails = true;
     this.dpt_level = data.level;
     this.dpt_head = data.department_head;
   }
 
-  getSchDetails(data){
+  public displaySchDetails(data){//display schedule details when schedule name is selected
     this.showSchDetails = true;
     this.working_days = data.days_of_work;
     this.start_time = data.start_time;
     this.end_time = data.end_time;
   }
 
-  public getSchedules(){
+  public getSchedules(){//get schedule detials from API
     this.adminService.getAllSchedules().subscribe(schDetails => {
       this.schedule_name = schDetails;
     });
@@ -96,16 +96,17 @@ export class CreateEmployeeComponent implements OnInit {
   public onSubmit(){
     this.employee = this.formArray.value;
     this.employee = {
+      domain_id: this.formArray.value[0].domainId,
       name: this.formArray.value[0].name,
-      domainId: this.formArray.value[0].domainId,
-      icNumber: this.formArray.value[0].ic_passportNo,
-      address:this.formArray.value[0].address,
-      email:this.formArray.value[0].email,
       gender:this.formArray.value[0].gender,
-      role: this.formArray.value[0].role,
+      address:this.formArray.value[0].address,
+      ic: this.formArray.value[0].ic_passportNo,
+      email:this.formArray.value[0].email,
       department: this.formArray.value[1].department._id,
-      schedule:this.formArray.value[2].schedule._id
+      schedule:this.formArray.value[2].schedule._id,
+      role: this.formArray.value[0].role
     }
     console.log(this.employee);
+    this.adminService.addEmployee(this.employee);
   }
 }

@@ -4,7 +4,7 @@
             <mat-card class="new-emp-form">
                 <mat-card-title class="title"> Create New Employee </mat-card-title>
                 <mat-card-content>
-                    <form [formGroup]="createEmployeeFormGroup" (ngSubmit)= "onSubmit()">
+                    <form [formGroup]="createEmployeeFormGroup" (ngSubmit)= "onSubmit()" #thisFormGroup>
                         <mat-horizontal-stepper #stepper formArrayName="formArray" [linear]="true">
                             <mat-step formGroupName="0" [stepControl]="formArray.get([0])">
                                 <ng-template matStepLabel>Personal Details</ng-template>
@@ -67,7 +67,7 @@
                                         <mat-form-field>
                                             <mat-label>Department Name</mat-label>
                                             <mat-select formControlName="department" required>
-                                                <mat-option *ngFor="let dpt of dpt_name" [value]="dpt" (click)="getDptDetails(dpt)">{{ dpt.department_name }}</mat-option>
+                                                <mat-option *ngFor="let dpt of dpt_name" [value]="dpt" (click)="displayDptDetails(dpt)">{{ dpt.department_name }}</mat-option>
                                             </mat-select>
                                         </mat-form-field>
                                     </div>
@@ -96,7 +96,7 @@
                                             <mat-form-field appearance="fill">
                                                 <mat-label>Schedule Name</mat-label>
                                                 <mat-select formControlName="schedule" required>
-                                                    <mat-option *ngFor="let schedule of schedule_name" (click)="getSchDetails(schedule)" [value]="schedule">{{ schedule.schedule_name }}</mat-option>
+                                                    <mat-option *ngFor="let schedule of schedule_name" (click)="displaySchDetails(schedule)" [value]="schedule">{{ schedule.schedule_name }}</mat-option>
                                                 </mat-select> 
                                             </mat-form-field>
                                         </div>
@@ -126,10 +126,11 @@
                             </mat-step>
                             <mat-step>
                               <ng-template matStepLabel>Done</ng-template>
-                              <p>A new employee has been registered.</p>
-                              <!-- <div>
-                                <button mat-button matStepperPrevious>Back</button>
-                              </div> -->
+                              <h2>A new employee has been registered.</h2>
+                              <div>
+                                <button mat-raised-button color="primary" type="button" (click)="stepper.reset();thisFormGroup.reset()">Create New Employee</button>
+                                <a mat-button routerLink="all-employee">Done</a>
+                              </div>
                             </mat-step>
                           </mat-horizontal-stepper>
                     </form>  
