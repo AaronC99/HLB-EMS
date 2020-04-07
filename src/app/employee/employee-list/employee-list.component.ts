@@ -39,7 +39,6 @@ export class EmployeeListComponent implements OnInit {
   public getEmployeeRecords(){
     this.employeeService.getAllEmployees(this.currentUserId).subscribe(data =>{
       this.dataSource = data;
-      console.log(this.dataSource);
     });
   }
 

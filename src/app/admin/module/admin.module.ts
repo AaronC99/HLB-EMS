@@ -13,6 +13,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AllEmployeeListComponent } from '../all-employee-list/all-employee-list.component';
 import { AdminService } from '../service/admin.service';
+import { MatTableModule } from '@angular/material/table';
 
 
 
@@ -34,6 +35,7 @@ import { AdminService } from '../service/admin.service';
     MatSelectModule,
     MatOptionModule,
     MatCheckboxModule,
+    MatTableModule
   ]
 })
 export class AdminModule {
