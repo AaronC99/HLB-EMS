@@ -12,6 +12,7 @@ export class CreateEmployeeComponent implements OnInit {
   gender:string[]=['Male','Female'];
   role:string[]=['Admin', 'Manager', 'Staff'];
   employee:Employee;
+  editable: boolean = true;
   showDptDetails = false;
   showSchDetails = false;
   schedule_name:any;
@@ -94,6 +95,7 @@ export class CreateEmployeeComponent implements OnInit {
   }
 
   public onSubmit(){
+    this.editable = false;
     this.employee = this.formArray.value;
     this.employee = {
       domain_id: this.formArray.value[0].domainId,
@@ -108,5 +110,9 @@ export class CreateEmployeeComponent implements OnInit {
     }
     console.log(this.employee);
     this.adminService.addEmployee(this.employee);
+  }
+  showError_Name(){
+    if (this.formArray.value[0].name.hasError('required'))
+      return 'Name is required'
   }
 }

@@ -48,7 +48,7 @@ export class LoginPageComponent implements OnInit {
   }
   getDomainIdError(){
     if(this.userInput.domainId.hasError('required'))
-      return 'Domain Id is required';
+      return 'Invalid Domain Id';
     else return 'Invalid Domain Id';
   }
   getDomainPassError(){
