@@ -11,12 +11,15 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { AllEmployeeListComponent } from '../all-employee-list/all-employee-list.component';
+import { AdminService } from '../service/admin.service';
 
 
 
 @NgModule({
   declarations: [
-    CreateEmployeeComponent
+    CreateEmployeeComponent,
+    AllEmployeeListComponent
   ],
   imports: [
     CommonModule,
@@ -33,4 +36,13 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatCheckboxModule,
   ]
 })
-export class AdminModule { }
+export class AdminModule {
+  public static forRoot() {
+    return{
+      ngModule: AdminModule,
+      providers: [
+        AdminService
+      ]
+    };
+  }
+ }
