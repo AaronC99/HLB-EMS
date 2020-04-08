@@ -4,6 +4,7 @@ import { AuthenticationService } from 'src/app/authentication/service/authentica
 import { EmployeeService } from 'src/app/employee/service/employee.service';
 import { MatSort } from '@angular/material/sort';
 import { AdminService } from '../service/admin.service';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-all-employee-list',
@@ -15,7 +16,7 @@ export class AllEmployeeListComponent implements OnInit {
   ELEMENT_DATA: any = [];
   dataSource:any = new MatTableDataSource<any>();
   currentUserId: String;
-  expandedRow:number;
+  checked:boolean = false;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   constructor(
     private authService: AuthenticationService,
@@ -33,6 +34,7 @@ export class AllEmployeeListComponent implements OnInit {
 
   public getAllEmployeeDetails(){
     this.employeeService.getAllEmployees(this.currentUserId).subscribe( data =>{
+      console.log(data[0]);
       this.ELEMENT_DATA = data;
       this.dataSource = new MatTableDataSource<any>(this.ELEMENT_DATA);
       this.dataSource.sort = this.sort;
@@ -45,13 +47,28 @@ export class AllEmployeeListComponent implements OnInit {
   }
 
   public deactivateAccount(currUser:any){
-    if (confirm("Confirmation Message: \nDo you want to deactive "+ currUser.domain_id+" ? ")){
-      this.adminService.updateEmployee(currUser.domain_id,{activated:false});
-    } 
+    if(currUser.activated){
+      if (confirm("Confirmation Message: \nDo you want to deactivate "+ currUser.domain_id+" ? ")){
+        this.adminService.updateEmployee(currUser.domain_id,{activated:false});
+      } 
+    } else {
+      if (confirm("Confirmation Message: \nDo you want to reactivate "+ currUser.domain_id+" ? ")){
+        this.adminService.updateEmployee(currUser.domain_id,{activated:true});
+      } 
+    }
   }
 
   public editProfileDetails(currUser:any){
-  
+
     console.log("Edit User: " + currUser.name);
+  }
+
+  public showAll($event: MatSlideToggleChange){
+    this.checked = $event.checked;
+    console.log(this.checked);
+  }
+
+  public showInactiveUser(){
+    
   }
 }

@@ -14,6 +14,7 @@ import { AdminService } from '../service/admin.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 
 
@@ -34,7 +35,8 @@ import { MatSortModule } from '@angular/material/sort';
     MatOptionModule,
     MatTableModule,
     MatIconModule,
-    MatSortModule
+    MatSortModule,
+    MatSlideToggleModule
   ]
 })
 export class AdminModule {
