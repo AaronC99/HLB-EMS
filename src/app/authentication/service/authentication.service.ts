@@ -53,4 +53,9 @@ export class AuthenticationService {
       this.loginErrorSubject.next(error.message);
     });    
   }
+
+  logout(){
+    this.loggedIn.next(false);
+    this._authSubj.next(null);
+  }
 }

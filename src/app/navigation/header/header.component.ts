@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterContentInit } from '@angular/core';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { AuthModel } from 'src/app/model/Authentication.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -19,10 +20,15 @@ export class HeaderComponent{
   employeeAccess: any;
   _authDetails: AuthModel;
 
-  constructor(private authService: AuthenticationService) {
+  constructor(
+    private authService: AuthenticationService,
+    private router:Router) {
     this.authService.userAuthDetails.subscribe((details) => {
       this._authDetails = details;
       this.account = details.username;
     });
+  }
+  onLogOut(){
+    this.authService.logout();
   }
 }

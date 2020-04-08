@@ -24,7 +24,7 @@ const routes: Routes = [
         component: CheckInOutPageComponent 
       },
       {
-        path: 'my-account',
+        path: 'my-account/:id',
         component: AccountComponent
       },
       {

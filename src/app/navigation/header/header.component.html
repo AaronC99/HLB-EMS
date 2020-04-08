@@ -16,7 +16,7 @@
             <mat-icon>supervised_user_circle</mat-icon>
             {{ employeeList }}
           </a>
-          <a routerLink="my-account" mat-button *ngIf="_authDetails.role==='Manager' || _authDetails.role==='Staff'">
+          <a routerLink="my-account/{{_authDetails.username}}" mat-button *ngIf="_authDetails.role==='Manager' || _authDetails.role==='Staff'">
             <mat-icon>account_circle</mat-icon>
             {{ account }}
           </a>
@@ -42,7 +42,7 @@
               <span>New Schedule</span>
             </button>
           </mat-menu>
-          <a routerLink="login-page" mat-raised-button color="warn" class="log-out">
+          <a routerLink="login-page" mat-raised-button color="warn" class="log-out" (click)="onLogOut()">
             {{ logout }}
           </a>
         </div>

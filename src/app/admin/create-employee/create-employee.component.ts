@@ -44,7 +44,6 @@ export class CreateEmployeeComponent implements OnInit {
     this.createForm();
     this.getDepartments();
     this.getSchedules();
-    this.checkDuplicateValues(this.formArray.value);
   }
 
   ngOnInit(): void {
@@ -114,6 +113,7 @@ export class CreateEmployeeComponent implements OnInit {
     console.log(this.employee);
     this.adminService.addEmployee(this.employee);
   }
+
   showErrorMessage(){
     if (this.formArray.hasError('required'))
       return 'Field is required!!';
@@ -122,15 +122,40 @@ export class CreateEmployeeComponent implements OnInit {
     else
       return 'Field does not contain numeric values';
   }
+  errorMsg(){
+    return 'Already Exist';
+  }
 
-  public checkDuplicateValues(input:any){
+  // public checkDuplicateValues(input:any){
+  //   this.adminService.checkDuplicate(input)
+  //     .subscribe((result)=>{
+  //     if (result !== null){
+  //       console.log("ID Exist");
+  //       this.exist = true;
+  //     } else {
+  //       console.log("New User")
+  //       this.exist = false;
+  //     }
+        
+  //   });
+  // }
+
+  public isDuplicate(input:string):{ [key: string]: boolean} | null {
+    console.log(input)
     this.adminService.checkDuplicate(input)
       .subscribe((result)=>{
       if (result !== null){
         console.log("ID Exist");
-        this.exist = true;
-      } else 
-        this.exist = false;
+        return { duplicate :true };
+      } else {
+        console.log("New User")
+        return null;
+      }
     });
+    // if(control.value === "tbillie"){
+    //   return { duplicate :true }
+    // }
+    return null;
   }
+    
 }
