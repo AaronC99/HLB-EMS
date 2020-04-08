@@ -54,6 +54,7 @@ export class CreateEmployeeComponent implements OnInit {
       this.dpt_name = dptDetails;
     });
   }
+
   public displayDptDetails(data){//display department details when schedule name is selected
     this.showDptDetails = true;
     this.dpt_level = data.level;
@@ -91,8 +92,7 @@ export class CreateEmployeeComponent implements OnInit {
         this.formBuilder.group({
           schedule: ['',Validators.required]
         })
-      ]),
-      
+      ])
     });
   }
 
@@ -122,6 +122,7 @@ export class CreateEmployeeComponent implements OnInit {
     else
       return 'Field does not contain numeric values';
   }
+
   errorMsg(){
     return 'Already Exist';
   }
@@ -146,7 +147,12 @@ export class CreateEmployeeComponent implements OnInit {
       .subscribe((result)=>{
       if (result !== null){
         console.log("ID Exist");
-        return { duplicate :true };
+
+        // Example of setting the error
+        this.formArray.setErrors({'invalid': true});
+
+
+        return { duplicate: true };
       } else {
         console.log("New User")
         return null;
