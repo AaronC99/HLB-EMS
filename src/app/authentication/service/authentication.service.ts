@@ -56,6 +56,6 @@ export class AuthenticationService {
 
   logout(){
     this.loggedIn.next(false);
-    this._authSubj.next(null);
+    this._authSubj.next(new AuthModel());
   }
 }

@@ -30,5 +30,6 @@ export class HeaderComponent{
   }
   onLogOut(){
     this.authService.logout();
+    this.router.navigateByUrl('login-page');
   }
 }
