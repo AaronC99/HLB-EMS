@@ -20,14 +20,14 @@
                                         <mat-form-field appearance="fill">
                                             <mat-label>Domain ID</mat-label>
                                             <input matInput placeholder="Enter Domain ID" formControlName="domainId" required (blur)="isDuplicate(formArray.value[0].domainId)">
-                                            <mat-error *ngIf="formArray.invalid">{{ errorMsg() }}</mat-error>
+                                            <mat-error *ngIf="formArray.hasError('duplicate')">{{ errorMsg() }}</mat-error>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-5">
                                         <mat-form-field appearance="fill">
                                             <mat-label>IC/Passport No</mat-label>
                                             <input matInput placeholder="Enter IC/Passport No" formControlName="ic_passportNo" required (blur)="isDuplicate(formArray.value[0].ic_passportNo)">
-                                            <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
+                                            <mat-error *ngIf="formArray.valid">{{ showErrorMessage() }}</mat-error>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-5">

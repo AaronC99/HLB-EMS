@@ -124,44 +124,28 @@ export class CreateEmployeeComponent implements OnInit {
   }
 
   errorMsg(){
-    return 'Already Exist';
+    if(this.formArray.hasError('duplicate'))
+      return 'Already Exist';
   }
 
-  // public checkDuplicateValues(input:any){
-  //   this.adminService.checkDuplicate(input)
-  //     .subscribe((result)=>{
-  //     if (result !== null){
-  //       console.log("ID Exist");
-  //       this.exist = true;
-  //     } else {
-  //       console.log("New User")
-  //       this.exist = false;
-  //     }
-        
-  //   });
-  // }
-
-  public isDuplicate(input:string):{ [key: string]: boolean} | null {
-    console.log(input)
+  public isDuplicate(input:string) {
     this.adminService.checkDuplicate(input)
       .subscribe((result)=>{
       if (result !== null){
         console.log("ID Exist");
 
         // Example of setting the error
-        this.formArray.setErrors({'invalid': true});
+        this.formArray.setErrors({'duplicate': true});
+        console.log(this.formArray.hasError('duplicate'));//true
 
-
-        return { duplicate: true };
+        //return { duplicate: true };
       } else {
+        this.formArray.setErrors(null);
         console.log("New User")
+        console.log(this.formArray.hasError('duplicate'));//false
         return null;
       }
     });
-    // if(control.value === "tbillie"){
-    //   return { duplicate :true }
-    // }
-    return null;
   }
     
 }
