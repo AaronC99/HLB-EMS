@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { AdminService } from '../service/admin.service';
 import { Employee } from 'src/app/model/Employee.model';
-import { map } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { CDK_DESCRIBEDBY_ID_PREFIX } from '@angular/cdk/a11y';
 
 @Component({
   selector: 'app-create-employee',
@@ -10,6 +12,7 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./create-employee.component.scss']
 })
 export class CreateEmployeeComponent implements OnInit {
+  private ngUnsubscribe = new Subject();
   gender:string[]=['Male','Female'];
   role:string[]=['Admin','Staff'];
   exist = true;
@@ -49,26 +52,30 @@ export class CreateEmployeeComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public getDepartments(){//get department detials from API
+  //get department detials from API
+  public getDepartments(){
     this.adminService.getAllDepartments().subscribe(dptDetails =>{
       this.dpt_name = dptDetails;
     });
   }
 
-  public displayDptDetails(data){//display department details when schedule name is selected
+  //display department details when schedule name is selected
+  public displayDptDetails(data){
     this.showDptDetails = true;
     this.dpt_level = data.level;
     this.dpt_head = data.department_head;
   }
 
-  public displaySchDetails(data){//display schedule details when schedule name is selected
+  //display schedule details when schedule name is selected
+  public displaySchDetails(data){
     this.showSchDetails = true;
     this.working_days = data.days_of_work;
     this.start_time = data.start_time;
     this.end_time = data.end_time;
   }
 
-  public getSchedules(){//get schedule detials from API
+  //get schedule detials from API
+  public getSchedules(){
     this.adminService.getAllSchedules().subscribe(schDetails => {
       this.schedule_name = schDetails;
     });
@@ -79,9 +86,9 @@ export class CreateEmployeeComponent implements OnInit {
       formArray: this.formBuilder.array([
         this.formBuilder.group({
           name: ['',[Validators.required,Validators.pattern('[a-zA-Z ]*')]],
-          domainId: ['',[Validators.required,Validators.pattern('[a-zA-Z ]*')]],
-          ic_passportNo: ['',Validators.required],
-          email: ['',[Validators.required,Validators.email]],
+          domainId: ['',[Validators.required,Validators.pattern('[a-zA-Z ]*'),this.isDuplicate.bind(this)]],
+          ic_passportNo: ['',[Validators.required,this.isDuplicate.bind(this)]],
+          email: ['',[Validators.required,Validators.email,this.isDuplicate.bind(this)]],
           address: ['',Validators.required],
           gender:['',Validators.required],
           role:['',Validators.required]
@@ -98,7 +105,6 @@ export class CreateEmployeeComponent implements OnInit {
 
   public onSubmit(){
     this.editable = false;
-    this.employee = this.formArray.value;
     this.employee = {
       domain_id: this.formArray.value[0].domainId,
       name: this.formArray.value[0].name,
@@ -115,37 +121,56 @@ export class CreateEmployeeComponent implements OnInit {
   }
 
   showErrorMessage(){
-    if (this.formArray.hasError('required'))
-      return 'Field is required!!';
+    //console.log(this.formArray.value[0].name);
+    if (this.formArray.hasError)
+      return 'Field is required';
     // else if (this.formArray.hasError('duplicate'))
     //   return 'Already Exist!!';
-    else
-      return 'Field does not contain numeric values';
+    // else
+    //   return 'Field does not contain numeric values';
   }
-
+  get userInput(){
+    return this.createEmployeeFormGroup.controls;
+  }
   errorMsg(){
     if(this.formArray.hasError('duplicate'))
       return 'Already Exist';
+    // else 
+    //   return 'Invalid Input';
+    // else 
+    //   return 'Field is required';
   }
 
-  public isDuplicate(input:string) {
-    this.adminService.checkDuplicate(input)
-      .subscribe((result)=>{
-      if (result !== null){
-        console.log("ID Exist");
-
-        // Example of setting the error
+  public isDuplicate(control:AbstractControl) {
+    // return this.adminService.checkDuplicate(control.value)
+    //   .subscribe((result)=>{
+    //   if (result !== null){
+    //     console.log(result)
+    //     this.formArray.setErrors({'duplicate': true});
+    //     console.log(this.formArray.hasError('duplicate'));//true
+    //   } else {
+    //     console.log(result)
+    //     this.formArray.setErrors(null);
+    //     console.log(this.formArray.hasError('duplicate'));//false
+    //     return null;
+    //   }
+    // });
+    this.adminService.checkDuplicate(control.value);
+    return this.adminService.isExist.subscribe((data:boolean)=>{
+      
+      if (data){
+        console.log(data)
         this.formArray.setErrors({'duplicate': true});
-        console.log(this.formArray.hasError('duplicate'));//true
-
-        //return { duplicate: true };
-      } else {
+        // console.log(this.formArray.hasError('duplicate'));
+        return data;
+      } else{
+        console.log(data)
         this.formArray.setErrors(null);
-        console.log("New User")
-        console.log(this.formArray.hasError('duplicate'));//false
-        return null;
+        // console.log(this.formArray.hasError('duplicate'));
+        return data;
       }
+
+      
     });
-  }
-    
+   }
 }

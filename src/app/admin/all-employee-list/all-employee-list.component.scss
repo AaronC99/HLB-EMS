@@ -4,6 +4,10 @@
 .employee-list-card{
     border-radius: 20px;
 }
+
+mat-card{
+    background-color: rgba(255, 255, 255, 0.7);
+}
 mat-card-title{
     text-align: center;
     font-family: 'Ubuntu', sans-serif;
