@@ -8,7 +8,7 @@
                   <input matInput (keyup)="applyFilter($event)" placeholder="Search...">
               </mat-form-field>
               <div class="slide-toggle">
-                <mat-slide-toggle (change)="showAll($event)">Show All Employee</mat-slide-toggle>
+                <mat-slide-toggle (change)="showAll($event)">Show All Employees</mat-slide-toggle>
               </div>
                 <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
                     <ng-container matColumnDef="name">

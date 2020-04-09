@@ -11,9 +11,10 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
   templateUrl: './all-employee-list.component.html',
   styleUrls: ['./all-employee-list.component.scss'],
 })
-export class AllEmployeeListComponent implements OnInit {
+export class AllEmployeeListComponent implements OnInit{
   displayedColumns: string[] = ['name', 'domainId', 'email','role','schedule','department','edit','status'];
-  ELEMENT_DATA: any = [];
+  ALL_DATA: any = [];
+  ACTIVE_DATA:any = [];
   dataSource:any = new MatTableDataSource<any>();
   currentUserId: String;
   checked:boolean = false;
@@ -34,9 +35,18 @@ export class AllEmployeeListComponent implements OnInit {
 
   public getAllEmployeeDetails(){
     this.employeeService.getAllEmployees(this.currentUserId).subscribe( data =>{
-      console.log(data[0]);
-      this.ELEMENT_DATA = data;
-      this.dataSource = new MatTableDataSource<any>(this.ELEMENT_DATA);
+      
+      this.ALL_DATA = data;
+      if (this.checked){
+        this.dataSource = new MatTableDataSource<any>(this.ALL_DATA);
+      }else {
+        this.ALL_DATA.forEach(element => {
+          if (element.activated === true){
+            this.ACTIVE_DATA = this.ALL_DATA.filter(user => user.activated === true);
+            this.dataSource = new MatTableDataSource<any>(this.ACTIVE_DATA);
+          }
+        });
+      }
       this.dataSource.sort = this.sort;
     });
   }
@@ -50,10 +60,12 @@ export class AllEmployeeListComponent implements OnInit {
     if(currUser.activated){
       if (confirm("Confirmation Message: \nDo you want to deactivate "+ currUser.domain_id+" ? ")){
         this.adminService.updateEmployee(currUser.domain_id,{activated:false});
+        this.getAllEmployeeDetails();
       } 
     } else {
       if (confirm("Confirmation Message: \nDo you want to reactivate "+ currUser.domain_id+" ? ")){
         this.adminService.updateEmployee(currUser.domain_id,{activated:true});
+        this.getAllEmployeeDetails();
       } 
     }
   }
@@ -65,10 +77,7 @@ export class AllEmployeeListComponent implements OnInit {
 
   public showAll($event: MatSlideToggleChange){
     this.checked = $event.checked;
-    console.log(this.checked);
+    this.getAllEmployeeDetails();
   }
 
-  public showInactiveUser(){
-    
-  }
 }
