@@ -5,6 +5,7 @@ import { EmployeeService } from 'src/app/employee/service/employee.service';
 import { MatSort } from '@angular/material/sort';
 import { AdminService } from '../service/admin.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-all-employee-list',
@@ -22,7 +23,8 @@ export class AllEmployeeListComponent implements OnInit{
   constructor(
     private authService: AuthenticationService,
     private employeeService: EmployeeService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    private router: Router
   ) {
     this.authService.userAuthDetails.subscribe(userId => {
       this.currentUserId = userId.username;
@@ -71,8 +73,7 @@ export class AllEmployeeListComponent implements OnInit{
   }
 
   public editProfileDetails(currUser:any){
-
-    console.log("Edit User: " + currUser.name);
+    this.router.navigateByUrl('edit-employee/'+currUser.domain_id);
   }
 
   public showAll($event: MatSlideToggleChange){
