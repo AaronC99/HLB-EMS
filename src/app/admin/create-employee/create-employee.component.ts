@@ -1,10 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';
 import { AdminService } from '../service/admin.service';
 import { Employee } from 'src/app/model/Employee.model';
-import { map, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
-import { CDK_DESCRIBEDBY_ID_PREFIX } from '@angular/cdk/a11y';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-employee',
@@ -12,7 +10,6 @@ import { CDK_DESCRIBEDBY_ID_PREFIX } from '@angular/cdk/a11y';
   styleUrls: ['./create-employee.component.scss']
 })
 export class CreateEmployeeComponent implements OnInit {
-  private ngUnsubscribe = new Subject();
   gender:string[]=['Male','Female'];
   role:string[]=['Admin','Staff'];
   exist = true;
@@ -86,9 +83,9 @@ export class CreateEmployeeComponent implements OnInit {
       formArray: this.formBuilder.array([
         this.formBuilder.group({
           name: ['',[Validators.required,Validators.pattern('[a-zA-Z ]*')]],
-          domainId: ['',[Validators.required,Validators.pattern('[a-zA-Z ]*'),this.isDuplicate.bind(this)]],
-          ic_passportNo: ['',[Validators.required,this.isDuplicate.bind(this)]],
-          email: ['',[Validators.required,Validators.email,this.isDuplicate.bind(this)]],
+          domainId: ['',[Validators.required,Validators.pattern('[a-zA-Z ]*')],this.isDuplicate.bind(this)],
+          ic_passportNo: ['',[Validators.required],this.isDuplicate.bind(this)],
+          email: ['',[Validators.required,Validators.email],this.isDuplicate.bind(this)],
           address: ['',Validators.required],
           gender:['',Validators.required],
           role:['',Validators.required]
@@ -121,56 +118,12 @@ export class CreateEmployeeComponent implements OnInit {
   }
 
   showErrorMessage(){
-    //console.log(this.formArray.value[0].name);
-    if (this.formArray.hasError)
-      return 'Field is required';
-    // else if (this.formArray.hasError('duplicate'))
-    //   return 'Already Exist!!';
-    // else
-    //   return 'Field does not contain numeric values';
-  }
-  get userInput(){
-    return this.createEmployeeFormGroup.controls;
-  }
-  errorMsg(){
-    if(this.formArray.hasError('duplicate'))
-      return 'Already Exist';
-    // else 
-    //   return 'Invalid Input';
-    // else 
-    //   return 'Field is required';
+    return 'Invalid Input';
   }
 
   public isDuplicate(control:AbstractControl) {
-    // return this.adminService.checkDuplicate(control.value)
-    //   .subscribe((result)=>{
-    //   if (result !== null){
-    //     console.log(result)
-    //     this.formArray.setErrors({'duplicate': true});
-    //     console.log(this.formArray.hasError('duplicate'));//true
-    //   } else {
-    //     console.log(result)
-    //     this.formArray.setErrors(null);
-    //     console.log(this.formArray.hasError('duplicate'));//false
-    //     return null;
-    //   }
-    // });
-    this.adminService.checkDuplicate(control.value);
-    return this.adminService.isExist.subscribe((data:boolean)=>{
-      
-      if (data){
-        console.log(data)
-        this.formArray.setErrors({'duplicate': true});
-        // console.log(this.formArray.hasError('duplicate'));
-        return data;
-      } else{
-        console.log(data)
-        this.formArray.setErrors(null);
-        // console.log(this.formArray.hasError('duplicate'));
-        return data;
-      }
-
-      
-    });
+    return this.adminService.checkDuplicate(control.value).pipe(map(res =>{
+      return res !== null ? { duplicate:true}: null;
+    }));
    }
 }

@@ -19,23 +19,22 @@
                                     <div class="col-5">
                                         <mat-form-field appearance="fill">
                                             <mat-label>Domain ID</mat-label>
-                                            <input matInput placeholder="Ex: tjohndoe" formControlName="domainId" required ><!--(blur)="isDuplicate(formArray.value[0].domainId)"-->
-                                            <mat-error *ngIf="formArray.invalid">{{ errorMsg() }}</mat-error>
+                                            <input matInput placeholder="Ex: tjohndoe" formControlName="domainId" required >
+                                            <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-5">
                                         <mat-form-field appearance="fill">
                                             <mat-label>IC/Passport No</mat-label>
-                                            <input matInput placeholder="Enter IC/Passport No" formControlName="ic_passportNo" required > <!--(blur)="isDuplicate(formArray.value[0].ic_passportNo)"-->
-                                            <mat-error *ngIf="formArray.invalid">{{ errorMsg() }}</mat-error>
+                                            <input matInput placeholder="Enter IC/Passport No" formControlName="ic_passportNo" required >
+                                            <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-5">
                                         <mat-form-field appearance="fill">
                                             <mat-label>Email Address</mat-label>
                                             <input matInput placeholder="Ex: tjohndoe@internal.hlb" formControlName="email" required > 
-                                            <mat-error *ngIf="formArray.invalid">{{ errorMsg() }}</mat-error>
-                                            <!-- (blur)="checkDuplicateValues(formArray.value[0].email)" -->
+                                            <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-5">
