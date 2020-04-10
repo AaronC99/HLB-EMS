@@ -27,14 +27,20 @@ export class LoginPageComponent implements OnInit {
     this.createForm();
     this.authService.loggedIn.subscribe((data)=>{
       if(data !== false){
-       this.router.navigateByUrl('/home');
+        this.authService.userAuthDetails.subscribe((data)=>{
+          if(data['role'] === 'Admin')
+            this.router.navigateByUrl('/home/all-employee');
+          else 
+            this.router.navigateByUrl('/home');
+        });
       }
-      });
-      this.authService.getLoginErrors().subscribe(error=>{
-        if (error !== null){
-          this.showErrorMessage = true;
-        }  
-      });
+    });
+    
+    this.authService.getLoginErrors().subscribe(error=>{
+      if (error !== null){
+        this.showErrorMessage = true;
+      }  
+    });
    }
 
   ngOnInit(): void {
@@ -48,7 +54,7 @@ export class LoginPageComponent implements OnInit {
   }
   getDomainIdError(){
     if(this.userInput.domainId.hasError('required'))
-      return 'Domain Id is required';
+      return 'Invalid Domain Id';
     else return 'Invalid Domain Id';
   }
   getDomainPassError(){

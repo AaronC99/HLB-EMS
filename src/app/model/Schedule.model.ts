@@ -1,6 +1,6 @@
 export class Schedule{
-    public scheduleName: string;
-    public workingDays: Array<string>;
-    public startTime: string;
-    public endTime: string;
+    public schedule_name: string;
+    public days_of_work: Array<string>;
+    public start_time: string;
+    public end_time: string;
 }

@@ -16,15 +16,33 @@
             <mat-icon>supervised_user_circle</mat-icon>
             {{ employeeList }}
           </a>
-          <a routerLink="my-account" mat-button *ngIf="_authDetails.role==='Manager' || _authDetails.role==='Staff'">
+          <a routerLink="my-account/{{_authDetails.username}}" mat-button *ngIf="_authDetails.role==='Manager' || _authDetails.role==='Staff'">
             <mat-icon>account_circle</mat-icon>
             {{ account }}
           </a>
-          <a routerLink="new-employee" mat-button *ngIf="_authDetails.role==='Admin'">
-            <mat-icon>add_circle</mat-icon>
-            {{ addEmployee }}
+          <a routerLink="all-employee" mat-button *ngIf="_authDetails.role==='Admin'">
+            <mat-icon>supervised_user_circle</mat-icon>
+            All Employee List
           </a>
-          <a routerLink="login-page" mat-raised-button color="warn" class="log-out">
+          <button mat-button [matMenuTriggerFor]="menu" *ngIf="_authDetails.role==='Admin'">
+            <mat-icon>add_circle</mat-icon>
+            Create
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item routerLink="new-employee">
+              <mat-icon>person_add</mat-icon>
+              <span>New Employee</span>
+            </button>
+            <button mat-menu-item>
+              <mat-icon>group_add</mat-icon>
+              <span>New Department</span>
+            </button>
+            <button mat-menu-item>
+              <mat-icon>schedule</mat-icon>
+              <span>New Schedule</span>
+            </button>
+          </mat-menu>
+          <a mat-raised-button color="warn" class="log-out" (click)="onLogOut()">
             {{ logout }}
           </a>
         </div>

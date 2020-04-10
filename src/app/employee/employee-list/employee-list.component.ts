@@ -1,19 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { EmployeeService } from '../service/employee.service';
 import {  MatSort } from '@angular/material/sort';
 
-export interface EmployeeRecords {
-  name: string;
-  domainId: string;
-  email: string;
-  role: string;
-  scheduleName: string;
-  departmentName: string;
-  
-}
-const EMPLOYEE_DATA: EmployeeRecords[] = [];
 @Component({
   selector: 'app-employee-list',
   templateUrl: './employee-list.component.html',
@@ -21,8 +11,10 @@ const EMPLOYEE_DATA: EmployeeRecords[] = [];
 })
 export class EmployeeListComponent implements OnInit {
   displayedColumns: string[] = ['name', 'domainId', 'email','role','schedule','department'];
-  dataSource:any = new MatTableDataSource(EMPLOYEE_DATA); 
+  EMPLOYEE_DATA:any = [];
+  dataSource:any = new MatTableDataSource<any>(); 
   currentUserId: String;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
   constructor(
     private authService:AuthenticationService,
     private employeeService: EmployeeService) {
@@ -30,16 +22,15 @@ export class EmployeeListComponent implements OnInit {
       this.currentUserId = user.username;
     });
    }
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
   ngOnInit(): void {
     this.getEmployeeRecords();
   }
 
-
   public getEmployeeRecords(){
     this.employeeService.getAllEmployees(this.currentUserId).subscribe(data =>{
-      this.dataSource = data;
-      console.log(this.dataSource);
+      this.EMPLOYEE_DATA = data;
+      this.dataSource = new MatTableDataSource(this.EMPLOYEE_DATA);
+      this.dataSource.sort = this.sort;
     });
   }
 

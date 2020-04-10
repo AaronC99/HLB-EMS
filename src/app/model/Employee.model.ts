@@ -3,8 +3,8 @@ import { Department } from './Department.model';
 
 export class Employee{
     public name: string;
-    public domainId: string;
-    public icNumber: string;
+    public domain_id: string;
+    public ic: string;
     public address: string;
     public gender: string;
     public email: string;

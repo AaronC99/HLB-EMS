@@ -22,10 +22,10 @@ export class AccountComponent implements OnInit {
     this.employeeService.currUserDetils.subscribe((details)=>{
       this.currUser = details;
       this.currUserSchedule = {
-          scheduleName: details.schedule['schedule_name'],
-          workingDays: details.schedule['days_of_work'],
-          startTime: details.schedule['start_time'],
-          endTime: details.schedule['end_time']
+          schedule_name: details.schedule['schedule_name'],
+          days_of_work: details.schedule['days_of_work'],
+          start_time: details.schedule['start_time'],
+          end_time: details.schedule['end_time']
       }
       this.currUserDepartment = details.department;
     });
