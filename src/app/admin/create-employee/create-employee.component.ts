@@ -3,6 +3,7 @@ import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl, FormA
 import { AdminService } from '../service/admin.service';
 import { Employee } from 'src/app/model/Employee.model';
 import { map } from 'rxjs/operators';
+import { Schedule } from 'src/app/model/Schedule.model';
 
 @Component({
   selector: 'app-create-employee',

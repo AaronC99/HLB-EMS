@@ -18,7 +18,6 @@ export class AuthenticationGuard implements CanActivate{ //CanActivateChild, Can
       next: ActivatedRouteSnapshot, state: RouterStateSnapshot):Observable<boolean>{
       return this.authService.isLoggedIn
         .pipe(
-          take(123),
           map((isLoggedIn:Boolean)=>{
             if(!isLoggedIn){
               this.router.navigateByUrl('');

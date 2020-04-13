@@ -6,6 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { AdminService } from '../service/admin.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Router } from '@angular/router';
+import { CreateEmployeeComponent } from '../create-employee/create-employee.component';
 
 @Component({
   selector: 'app-all-employee-list',
@@ -73,7 +74,7 @@ export class AllEmployeeListComponent implements OnInit{
   }
 
   public editProfileDetails(currUser:any){
-    this.router.navigateByUrl('edit-employee/'+currUser.domain_id);
+    this.router.navigateByUrl('/home/edit-employee/'+currUser.domain_id);
   }
 
   public showAll($event: MatSlideToggleChange){
