@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthModel } from 'src/app/model/Authentication.model';
 
@@ -14,7 +13,6 @@ export class AuthenticationService {
   private loginErrorSubject = new Subject<string>();
 
   constructor(
-    private router: Router,
     private httpClient: HttpClient
   ) {
     this._authSubj = new BehaviorSubject(this._authObj);
@@ -40,12 +38,11 @@ export class AuthenticationService {
         this.loginErrorSubject.next("Invalid User");
         this.loggedIn.next(false);
       } else {
-        this.role = data['role']; //get role in string
+        this.role = data['role'];
         this._authObj = {
           username: loginID, 
           role: this.role
         };
-        console.log(this._authObj.username,this._authObj.role);
         this._authSubj.next(this._authObj);
         this.loggedIn.next(true);
       }

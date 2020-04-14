@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ComponentFactoryResolver, ViewChildren, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ComponentFactoryResolver, ViewChildren, ViewContainerRef, Output, EventEmitter, Input } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { EmployeeService } from 'src/app/employee/service/employee.service';
@@ -7,6 +7,8 @@ import { AdminService } from '../service/admin.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Router } from '@angular/router';
 import { CreateEmployeeComponent } from '../create-employee/create-employee.component';
+import { map } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-all-employee-list',
@@ -20,6 +22,8 @@ export class AllEmployeeListComponent implements OnInit{
   dataSource:any = new MatTableDataSource<any>();
   currentUserId: String;
   checked:boolean = false;
+  @Input() sendCurrUser: Object;
+  @Output() sendCurrentUser = new EventEmitter<Object>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   constructor(
     private authService: AuthenticationService,
@@ -73,8 +77,14 @@ export class AllEmployeeListComponent implements OnInit{
     }
   }
 
-  public editProfileDetails(currUser:any){
-    this.router.navigateByUrl('/home/edit-employee/'+currUser.domain_id);
+  public editProfileDetails(currUser){
+    this.router.navigateByUrl(`/home/edit-employee/${currUser.domain_id}`);
+    //this.sendCurrentUser.emit(currUser);
+    //this.sendCurrUser = currUser;
+    //this.adminService.employee = currUser;
+    this.adminService.userToEdit = new BehaviorSubject(currUser);
+    this.adminService.userToEdit.next(currUser);
+    //console.log('Sending: '+this.adminService.employee.domain_id);
   }
 
   public showAll($event: MatSlideToggleChange){

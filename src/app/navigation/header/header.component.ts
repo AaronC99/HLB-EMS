@@ -2,6 +2,8 @@ import { Component, OnInit, AfterContentInit } from '@angular/core';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { Router } from '@angular/router';
+import { AdminService } from 'src/app/admin/service/admin.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -22,11 +24,17 @@ export class HeaderComponent{
 
   constructor(
     private authService: AuthenticationService,
-    private router:Router) {
+    private router:Router,
+    private adminService: AdminService) {
     this.authService.userAuthDetails.subscribe((details) => {
       this._authDetails = details;
       this.account = details.username;
     });
+  }
+
+  newEmployeePage(){
+    this.adminService.userToEdit = new BehaviorSubject(null);
+    this.adminService.userToEdit.next(null);
   }
   onLogOut(){
     this.authService.logout();

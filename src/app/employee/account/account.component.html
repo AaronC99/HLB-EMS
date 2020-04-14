@@ -1,77 +1,75 @@
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <mat-card class="profile">
-                <mat-card-title>Profile</mat-card-title>
-                <mat-card-content>
-                    <div class="row align-items-start">
-                        <div class="col-3"><h2>Name :</h2></div>
-                        <div class="col-3"><h2>{{ currUser.name }}</h2></div>
-                        <div class="col-3"><h2>Domain ID:</h2></div>
-                        <div class="col-3"><h2>{{ currUser.domain_id }}</h2></div>
-                        <div class="w-100"></div>
-                        <div class="col-3"><h2>IC/Passport No :</h2></div>
-                        <div class="col-3"><h2>{{ currUser.ic }}</h2></div>
-                        <div class="col-3"><h2>Email:</h2></div>
-                        <div class="col-3"><h2>{{ currUser.email }}</h2></div>
-                        <div class="w-100"></div>
-                        <div class="col-3"><h2>Role:</h2></div>
-                        <div class="col-3"><h2>{{ currUser.role }}</h2></div>
-                        <div class="col-3"><h2>Gender:</h2></div>
-                        <div class="col-3"><h2>{{ currUser.gender }}</h2></div>
-                        <div class="w-100"></div>
-                        <div class="col-3"><h2>Address:</h2></div>
-                        <div class="col-9"><h2>{{ currUser.address }}</h2></div>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-        </div>
+<div class="row justify-content-center">
+    <div class="col-12">
+        <mat-card class="profile">
+            <mat-card-title>Profile</mat-card-title>
+            <mat-card-content>
+                <div class="row align-items-start">
+                    <div class="col-2"><h2>Name </h2></div>
+                    <div class="col-4"><h2>: {{ currUser.name }}</h2></div>
+                    <div class="col-2"><h2>Domain ID</h2></div>
+                    <div class="col-4"><h2>: {{ currUser.domain_id }}</h2></div>
+                    <div class="w-100"></div>
+                    <div class="col-2"><h2>IC/Passport No </h2></div>
+                    <div class="col-4"><h2>: {{ currUser.ic }}</h2></div>
+                    <div class="col-2"><h2>Email</h2></div>
+                    <div class="col-4"><h2>: {{ currUser.email }}</h2></div>
+                    <div class="w-100"></div>
+                    <div class="col-2"><h2>Role</h2></div>
+                    <div class="col-4"><h2>: {{ currUser.role }}</h2></div>
+                    <div class="col-2"><h2>Gender</h2></div>
+                    <div class="col-4"><h2>: {{ currUser.gender }}</h2></div>
+                    <div class="w-100"></div>
+                    <div class="col-2"><h2>Address</h2></div>
+                    <div class="col-10"><h2>: {{ currUser.address }}</h2></div>
+                </div>
+            </mat-card-content>
+        </mat-card>
     </div>
-    <div class="row">
-        <div class="col-6">
-            <mat-card class="schedule">
-                <mat-card-title>Schedule</mat-card-title>
-                <mat-card-content>
-                    <div class="row">
-                        <div class="col-6"><h2>Schedule Type:</h2></div>
-                        <div class="col-6"><h2>{{ currUserSchedule.schedule_name }}</h2></div>
-                        <div class="w-100"></div>
-                        <div class="col-6"><h2>Working Days:</h2></div>
-                        <div class="col-6">
-                            <h2>
-                                <ul>
-                                    <li *ngFor="let days of currUserSchedule.days_of_work">
-                                        {{ days }}
-                                    </li>
-                                </ul>
-                            </h2>
-                        </div>
-                        <div class="w-100"></div>
-                        <div class="col-6"><h2>Start Time:</h2></div>
-                        <div class="col-6"><h2>{{ currUserSchedule.start_time}}</h2></div>
-                        <div class="w-100"></div>
-                        <div class="col-6"><h2>End Time:</h2></div>
-                        <div class="col-6"><h2>{{ currUserSchedule.end_time}}</h2></div>
+</div>
+<div class="row justify-content-center">
+    <div class="col-6">
+        <mat-card class="schedule">
+            <mat-card-title>Schedule</mat-card-title>
+            <mat-card-content>
+                <div class="row align-items-start">
+                    <div class="col-6"><h2>Schedule Type:</h2></div>
+                    <div class="col-6"><h2>{{ currUserSchedule.schedule_name }}</h2></div>
+                    <div class="w-100"></div>
+                    <div class="col-6"><h2>Working Days:</h2></div>
+                    <div class="col-6">
+                        <h2>
+                            <ul>
+                                <li *ngFor="let days of currUserSchedule.days_of_work">
+                                    {{ days }}
+                                </li>
+                            </ul>
+                        </h2>
                     </div>
-                </mat-card-content>
-            </mat-card>
-        </div>
-        <div class="col-6">
-            <mat-card class="department">
-                <mat-card-title>Department</mat-card-title>
-                <mat-card-content>
-                    <div class="row">
-                        <div class="col-6"><h2>Name:</h2></div>
-                        <div class="col-6"><h2>{{ currUserDepartment.department_name }}</h2></div>
-                        <div class="w-100"></div>
-                        <div class="col-6"><h2>Location:</h2></div>
-                        <div class="col-6"><h2>{{ currUserDepartment.level }}</h2></div>
-                        <div class="w-100"></div>
-                        <div class="col-6"><h2>Supervisor:</h2></div>
-                        <div class="col-6"><h2>{{ currUserDepartment.department_head.name }}</h2></div>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-        </div>
+                    <div class="w-100"></div>
+                    <div class="col-6"><h2>Start Time:</h2></div>
+                    <div class="col-6"><h2>{{ currUserSchedule.start_time}}</h2></div>
+                    <div class="w-100"></div>
+                    <div class="col-6"><h2>End Time:</h2></div>
+                    <div class="col-6"><h2>{{ currUserSchedule.end_time}}</h2></div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div class="col-6">
+        <mat-card class="department">
+            <mat-card-title>Department</mat-card-title>
+            <mat-card-content>
+                <div class="row align-items-start">
+                    <div class="col-6"><h2>Name:</h2></div>
+                    <div class="col-6"><h2>{{ currUserDepartment.department_name }}</h2></div>
+                    <div class="w-100"></div>
+                    <div class="col-6"><h2>Location:</h2></div>
+                    <div class="col-6"><h2>{{ currUserDepartment.level }}</h2></div>
+                    <div class="w-100"></div>
+                    <div class="col-6"><h2>Supervisor:</h2></div>
+                    <div class="col-6"><h2>{{ currUserDepartment.department_head.name }}</h2></div>
+                </div>
+            </mat-card-content>
+        </mat-card>
     </div>
 </div>

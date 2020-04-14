@@ -2,9 +2,9 @@
     <div class="row" id="outer-row">
         <div class="col-12">
             <mat-card class="new-emp-form">
-                <mat-card-title class="title"> Create New Employee </mat-card-title>
+                <mat-card-title class="title">{{ title }}</mat-card-title>
                 <mat-card-content>
-                    <form [formGroup]="createEmployeeFormGroup" (ngSubmit)= "onSubmit()" #thisFormGroup (keydown.enter)="$event.preventDefault()">
+                    <form [formGroup]="employeeFormGroup" (ngSubmit)= "onSubmit()" #thisFormGroup (keydown.enter)="$event.preventDefault()">
                         <mat-horizontal-stepper #stepper formArrayName="formArray" [linear]="true">
                             <mat-step formGroupName="0" [stepControl]="formArray.get([0])" [editable]="editable">
                                 <ng-template matStepLabel>Personal Details</ng-template>
@@ -74,7 +74,7 @@
                                         <mat-form-field>
                                             <mat-label>Department Name</mat-label>
                                             <mat-select formControlName="department" required>
-                                                <mat-option *ngFor="let dpt of dpt_name" [value]="dpt" (click)="displayDptDetails(dpt)">{{ dpt.department_name }}</mat-option>
+                                                <mat-option *ngFor="let dpt of departmentDetails" [value]="dpt" (click)="displayDptDetails(dpt)">{{ dpt.department_name }}</mat-option>
                                             </mat-select>
                                             <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
                                         </mat-form-field>
@@ -104,7 +104,7 @@
                                             <mat-form-field appearance="fill">
                                                 <mat-label>Schedule Name</mat-label>
                                                 <mat-select formControlName="schedule" required>
-                                                    <mat-option *ngFor="let schedule of schedule_name" (click)="displaySchDetails(schedule)" [value]="schedule">{{ schedule.schedule_name }}</mat-option>
+                                                    <mat-option *ngFor="let schedule of scheduleDetails" (click)="displaySchDetails(schedule)" [value]="schedule">{{ schedule.schedule_name }}</mat-option>
                                                 </mat-select> 
                                                 <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
                                             </mat-form-field>
@@ -130,12 +130,12 @@
                                     </div>
                                     <div class="next-button">
                                         <button mat-button matStepperPrevious type="button">Back</button>
-                                        <button mat-raised-button matStepperNext color="primary" type="submit">Register</button>
+                                        <button mat-raised-button matStepperNext color="primary" type="submit">{{ buttonTitle }}</button>
                                     </div>
                             </mat-step>
                             <mat-step>
                               <ng-template matStepLabel>Done</ng-template>
-                              <h2>A new employee has been registered.</h2>
+                              <h2>{{ completeMessage }}</h2>
                               <div>
                                 <button mat-raised-button color="primary" type="button" (click)="stepper.reset();thisFormGroup.reset()">Create New Employee</button>
                                 <a mat-button routerLink="/home/all-employee">Done</a>
