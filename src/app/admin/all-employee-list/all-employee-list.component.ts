@@ -22,8 +22,6 @@ export class AllEmployeeListComponent implements OnInit{
   dataSource:any = new MatTableDataSource<any>();
   currentUserId: String;
   checked:boolean = false;
-  @Input() sendCurrUser: Object;
-  @Output() sendCurrentUser = new EventEmitter<Object>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   constructor(
     private authService: AuthenticationService,
@@ -79,12 +77,8 @@ export class AllEmployeeListComponent implements OnInit{
 
   public editProfileDetails(currUser){
     this.router.navigateByUrl(`/home/edit-employee/${currUser.domain_id}`);
-    //this.sendCurrentUser.emit(currUser);
-    //this.sendCurrUser = currUser;
-    //this.adminService.employee = currUser;
     this.adminService.userToEdit = new BehaviorSubject(currUser);
     this.adminService.userToEdit.next(currUser);
-    //console.log('Sending: '+this.adminService.employee.domain_id);
   }
 
   public showAll($event: MatSlideToggleChange){

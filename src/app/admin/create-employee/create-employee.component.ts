@@ -141,7 +141,6 @@ export class CreateEmployeeComponent implements OnInit {
       schedule:this.formArray.value[2].schedule._id,
       role: this.formArray.value[0].role
     }
-    console.log(this.employee);
     if (this.isEditting === false)
       this.adminService.addEmployee(this.employee);
     else {
@@ -171,7 +170,19 @@ export class CreateEmployeeComponent implements OnInit {
         this.title = `Edit Profile Details: ${this.employee.name}`;
         this.buttonTitle = 'Update Details';
         this.completeMessage = `${this.employee.name} record have been updated.`;
+        // this.employeeFormGroup.patchValue({
+        //   name: this.employee.name,
+        //   domainId: this.employee.domain_id,
+        //   ic_passportNo: this.employee.ic,
+        //   email: this.employee.email,
+        //   address: this.employee.address,
+        //   gender: this.employee.gender,
+        //   role: this.employee.role,
+        //   department: this.employee.department.department_name,
+        //   schedule: this.employee.schedule.schedule_name
+        // });
         this.editForm();
+        console.log(this.formArray.value[1],this.formArray.value[2]);
       }
     });
   }

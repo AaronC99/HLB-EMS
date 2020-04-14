@@ -72,7 +72,7 @@
                                 <div class="row justify-content-center">
                                     <div class="col-5">
                                         <mat-form-field>
-                                            <mat-label>Department Name</mat-label>
+                                            <mat-label>Select Department</mat-label>
                                             <mat-select formControlName="department" required>
                                                 <mat-option *ngFor="let dpt of departmentDetails" [value]="dpt" (click)="displayDptDetails(dpt)">{{ dpt.department_name }}</mat-option>
                                             </mat-select>
