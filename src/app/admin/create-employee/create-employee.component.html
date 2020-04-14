@@ -74,9 +74,13 @@
                                         <mat-form-field>
                                             <mat-label>Select Department</mat-label>
                                             <mat-select formControlName="department" required>
-                                                <mat-option *ngFor="let dpt of departmentDetails" [value]="dpt" (click)="displayDptDetails(dpt)">{{ dpt.department_name }}</mat-option>
+                                                <mat-option *ngFor="let dpt of departmentDetails" [value]="dpt._id" (click)="displayDptDetails(dpt)">
+                                                    {{ dpt.department_name }}
+                                                </mat-option>
                                             </mat-select>
-                                            <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
+                                            <mat-error *ngIf="formArray.invalid">
+                                                {{ showErrorMessage() }}
+                                            </mat-error>
                                         </mat-form-field>
                                     </div>
                                     <div class="w-100"></div>
@@ -104,7 +108,9 @@
                                             <mat-form-field appearance="fill">
                                                 <mat-label>Schedule Name</mat-label>
                                                 <mat-select formControlName="schedule" required>
-                                                    <mat-option *ngFor="let schedule of scheduleDetails" (click)="displaySchDetails(schedule)" [value]="schedule">{{ schedule.schedule_name }}</mat-option>
+                                                    <mat-option *ngFor="let schedule of scheduleDetails" (click)="displaySchDetails(schedule)" [value]="schedule._id">
+                                                        {{ schedule.schedule_name }}
+                                                    </mat-option>
                                                 </mat-select> 
                                                 <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
                                             </mat-form-field>

@@ -5,7 +5,8 @@ export class Department{
     public level: string;
     public department_head: Employee;
 
-    constructor(){
+    constructor(departmentName?) {
         this.department_head = new Employee();
+        this.department_name = departmentName ? departmentName : undefined;
     }
 }

@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterContentInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';
 import { AdminService } from '../service/admin.service';
 import { Employee } from 'src/app/model/Employee.model';
 import { map } from 'rxjs/operators';
+import { Department } from 'src/app/model/Department.model';
 
 @Component({
   selector: 'app-create-employee',
   templateUrl: './create-employee.component.html',
   styleUrls: ['./create-employee.component.scss']
 })
-export class CreateEmployeeComponent implements OnInit {
+export class CreateEmployeeComponent implements AfterContentInit {
   title = 'Create New Employee';
   buttonTitle = 'Register';
   completeMessage = 'A new employee has been registered.';
@@ -48,16 +49,15 @@ export class CreateEmployeeComponent implements OnInit {
     this.employee = new Employee();
     this.getDepartments();
     this.getSchedules();
-    this.checkUserForEdit();
   }
 
-  ngOnInit(): void {
-    
+  ngAfterContentInit(): void {
+    this.checkUserForEdit();
   }
 
   //get department detials from API
   public getDepartments(){
-    this.adminService.getAllDepartments().subscribe(dptDetails =>{
+    this.adminService.getAllDepartments().subscribe(dptDetails => {
       this.departmentDetails = dptDetails;
     });
   }
@@ -97,7 +97,7 @@ export class CreateEmployeeComponent implements OnInit {
           role:['',Validators.required]
         }),
         this.formBuilder.group({
-          department: ['',Validators.required]
+          department: [ '', Validators.required]
         }),
         this.formBuilder.group({
           schedule: ['',Validators.required]
@@ -106,7 +106,7 @@ export class CreateEmployeeComponent implements OnInit {
     });
   }
 
-  public editForm(){
+  public editForm() {
     this.employeeFormGroup = this.formBuilder.group({
       formArray: this.formBuilder.array([
         this.formBuilder.group({
@@ -119,10 +119,10 @@ export class CreateEmployeeComponent implements OnInit {
           role:[this.employee.role,Validators.required],
         }),
         this.formBuilder.group({
-          department: [this.employee.department.department_name,Validators.required]
+          department: [ this.employee.department.department_name, Validators.required]
         }),
         this.formBuilder.group({
-          schedule: [this.employee.schedule.schedule_name,Validators.required]
+          schedule: [ this.employee.schedule.schedule_name, Validators.required]
         })
       ])
     });
@@ -133,56 +133,44 @@ export class CreateEmployeeComponent implements OnInit {
     this.employee = {
       domain_id: this.formArray.value[0].domainId,
       name: this.formArray.value[0].name,
-      gender:this.formArray.value[0].gender,
-      address:this.formArray.value[0].address,
+      gender: this.formArray.value[0].gender,
+      address: this.formArray.value[0].address,
       ic: this.formArray.value[0].ic_passportNo,
-      email:this.formArray.value[0].email,
-      department: this.formArray.value[1].department._id,
-      schedule:this.formArray.value[2].schedule._id,
+      email: this.formArray.value[0].email,
+      department: this.formArray.value[1].department,
+      schedule: this.formArray.value[2].schedule,
       role: this.formArray.value[0].role
     }
     if (this.isEditting === false)
       this.adminService.addEmployee(this.employee);
     else {
-      this.adminService.updateEmployee(this.employee.domain_id,this.employee);
+      this.adminService.updateEmployee(this.employee.domain_id, this.employee);
       this.isEditting = false;
     }
-      
   }
 
   showErrorMessage(){
     return 'Invalid Input';
   }
 
-  public isDuplicate(control:AbstractControl) {
+  public isDuplicate(control: AbstractControl) {
     return this.adminService.checkDuplicate(control.value).pipe(map(res =>{
-      return res !== null ? { duplicate:true}: null;
+      return res !== null ? { duplicate: true} : null;
     }));
   }
 
   public checkUserForEdit(){
-    this.adminService.getCurrUserToEdit().subscribe(data =>{
+    this.adminService.getCurrUserToEdit().subscribe(data => {
+
       if (data === null){
         this.createForm();
-      }else{
+      } else {
         this.isEditting = true;
         this.employee = data;
         this.title = `Edit Profile Details: ${this.employee.name}`;
         this.buttonTitle = 'Update Details';
         this.completeMessage = `${this.employee.name} record have been updated.`;
-        // this.employeeFormGroup.patchValue({
-        //   name: this.employee.name,
-        //   domainId: this.employee.domain_id,
-        //   ic_passportNo: this.employee.ic,
-        //   email: this.employee.email,
-        //   address: this.employee.address,
-        //   gender: this.employee.gender,
-        //   role: this.employee.role,
-        //   department: this.employee.department.department_name,
-        //   schedule: this.employee.schedule.schedule_name
-        // });
         this.editForm();
-        console.log(this.formArray.value[1],this.formArray.value[2]);
       }
     });
   }

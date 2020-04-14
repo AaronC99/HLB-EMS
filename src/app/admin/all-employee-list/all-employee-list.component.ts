@@ -23,6 +23,7 @@ export class AllEmployeeListComponent implements OnInit{
   currentUserId: String;
   checked:boolean = false;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+
   constructor(
     private authService: AuthenticationService,
     private employeeService: EmployeeService,
@@ -39,8 +40,8 @@ export class AllEmployeeListComponent implements OnInit{
   }
 
   public getAllEmployeeDetails(){
-    this.employeeService.getAllEmployees(this.currentUserId).subscribe( data =>{
-      
+    this.employeeService.getAllEmployees(this.currentUserId).subscribe( data => {
+      console.log(data);
       this.ALL_DATA = data;
       if (this.checked){
         this.dataSource = new MatTableDataSource<any>(this.ALL_DATA);
@@ -75,10 +76,9 @@ export class AllEmployeeListComponent implements OnInit{
     }
   }
 
-  public editProfileDetails(currUser){
+  public editProfileDetails(currUser) {
+    this.adminService.userToEdit = currUser;
     this.router.navigateByUrl(`/home/edit-employee/${currUser.domain_id}`);
-    this.adminService.userToEdit = new BehaviorSubject(currUser);
-    this.adminService.userToEdit.next(currUser);
   }
 
   public showAll($event: MatSlideToggleChange){

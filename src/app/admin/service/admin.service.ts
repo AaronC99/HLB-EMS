@@ -8,14 +8,23 @@ import { Employee } from 'src/app/model/Employee.model';
 })
 export class AdminService {
   private REST_API_SERVER = "http://localhost:3000";
-  userToEdit: BehaviorSubject<Employee>;
+  private _userToEdit: BehaviorSubject<Employee>;
 
   constructor(
     private httpClient: HttpClient
-  ) {}
+  ) {
+    this._userToEdit = new BehaviorSubject(new Employee());
+    this._userToEdit.next(new Employee());
+  }
+
+
+  set userToEdit(user) {
+    console.log(user);
+    this._userToEdit.next(user);
+  }
 
   public getCurrUserToEdit(){
-    return this.userToEdit.asObservable();
+    return this._userToEdit.asObservable();
   }
 
   public getAllDepartments(){
@@ -25,7 +34,7 @@ export class AdminService {
   public getAllSchedules(){
     return this.httpClient.get(this.REST_API_SERVER+'/schedule/allschedules');
   }
-  
+
   public addEmployee(employeeDetails:any){
     this.httpClient.post(this.REST_API_SERVER+'/employee/addEmployee',employeeDetails).subscribe(data=>{
       console.log(data);
