@@ -1,9 +1,8 @@
-import { Component, OnInit, AfterContentInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { Router } from '@angular/router';
 import { AdminService } from 'src/app/admin/service/admin.service';
-import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -19,7 +18,6 @@ export class HeaderComponent{
   employeeList = 'Employee List';
   addEmployee = 'New Employee';
   logout = 'Log Out';
-  employeeAccess: any;
   _authDetails: AuthModel;
 
   constructor(
@@ -33,9 +31,9 @@ export class HeaderComponent{
   }
 
   newEmployeePage(){
-    this.adminService.userToEdit = new BehaviorSubject(null);
-    this.adminService.userToEdit.next(null);
+    this.adminService.userToEdit = null;
   }
+
   onLogOut(){
     this.authService.logout();
     this.router.navigateByUrl('login-page');
