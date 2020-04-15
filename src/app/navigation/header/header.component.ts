@@ -1,7 +1,8 @@
-import { Component, OnInit, AfterContentInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { Router } from '@angular/router';
+import { AdminService } from 'src/app/admin/service/admin.service';
 
 @Component({
   selector: 'app-header',
@@ -17,17 +18,22 @@ export class HeaderComponent{
   employeeList = 'Employee List';
   addEmployee = 'New Employee';
   logout = 'Log Out';
-  employeeAccess: any;
   _authDetails: AuthModel;
 
   constructor(
     private authService: AuthenticationService,
-    private router:Router) {
+    private router:Router,
+    private adminService: AdminService) {
     this.authService.userAuthDetails.subscribe((details) => {
       this._authDetails = details;
       this.account = details.username;
     });
   }
+
+  newEmployeePage(){
+    this.adminService.userToEdit = null;
+  }
+
   onLogOut(){
     this.authService.logout();
     this.router.navigateByUrl('login-page');

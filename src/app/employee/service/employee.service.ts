@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Employee } from 'src/app/model/Employee.model';
-import { BehaviorSubject, scheduled } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +40,7 @@ export class EmployeeService {
       });
   }
 
-  public getAllEmployees(DomainID:String){ //pass in the id of current user to check if its admin or manager
+  public getAllEmployees(DomainID:String){
     return this.httpClient.get(this.REST_API_SERVER+'/employee/allEmployees/'+DomainID);
   }
 

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeeService } from '../service/employee.service';
 import { Employee } from 'src/app/model/Employee.model';
-import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { Schedule } from 'src/app/model/Schedule.model';
 import { Department } from 'src/app/model/Department.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-account',
@@ -14,28 +14,20 @@ export class AccountComponent implements OnInit {
   currUser: Employee;
   currUserSchedule: Schedule;
   currUserDepartment: Department;
-  currUserName:String;
   constructor(
     private employeeService: EmployeeService,
-    private authService: AuthenticationService
+    private route: ActivatedRoute
   ) {
     this.employeeService.currUserDetils.subscribe((details)=>{
       this.currUser = details;
-      this.currUserSchedule = {
-          schedule_name: details.schedule['schedule_name'],
-          days_of_work: details.schedule['days_of_work'],
-          start_time: details.schedule['start_time'],
-          end_time: details.schedule['end_time']
-      }
+      this.currUserSchedule = details.schedule;
       this.currUserDepartment = details.department;
-    });
-    this.authService.userAuthDetails.subscribe(user=>{
-      this.currUserName = user.username;
     });
    }
 
   ngOnInit(): void {
-    this.employeeService.getProfileDetails(this.currUserName);
+    this.currUser.domain_id = this.route.snapshot.paramMap.get('domain_id');
+    this.employeeService.getProfileDetails(this.currUser.domain_id);
   }
 
 

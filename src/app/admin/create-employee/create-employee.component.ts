@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';
+import { Component, AfterContentInit } from '@angular/core';
+import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { AdminService } from '../service/admin.service';
 import { Employee } from 'src/app/model/Employee.model';
 import { map } from 'rxjs/operators';
@@ -9,22 +9,27 @@ import { map } from 'rxjs/operators';
   templateUrl: './create-employee.component.html',
   styleUrls: ['./create-employee.component.scss']
 })
-export class CreateEmployeeComponent implements OnInit {
-  gender:string[]=['Male','Female'];
-  role:string[]=['Admin','Staff'];
+export class CreateEmployeeComponent implements AfterContentInit {
+  title = 'Create New Employee';
+  buttonTitle = 'Register';
+  completeMessage = '';
+  gender:string[] = ['Male','Female'];
+  role:string[] = ['Admin','Manager','Staff'];
   exist = true;
-  employee:Employee;
+  isEditting = false;
+  employee: Employee;
   editable: boolean = true;
+  complete:boolean = false;
   showDptDetails = false;
   showSchDetails = false;
-  schedule_name:any;
-  working_days:any;
-  start_time:any;
-  end_time:any;
-  dpt_name:any;
-  dpt_level:any;
-  dpt_head:any;
-  createEmployeeFormGroup = new FormGroup({
+  scheduleDetails: Object;
+  working_days: Array<string>;
+  start_time: string;
+  end_time: string;
+  departmentDetails: Object;
+  dpt_level: string;
+  dpt_head: any;
+  employeeFormGroup = new FormGroup({
     name: new FormControl(''),
     domainId: new FormControl(''),
     ic_passportNo: new FormControl(''),
@@ -35,51 +40,55 @@ export class CreateEmployeeComponent implements OnInit {
     department: new FormControl(''),
     schedule: new FormControl(''),
   });
-  get formArray(): AbstractControl | null { return this.createEmployeeFormGroup.get('formArray'); }
+  
+  get formArray(): AbstractControl | null { 
+    return this.employeeFormGroup.get('formArray'); 
+  }
   
   constructor(
     private formBuilder:FormBuilder,
     private adminService: AdminService
     ) {
-    this.createForm();
+    this.employee = new Employee();
     this.getDepartments();
     this.getSchedules();
   }
 
-  ngOnInit(): void {
+  ngAfterContentInit(): void {
+    this.checkUserForEdit();
   }
 
   //get department detials from API
   public getDepartments(){
-    this.adminService.getAllDepartments().subscribe(dptDetails =>{
-      this.dpt_name = dptDetails;
+    this.adminService.getAllDepartments().subscribe(dptDetails => {
+      this.departmentDetails = dptDetails;
     });
   }
 
-  //display department details when schedule name is selected
-  public displayDptDetails(data){
+  //display department details when department name is selected
+  public displayDptDetails(dept){
     this.showDptDetails = true;
-    this.dpt_level = data.level;
-    this.dpt_head = data.department_head;
+    this.dpt_level = dept.level;
+    this.dpt_head = dept.department_head;
   }
 
   //display schedule details when schedule name is selected
-  public displaySchDetails(data){
+  public displaySchDetails(schedule){
     this.showSchDetails = true;
-    this.working_days = data.days_of_work;
-    this.start_time = data.start_time;
-    this.end_time = data.end_time;
+    this.working_days = schedule.days_of_work;
+    this.start_time = schedule.start_time;
+    this.end_time = schedule.end_time;
   }
 
   //get schedule detials from API
   public getSchedules(){
     this.adminService.getAllSchedules().subscribe(schDetails => {
-      this.schedule_name = schDetails;
+      this.scheduleDetails = schDetails;
     });
   }
 
   public createForm(){
-    this.createEmployeeFormGroup = this.formBuilder.group({
+    this.employeeFormGroup = this.formBuilder.group({
       formArray: this.formBuilder.array([
         this.formBuilder.group({
           name: ['',[Validators.required,Validators.pattern('[a-zA-Z ]*')]],
@@ -91,7 +100,7 @@ export class CreateEmployeeComponent implements OnInit {
           role:['',Validators.required]
         }),
         this.formBuilder.group({
-          department: ['',Validators.required]
+          department: [ '', Validators.required]
         }),
         this.formBuilder.group({
           schedule: ['',Validators.required]
@@ -100,30 +109,74 @@ export class CreateEmployeeComponent implements OnInit {
     });
   }
 
+  public editForm() {
+    this.employeeFormGroup = this.formBuilder.group({
+      formArray: this.formBuilder.array([
+        this.formBuilder.group({
+          name: [this.employee.name,[Validators.required,Validators.pattern('[a-zA-Z ]*')]],
+          domainId: [this.employee.domain_id,[Validators.required,Validators.pattern('[a-zA-Z ]*')]],
+          ic_passportNo: [this.employee.ic,[Validators.required]],
+          email: [this.employee.email,[Validators.required,Validators.email]],
+          address: [this.employee.address,Validators.required],
+          gender:[this.employee.gender,Validators.required],
+          role:[this.employee.role,Validators.required],
+        }),
+        this.formBuilder.group({
+          department: [ this.employee.department._id, Validators.required]
+        }),
+        this.formBuilder.group({
+          schedule: [ this.employee.schedule._id, Validators.required]
+        })
+      ])
+    });
+  }
+
   public onSubmit(){
     this.editable = false;
+    this.complete = true;
     this.employee = {
       domain_id: this.formArray.value[0].domainId,
       name: this.formArray.value[0].name,
-      gender:this.formArray.value[0].gender,
-      address:this.formArray.value[0].address,
+      gender: this.formArray.value[0].gender,
+      address: this.formArray.value[0].address,
       ic: this.formArray.value[0].ic_passportNo,
-      email:this.formArray.value[0].email,
-      department: this.formArray.value[1].department._id,
-      schedule:this.formArray.value[2].schedule._id,
+      email: this.formArray.value[0].email,
+      department: this.formArray.value[1].department,
+      schedule: this.formArray.value[2].schedule,
       role: this.formArray.value[0].role
     }
-    console.log(this.employee);
-    this.adminService.addEmployee(this.employee);
+    if (this.isEditting === false){
+      this.completeMessage = 'A new employee has been registered.';
+      this.adminService.addEmployee(this.employee);
+    } else {
+      this.completeMessage = `${this.employee.name} record have been updated.`;
+      this.adminService.updateEmployee(this.employee.domain_id, this.employee);
+      this.isEditting = false;
+    }
   }
 
-  showErrorMessage(){
+  public showErrorMessage(){
     return 'Invalid Input';
   }
 
-  public isDuplicate(control:AbstractControl) {
+  public isDuplicate(control: AbstractControl) {
     return this.adminService.checkDuplicate(control.value).pipe(map(res =>{
-      return res !== null ? { duplicate:true}: null;
+      return res !== null ? { duplicate: true} : null;
     }));
-   }
+  }
+
+  public checkUserForEdit(){
+    this.adminService.getCurrUserToEdit().subscribe(data => {
+
+      if (data === null){
+        this.createForm();
+      } else {
+        this.isEditting = true;
+        this.employee = data;
+        this.title = `Edit Profile Details: ${this.employee.name}`;
+        this.buttonTitle = 'Update Details';
+        this.editForm();
+      }
+    });
+  }
 }

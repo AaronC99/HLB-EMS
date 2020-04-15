@@ -24,7 +24,7 @@ const routes: Routes = [
         component: CheckInOutPageComponent 
       },
       {
-        path: 'my-account/:id',
+        path: 'my-account/:domain_id',
         component: AccountComponent
       },
       {
@@ -36,7 +36,7 @@ const routes: Routes = [
         component: CreateEmployeeComponent,
       },
       {
-        path:'edit-employee/:id',
+        path:'edit-employee/:domain_id',
         component: CreateEmployeeComponent
       },
       {
