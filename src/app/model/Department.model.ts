@@ -1,6 +1,7 @@
 import { Employee } from './Employee.model';
 
 export class Department{
+    public _id: string;
     public department_name: string;
     public level: string;
     public department_head: Employee;
