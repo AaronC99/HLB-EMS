@@ -19,7 +19,8 @@ export class CheckInOutPageComponent implements OnInit {
   date:any = new Date();
   localTime = new DatePipe('en-US');
   currentTime:string;
-  currentDate = this.localTime.transform(this.date,'EEEE, d-MM-y');
+  currentDay = this.localTime.transform(this.date,'EEEE');
+  currentDate = this.localTime.transform(this.date,'d-MM-y');
   displayedColumns: string[] = ['dateIn','timeIn','dateOut','timeOut'];
   ELEMENT_DATA = [];
   dataSource:any = new MatTableDataSource(this.ELEMENT_DATA);

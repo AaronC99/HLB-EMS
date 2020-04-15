@@ -4,7 +4,7 @@
       <mat-card class="clock-card">
         <mat-card-title class="timer">
           <h1>{{ clock }}</h1><br>
-          <h2>{{ currentDate }}</h2> 
+          <h2>{{ currentDay }} | {{ currentDate }}</h2> 
         </mat-card-title>
         <mat-card-actions>
           <button mat-raised-button class="clock-in-out-button" *ngIf="this.clockInVisible" (click)="onClockIn()">Clock In</button>
