@@ -13,44 +13,58 @@
                                         <mat-form-field appearance="fill">
                                             <mat-label>Name</mat-label>
                                             <input matInput placeholder="Enter Full Name" formControlName="name" required> 
-                                            <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
+                                            <mat-error *ngIf="formArray.invalid">
+                                                {{ showErrorMessage() }}
+                                            </mat-error>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-5">
                                         <mat-form-field appearance="fill">
                                             <mat-label>Domain ID</mat-label>
                                             <input matInput placeholder="Ex: tjohndoe" formControlName="domainId" required >
-                                            <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
+                                            <mat-error *ngIf="formArray.invalid">
+                                                {{ showErrorMessage() }}
+                                            </mat-error>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-5">
                                         <mat-form-field appearance="fill">
                                             <mat-label>IC/Passport No</mat-label>
                                             <input matInput placeholder="Enter IC/Passport No" formControlName="ic_passportNo" required >
-                                            <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
+                                            <mat-error *ngIf="formArray.invalid">
+                                                {{ showErrorMessage() }}
+                                            </mat-error>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-5">
                                         <mat-form-field appearance="fill">
                                             <mat-label>Email Address</mat-label>
                                             <input matInput placeholder="Ex: tjohndoe@internal.hlb" formControlName="email" required > 
-                                            <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
+                                            <mat-error *ngIf="formArray.invalid">
+                                                {{ showErrorMessage() }}
+                                            </mat-error>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-5">
                                         <mat-form-field appearance="fill">
                                             <mat-label>Address</mat-label>
                                             <input matInput placeholder="Enter Address" formControlName="address" required> 
-                                            <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
+                                            <mat-error *ngIf="formArray.invalid">
+                                                {{ showErrorMessage() }}
+                                            </mat-error>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-5">
                                         <mat-form-field appearance="fill">
                                             <mat-label>Gender</mat-label>
                                             <mat-select formControlName="gender" required>
-                                                <mat-option *ngFor="let gndr of gender" [value]="gndr">{{ gndr }}</mat-option>
+                                                <mat-option *ngFor="let gndr of gender" [value]="gndr">
+                                                    {{ gndr }}
+                                                </mat-option>
                                             </mat-select>
-                                            <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
+                                            <mat-error *ngIf="formArray.invalid">
+                                                {{ showErrorMessage() }}
+                                            </mat-error>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-5">
@@ -59,12 +73,16 @@
                                             <mat-select formControlName="role" required>
                                                 <mat-option *ngFor="let position of role" [value]="position">{{ position }}</mat-option>
                                             </mat-select>
-                                            <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
+                                            <mat-error *ngIf="formArray.invalid">
+                                                {{ showErrorMessage() }}
+                                            </mat-error>
                                         </mat-form-field>
                                     </div>
                                 </div>
                                 <div class="next-button">
-                                  <button mat-raised-button matStepperNext color="primary" type="button">Next</button>
+                                  <button mat-raised-button matStepperNext color="primary" type="button">
+                                      Next
+                                    </button>
                                 </div>
                             </mat-step>
                             <mat-step formGroupName="1" [stepControl]="formArray.get([1])" [editable]="editable">
@@ -91,7 +109,7 @@
                                                 <div class="col-6"><h3>{{ dpt_level }}</h3></div>
                                                 <div class="w-100"></div>
                                                 <div class="col-6"><h2>Supervisor:</h2></div>
-                                                <div class="col-6"><h3>{{ dpt_head.name }}</h3></div>
+                                                <div class="col-6"><h3>{{ dpt_head.name }}</h3></div>            
                                             </div>
                                         </div>
                                     </div>
@@ -112,7 +130,9 @@
                                                         {{ schedule.schedule_name }}
                                                     </mat-option>
                                                 </mat-select> 
-                                                <mat-error *ngIf="formArray.invalid">{{ showErrorMessage() }}</mat-error>
+                                                <mat-error *ngIf="formArray.invalid">
+                                                    {{ showErrorMessage() }}
+                                                </mat-error>
                                             </mat-form-field>
                                         </div>
                                         <div class="w-100"></div>
@@ -139,7 +159,7 @@
                                         <button mat-raised-button matStepperNext color="primary" type="submit">{{ buttonTitle }}</button>
                                     </div>
                             </mat-step>
-                            <mat-step>
+                            <mat-step [editable]="complete">
                               <ng-template matStepLabel>Done</ng-template>
                               <h2>{{ completeMessage }}</h2>
                               <div>

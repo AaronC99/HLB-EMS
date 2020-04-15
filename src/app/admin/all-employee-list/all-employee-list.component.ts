@@ -73,7 +73,6 @@ export class AllEmployeeListComponent implements OnInit{
   }
 
   public editProfileDetails(currUser) {
-    console.log(currUser);
     this.adminService.userToEdit = currUser;
     this.router.navigateByUrl(`/home/edit-employee/${currUser.domain_id}`);
   }

@@ -1,9 +1,8 @@
-import { Component, OnInit, AfterContentInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';
+import { Component, AfterContentInit } from '@angular/core';
+import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { AdminService } from '../service/admin.service';
 import { Employee } from 'src/app/model/Employee.model';
 import { map } from 'rxjs/operators';
-import { Department } from 'src/app/model/Department.model';
 
 @Component({
   selector: 'app-create-employee',
@@ -13,22 +12,23 @@ import { Department } from 'src/app/model/Department.model';
 export class CreateEmployeeComponent implements AfterContentInit {
   title = 'Create New Employee';
   buttonTitle = 'Register';
-  completeMessage = 'A new employee has been registered.';
+  completeMessage = '';
   gender:string[] = ['Male','Female'];
   role:string[] = ['Admin','Manager','Staff'];
   exist = true;
   isEditting = false;
-  employee:Employee;
+  employee: Employee;
   editable: boolean = true;
+  complete:boolean = false;
   showDptDetails = false;
   showSchDetails = false;
-  scheduleDetails:any;
-  working_days:any;
-  start_time:any;
-  end_time:any;
-  departmentDetails:any;
-  dpt_level:any;
-  dpt_head:any;
+  scheduleDetails: Object;
+  working_days: Array<string>;
+  start_time: string;
+  end_time: string;
+  departmentDetails: Object;
+  dpt_level: string;
+  dpt_head: any;
   employeeFormGroup = new FormGroup({
     name: new FormControl(''),
     domainId: new FormControl(''),
@@ -40,7 +40,10 @@ export class CreateEmployeeComponent implements AfterContentInit {
     department: new FormControl(''),
     schedule: new FormControl(''),
   });
-  get formArray(): AbstractControl | null { return this.employeeFormGroup.get('formArray'); }
+  
+  get formArray(): AbstractControl | null { 
+    return this.employeeFormGroup.get('formArray'); 
+  }
   
   constructor(
     private formBuilder:FormBuilder,
@@ -62,7 +65,7 @@ export class CreateEmployeeComponent implements AfterContentInit {
     });
   }
 
-  //display department details when schedule name is selected
+  //display department details when department name is selected
   public displayDptDetails(dept){
     this.showDptDetails = true;
     this.dpt_level = dept.level;
@@ -119,10 +122,10 @@ export class CreateEmployeeComponent implements AfterContentInit {
           role:[this.employee.role,Validators.required],
         }),
         this.formBuilder.group({
-          department: [ this.employee.department.department_name, Validators.required]
+          department: [ this.employee.department._id, Validators.required]
         }),
         this.formBuilder.group({
-          schedule: [ this.employee.schedule.schedule_name, Validators.required]
+          schedule: [ this.employee.schedule._id, Validators.required]
         })
       ])
     });
@@ -130,6 +133,7 @@ export class CreateEmployeeComponent implements AfterContentInit {
 
   public onSubmit(){
     this.editable = false;
+    this.complete = true;
     this.employee = {
       domain_id: this.formArray.value[0].domainId,
       name: this.formArray.value[0].name,
@@ -141,15 +145,17 @@ export class CreateEmployeeComponent implements AfterContentInit {
       schedule: this.formArray.value[2].schedule,
       role: this.formArray.value[0].role
     }
-    if (this.isEditting === false)
+    if (this.isEditting === false){
+      this.completeMessage = 'A new employee has been registered.';
       this.adminService.addEmployee(this.employee);
-    else {
+    } else {
+      this.completeMessage = `${this.employee.name} record have been updated.`;
       this.adminService.updateEmployee(this.employee.domain_id, this.employee);
       this.isEditting = false;
     }
   }
 
-  showErrorMessage(){
+  public showErrorMessage(){
     return 'Invalid Input';
   }
 
@@ -169,7 +175,6 @@ export class CreateEmployeeComponent implements AfterContentInit {
         this.employee = data;
         this.title = `Edit Profile Details: ${this.employee.name}`;
         this.buttonTitle = 'Update Details';
-        this.completeMessage = `${this.employee.name} record have been updated.`;
         this.editForm();
       }
     });
