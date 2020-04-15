@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../service/authentication.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss']
 })
-export class LoginPageComponent implements OnInit {
+export class LoginPageComponent {
   hide = true;
   showErrorMessage = false;
   title = 'Employee Management System Login'
@@ -42,9 +42,6 @@ export class LoginPageComponent implements OnInit {
       }  
     });
    }
-
-  ngOnInit(): void {
-  }
 
   createForm(){
     this.loginForm = this.formBuilder.group({

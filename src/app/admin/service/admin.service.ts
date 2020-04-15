@@ -19,7 +19,6 @@ export class AdminService {
 
 
   set userToEdit(user) {
-    console.log(user);
     this._userToEdit.next(user);
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ComponentFactoryResolver, ViewChildren, ViewContainerRef, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { EmployeeService } from 'src/app/employee/service/employee.service';
@@ -6,9 +6,6 @@ import { MatSort } from '@angular/material/sort';
 import { AdminService } from '../service/admin.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Router } from '@angular/router';
-import { CreateEmployeeComponent } from '../create-employee/create-employee.component';
-import { map } from 'rxjs/operators';
-import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-all-employee-list',
@@ -41,7 +38,6 @@ export class AllEmployeeListComponent implements OnInit{
 
   public getAllEmployeeDetails(){
     this.employeeService.getAllEmployees(this.currentUserId).subscribe( data => {
-      console.log(data);
       this.ALL_DATA = data;
       if (this.checked){
         this.dataSource = new MatTableDataSource<any>(this.ALL_DATA);
@@ -77,6 +73,7 @@ export class AllEmployeeListComponent implements OnInit{
   }
 
   public editProfileDetails(currUser) {
+    console.log(currUser);
     this.adminService.userToEdit = currUser;
     this.router.navigateByUrl(`/home/edit-employee/${currUser.domain_id}`);
   }
