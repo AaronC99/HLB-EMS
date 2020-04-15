@@ -1,7 +1,6 @@
 export class Timesheet{
-    constructor(
-        public clockInTime:string,
-        public clockOutTime:string,
-        public date:string,
-        public day:string) {}
+    public date_in:string;
+    public time_in:string;
+    public time_out:string;
+    public date_out:string;
 }
