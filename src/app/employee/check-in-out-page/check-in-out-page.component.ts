@@ -2,50 +2,56 @@ import { Component, OnInit, NgModule } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Timesheet } from '../../model/Timesheet.model';
 import * as moment from 'moment';
+import { MatTableDataSource } from '@angular/material/table';
 
-export interface clockInOutElement{
-  date: any;
-  day: any;
-  timeIn: any;
-  timeOut: any;
-}
 
-const ELEMENT_DATA: clockInOutElement[] = [];
+
 @Component({
   selector: 'app-check-in-out-page',
   templateUrl: './check-in-out-page.component.html',
   styleUrls: ['./check-in-out-page.component.scss']
 })
 export class CheckInOutPageComponent implements OnInit {
-  model = new Timesheet('','','','');
+  timesheet: Timesheet;
   clockInVisible = true;
   clockOutVisible = false;
-  clockIn:any = new Date();
+  clock:string;
+  date:any = new Date();
   localTime = new DatePipe('en-US');
-  currTime = this.localTime.transform(this.clockIn,'shortTime');
-  clockOut = '';
-  currDate = this.localTime.transform(this.clockIn,'d-M-yy');
-  currDay = this.localTime.transform(this.clockIn,'EEEE');
-  displayedColumns: string[] = ['date','day','timeIn','timeOut'];
-  dataSource = ELEMENT_DATA;
-  now:String;
+  currentTime:string;
+  currentDate = this.localTime.transform(this.date,'EEEE, d-MM-y');
+  displayedColumns: string[] = ['dateIn','timeIn','dateOut','timeOut'];
+  ELEMENT_DATA = [];
+  dataSource:any = new MatTableDataSource(this.ELEMENT_DATA);
+
   constructor() { 
     setInterval(()=>{
-       this.now = moment().format('hh:mm:ss a');
+       this.clock = moment().format('hh:mm:ss A');
+       this.currentTime = moment().format('HH:mm');
     },1000);
   }
 
   ngOnInit(): void {
+    // load table from API
   }
   onClockIn(){
     this.clockInVisible = false;
     this.clockOutVisible = true;
-    let timesheet = [];
-    timesheet.push(this.model);
-    this.dataSource = timesheet;
+    this.timesheet = {
+      date_in: this.currentDate,
+      time_in: this.currentTime,
+      date_out: null,
+      time_out: null
+    }
+    this.ELEMENT_DATA.push(this.timesheet);
+    this.dataSource = this.ELEMENT_DATA;
   }
+
   onClockOut(){
     this.clockOutVisible = false;
-    this.clockOut = this.currTime;
+    this.timesheet.date_out = this.currentDate;
+    this.timesheet.time_out= this.currentTime;
+    this.ELEMENT_DATA.push(this.timesheet);
+    console.log(this.timesheet);
   }
 }

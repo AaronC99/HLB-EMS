@@ -3,8 +3,8 @@
     <div class = "col">
       <mat-card class="clock-card">
         <mat-card-title class="timer">
-          <h1>{{ now }}</h1><br>
-          <h2>{{ currDay }} | {{ currDate }}</h2> 
+          <h1>{{ clock }}</h1><br>
+          <h2>{{ currentDate }}</h2> 
         </mat-card-title>
         <mat-card-actions>
           <button mat-raised-button class="clock-in-out-button" *ngIf="this.clockInVisible" (click)="onClockIn()">Clock In</button>
@@ -15,28 +15,28 @@
     <div class = "col col-lg-8">
       <mat-card class="clock-in-out">
           <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-            <!-- Date Column -->
-            <ng-container matColumnDef="date">
-              <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{ currDate }} </mat-cell>
-            </ng-container>
-          
-            <!-- Day Column -->
-            <ng-container matColumnDef="day">
-              <mat-header-cell *matHeaderCellDef> Day </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{ currDay }} </mat-cell>
+            <!-- Date In Column -->
+            <ng-container matColumnDef="dateIn">
+              <mat-header-cell *matHeaderCellDef> Date In</mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{ element.date_in }} </mat-cell>
             </ng-container>
           
             <!-- Time In Column -->
             <ng-container matColumnDef="timeIn">
               <mat-header-cell *matHeaderCellDef> Time In </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{ currTime }} </mat-cell>
+              <mat-cell *matCellDef="let element"> {{ element.time_in }} </mat-cell>
+            </ng-container>
+          
+            <!-- Date Out Column -->
+            <ng-container matColumnDef="dateOut">
+              <mat-header-cell *matHeaderCellDef> Date Out </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{ element.date_out }} </mat-cell>
             </ng-container>
           
             <!-- Time Out Column -->
             <ng-container matColumnDef="timeOut">
               <mat-header-cell *matHeaderCellDef> Time Out </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{ clockOut }} </mat-cell>
+              <mat-cell *matCellDef="let element"> {{ element.time_out }} </mat-cell>
             </ng-container>
           
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
