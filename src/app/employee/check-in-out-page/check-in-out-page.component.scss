@@ -43,6 +43,7 @@ mat-card-actions{
 .row {
   margin: 30px;
 }
-table{
-  width:100%;
+mat-table {
+  max-height: 700px;
+  overflow:auto;
 }
