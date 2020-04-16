@@ -4,6 +4,7 @@ import { Timesheet } from '../../model/Timesheet.model';
 import * as moment from 'moment';
 import { MatTableDataSource } from '@angular/material/table';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
+import { EmployeeService } from '../service/employee.service';
 
 @Component({
   selector: 'app-check-in-out-page',
@@ -20,7 +21,7 @@ export class CheckInOutPageComponent implements OnInit {
   date:any = new Date();
   localTime = new DatePipe('en-US');
   currentDay = this.localTime.transform(this.date,'EEEE');
-  currentDate = this.localTime.transform(this.date,'d-MM-y');
+  currentDate = this.localTime.transform(this.date,'dd-MM-y');
   currentYear = this.localTime.transform(this.date,'y')
   displayedColumns: string[] = ['dateIn','timeIn','dateOut','timeOut'];
   CLOCK_IN_OUT_DATA = [];
@@ -28,7 +29,8 @@ export class CheckInOutPageComponent implements OnInit {
   currUserId:any;
 
   constructor(
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private employeeService: EmployeeService
   ) { 
     setInterval(()=>{
        this.clock = moment().format('hh:mm:ss A');
@@ -40,13 +42,6 @@ export class CheckInOutPageComponent implements OnInit {
     this.authService.userAuthDetails.subscribe( name => {
       this.currUserId = name.username;
     });
-    //console.log(this.currUserId);
-    // load table from API
-    /*
-      if (data.date_in !== time.sheet.date_in){
-        
-      }
-    */ 
   }
 
   onClockIn(){
@@ -61,9 +56,10 @@ export class CheckInOutPageComponent implements OnInit {
     }
     this.CLOCK_IN_OUT_DATA.push(this.timesheet);
     this.dataSource = this.CLOCK_IN_OUT_DATA;
-    //console.log(this.currUserId,this.timesheet);
-    console.log('Arguments send to API: ' + this.currUserId,this.currentDate,this.currentTime,this.currentYear);
-    // Pass clock in time and date to api
+    let dateIn = this.localTime.transform(this.date,'dd-MM');
+    let timeIn = moment().format('HHmm');
+    //console.log('Arguments send to API: ' + this.currUserId,date,this.currentTime,this.currentYear);
+    this.employeeService.clockIn(this.currUserId,dateIn,timeIn,this.currentYear);
   }
 
   onClockOut(){
@@ -71,8 +67,9 @@ export class CheckInOutPageComponent implements OnInit {
     this.timesheet.date_out = this.currentDate;
     this.timesheet.time_out= this.currentTime;
     this.CLOCK_IN_OUT_DATA.push(this.timesheet);
-    //console.log(this.currUserId,this.timesheet);
-    console.log('Arguments for clock out send to API: '+ this.currUserId,this.timesheet.date_out,this.timesheet.time_out,this.currentYear);
-    // Pass clock out time and date to api
+    let dateOut = this.localTime.transform(this.date,'dd-MM');
+    let timeOut = moment().format('HHmm');
+    //console.log('Arguments for clock out send to API: '+ this.currUserId,dateOut,timeOut,this.currentYear);
+    this.employeeService.clockOut(this.currUserId,dateOut,timeOut,this.currentYear);
   }
 }
