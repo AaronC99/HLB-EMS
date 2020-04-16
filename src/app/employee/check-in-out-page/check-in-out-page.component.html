@@ -7,8 +7,12 @@
           <h2>{{ currentDay }} | {{ currentDate }}</h2> 
         </mat-card-title>
         <mat-card-actions>
-          <button mat-raised-button class="clock-in-out-button" *ngIf="this.clockInVisible" (click)="onClockIn()">Clock In</button>
-          <button mat-raised-button class="clock-out-button" *ngIf="this.clockOutVisible" (click)="onClockOut()">Clock Out</button>
+          <button mat-raised-button class="clock-in-out-button" *ngIf="clockInButton" (click)="onClockIn()">
+            Clock In
+          </button>
+          <button mat-raised-button class="clock-out-button" *ngIf="clockOutButton" (click)="onClockOut()">
+            Clock Out
+          </button>
         </mat-card-actions>
       </mat-card>
     </div>

@@ -1,29 +1,28 @@
-import { Component, OnInit, NgModule } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Timesheet } from '../../model/Timesheet.model';
 import * as moment from 'moment';
 import { MatTableDataSource } from '@angular/material/table';
-
-
 
 @Component({
   selector: 'app-check-in-out-page',
   templateUrl: './check-in-out-page.component.html',
   styleUrls: ['./check-in-out-page.component.scss']
 })
+
 export class CheckInOutPageComponent implements OnInit {
   timesheet: Timesheet;
-  clockInVisible = true;
-  clockOutVisible = false;
+  clockInButton = true;
+  clockOutButton = false;
   clock:string;
+  currentTime:string;
   date:any = new Date();
   localTime = new DatePipe('en-US');
-  currentTime:string;
   currentDay = this.localTime.transform(this.date,'EEEE');
   currentDate = this.localTime.transform(this.date,'d-MM-y');
   displayedColumns: string[] = ['dateIn','timeIn','dateOut','timeOut'];
-  ELEMENT_DATA = [];
-  dataSource:any = new MatTableDataSource(this.ELEMENT_DATA);
+  CLOCK_IN_OUT_DATA = [];
+  dataSource:any = new MatTableDataSource(this.CLOCK_IN_OUT_DATA);
 
   constructor() { 
     setInterval(()=>{
@@ -34,25 +33,33 @@ export class CheckInOutPageComponent implements OnInit {
 
   ngOnInit(): void {
     // load table from API
+    /*
+      if (data.date_in !== time.sheet.date_in){
+        
+      }
+    */ 
   }
+
   onClockIn(){
-    this.clockInVisible = false;
-    this.clockOutVisible = true;
+    this.clockInButton = false;
+    this.clockOutButton = true;
     this.timesheet = {
       date_in: this.currentDate,
       time_in: this.currentTime,
       date_out: null,
       time_out: null
     }
-    this.ELEMENT_DATA.push(this.timesheet);
-    this.dataSource = this.ELEMENT_DATA;
+    this.CLOCK_IN_OUT_DATA.push(this.timesheet);
+    this.dataSource = this.CLOCK_IN_OUT_DATA;
+    // Pass clock in time and date to api
   }
 
   onClockOut(){
-    this.clockOutVisible = false;
+    this.clockOutButton = false;
     this.timesheet.date_out = this.currentDate;
     this.timesheet.time_out= this.currentTime;
-    this.ELEMENT_DATA.push(this.timesheet);
+    this.CLOCK_IN_OUT_DATA.push(this.timesheet);
     console.log(this.timesheet);
+    // Pass clock out time and date to api
   }
 }
