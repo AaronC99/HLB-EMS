@@ -51,8 +51,8 @@ export class EmployeeService {
     });
   }
 
-  public clockOut(domainId:string,dateOut:string,timeOut:string,year:string){
-    this.httpClient.get(`${this.REST_API_SERVER}/clock/clockOut/${domainId}/${dateOut}/${timeOut}/${year}`)
+  public clockOut(domainId:string,dateIn:string,dateOut:string,timeOut:string,year:string){
+    this.httpClient.get(`${this.REST_API_SERVER}/clock/clockOut/${domainId}/${dateIn}/${dateOut}/${timeOut}/${year}`)
       .subscribe( data => {
         console.log(data);
       });

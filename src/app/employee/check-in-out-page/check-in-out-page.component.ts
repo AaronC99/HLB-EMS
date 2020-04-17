@@ -22,6 +22,7 @@ export class CheckInOutPageComponent implements OnInit {
   localTime = new DatePipe('en-US');
   currentDay = this.localTime.transform(this.date,'EEEE');
   currentDate = this.localTime.transform(this.date,'dd-MM-y');
+  dateIn = this.localTime.transform(this.date,'dd-MM');
   currentYear = this.localTime.transform(this.date,'y')
   displayedColumns: string[] = ['dateIn','timeIn','dateOut','timeOut'];
   CLOCK_IN_OUT_DATA = [];
@@ -56,10 +57,9 @@ export class CheckInOutPageComponent implements OnInit {
     }
     this.CLOCK_IN_OUT_DATA.push(this.timesheet);
     this.dataSource = this.CLOCK_IN_OUT_DATA;
-    let dateIn = this.localTime.transform(this.date,'dd-MM');
     let timeIn = moment().format('HHmm');
-    //console.log('Arguments send to API: ' + this.currUserId,date,this.currentTime,this.currentYear);
-    this.employeeService.clockIn(this.currUserId,dateIn,timeIn,this.currentYear);
+    //console.log('Clock In: ' + this.currUserId,this.dateIn,timeIn,this.currentYear);
+    this.employeeService.clockIn(this.currUserId,this.dateIn,timeIn,this.currentYear);
   }
 
   onClockOut(){
@@ -69,7 +69,7 @@ export class CheckInOutPageComponent implements OnInit {
     this.CLOCK_IN_OUT_DATA.push(this.timesheet);
     let dateOut = this.localTime.transform(this.date,'dd-MM');
     let timeOut = moment().format('HHmm');
-    //console.log('Arguments for clock out send to API: '+ this.currUserId,dateOut,timeOut,this.currentYear);
-    this.employeeService.clockOut(this.currUserId,dateOut,timeOut,this.currentYear);
+    //console.log('Clock Out: '+ this.currUserId,this.dateIn,dateOut,timeOut,this.currentYear);
+    this.employeeService.clockOut(this.currUserId,this.dateIn,dateOut,timeOut,this.currentYear);
   }
 }
