@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { MatTableDataSource } from '@angular/material/table';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { EmployeeService } from '../service/employee.service';
-import { ClockInOut } from 'src/app/model/ClockInOut.model';
 
 @Component({
   selector: 'app-check-in-out-page',
@@ -13,7 +12,6 @@ import { ClockInOut } from 'src/app/model/ClockInOut.model';
 })
 
 export class CheckInOutPageComponent implements OnInit {
-  clockInOutObj: ClockInOut;
   clockInButton = true;
   clockOutButton = false;
   clock:string;
@@ -21,14 +19,14 @@ export class CheckInOutPageComponent implements OnInit {
   date:any = new Date();
   localTime = new DatePipe('en-US');
   currentDay = this.localTime.transform(this.date,'EEEE');
+  currentMonth = this.localTime.transform(this.date,'MM');
   currentDate = this.localTime.transform(this.date,'dd-MM-y');
   dateIn = this.localTime.transform(this.date,'dd-MM');
   currentYear = this.localTime.transform(this.date,'y')
-  displayedColumns: string[] = ['dateIn','timeIn','dateOut','timeOut'];
-  CLOCK_IN_OUT_DATA = [];
-  dataSource:any = new MatTableDataSource(this.CLOCK_IN_OUT_DATA);
+  displayedColumns: string[] = ['dateIn','timeIn','timeOut','dateOut'];
+  CLOCK_IN_OUT_DATA:any = [];
+  dataSource:any = new MatTableDataSource<any>();
   currUserId:any;
-
   constructor(
     private authService: AuthenticationService,
     private employeeService: EmployeeService
@@ -43,32 +41,37 @@ export class CheckInOutPageComponent implements OnInit {
     this.authService.userAuthDetails.subscribe( currentUser => {
       this.currUserId = currentUser.username;
     });
+    this.employeeService.getCurrUserClockInOut(this.currUserId,this.currentMonth,this.currentYear).subscribe( data => {
+      const ALL_DATA:any = data;
+      this.CLOCK_IN_OUT_DATA = ALL_DATA.filter( data => 
+        parseInt(data.date_in) <= parseInt(this.dateIn)
+      );
+      this.CLOCK_IN_OUT_DATA.forEach(element => {
+        if(element.date_in === this.dateIn && element.time_out === '0000'){
+          this.clockInButton = false;
+          this.clockOutButton = true;
+        }else {
+          this.clockInButton = false;
+          this.clockOutButton = false;
+        }
+        this.dataSource = new MatTableDataSource<any>(this.CLOCK_IN_OUT_DATA);
+      });
+    });
   }
 
   onClockIn(){
     this.clockInButton = false;
     this.clockOutButton = true;
-    this.clockInOutObj = {
-      date_in: this.currentDate,
-      time_in: this.currentTime,
-      date_out: null,
-      time_out: null
-    }
-    this.CLOCK_IN_OUT_DATA.push(this.clockInOutObj);
-    this.dataSource = this.CLOCK_IN_OUT_DATA;
     let timeIn = moment().format('HHmm');
-    //console.log('Clock In: ' + this.currUserId,this.dateIn,timeIn,this.currentYear);
     this.employeeService.clockIn(this.currUserId,this.dateIn,timeIn,this.currentYear);
+    this.ngOnInit();
   }
 
   onClockOut(){
     this.clockOutButton = false;
-    this.clockInOutObj.date_out = this.currentDate;
-    this.clockInOutObj.time_out = this.currentTime;
-    this.CLOCK_IN_OUT_DATA.push(this.clockInOutObj);
     let dateOut = this.localTime.transform(this.date,'dd-MM');
     let timeOut = moment().format('HHmm');
-    //console.log('Clock Out: '+ this.currUserId,this.dateIn,dateOut,timeOut,this.currentYear);
     this.employeeService.clockOut(this.currUserId,this.dateIn,dateOut,timeOut,this.currentYear);
+    this.ngOnInit();
   }
 }

@@ -18,29 +18,45 @@
     </div>
     <div class = "col col-lg-8">
       <mat-card class="clock-in-out">
-          <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
             <!-- Date In Column -->
             <ng-container matColumnDef="dateIn">
-              <mat-header-cell *matHeaderCellDef> Date In</mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{ element.date_in }} </mat-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header> 
+                Date In
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element"> 
+                {{ element.date_in }} 
+              </mat-cell>
             </ng-container>
           
             <!-- Time In Column -->
             <ng-container matColumnDef="timeIn">
-              <mat-header-cell *matHeaderCellDef> Time In </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{ element.time_in }} </mat-cell>
-            </ng-container>
-          
-            <!-- Date Out Column -->
-            <ng-container matColumnDef="dateOut">
-              <mat-header-cell *matHeaderCellDef> Date Out </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{ element.date_out }} </mat-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header> 
+                Time In 
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element"> 
+                {{ element.time_in }} 
+              </mat-cell>
             </ng-container>
           
             <!-- Time Out Column -->
             <ng-container matColumnDef="timeOut">
-              <mat-header-cell *matHeaderCellDef> Time Out </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{ element.time_out }} </mat-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header> 
+                Time Out 
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element"> 
+                {{ element.time_out }} 
+              </mat-cell>
+            </ng-container>
+
+            <!-- Date Out Column -->
+            <ng-container matColumnDef="dateOut">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> 
+                Date Out 
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element"> 
+                {{ element.date_out }} 
+              </mat-cell>
             </ng-container>
           
             <mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></mat-header-row>
