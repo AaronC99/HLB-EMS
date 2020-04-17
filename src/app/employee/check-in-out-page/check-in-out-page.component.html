@@ -24,17 +24,17 @@
               <mat-header-cell *matHeaderCellDef mat-sort-header> 
                 Date In
               </mat-header-cell>
-              <mat-cell *matCellDef="let element"> 
+              <mat-cell *matCellDef="let element" [ngStyle]="{'background-color': element.date_in === dateIn ? '#00fdcb' : '' }"> 
                 {{ element.date_in }} 
               </mat-cell>
             </ng-container>
           
             <!-- Time In Column -->
-            <ng-container matColumnDef="timeIn">
+            <ng-container matColumnDef="timeIn" >
               <mat-header-cell *matHeaderCellDef mat-sort-header> 
                 Time In 
               </mat-header-cell>
-              <mat-cell *matCellDef="let element"> 
+              <mat-cell *matCellDef="let element" [ngStyle]="{'background-color': element.date_in === dateIn ? '#00fdcb' : '' }"> 
                 {{ element.time_in }} 
               </mat-cell>
             </ng-container>
@@ -44,7 +44,7 @@
               <mat-header-cell *matHeaderCellDef mat-sort-header> 
                 Time Out 
               </mat-header-cell>
-              <mat-cell *matCellDef="let element"> 
+              <mat-cell *matCellDef="let element" [ngStyle]="{'background-color': element.date_in === dateIn ? '#00fdcb' : '' }"> 
                 {{ element.time_out }} 
               </mat-cell>
             </ng-container>
@@ -54,7 +54,7 @@
               <mat-header-cell *matHeaderCellDef mat-sort-header> 
                 Date Out 
               </mat-header-cell>
-              <mat-cell *matCellDef="let element"> 
+              <mat-cell *matCellDef="let element" [ngStyle]="{'background-color': element.date_in === dateIn ? '#00fdcb' : '' }"> 
                 {{ element.date_out }} 
               </mat-cell>
             </ng-container>

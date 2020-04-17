@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { MatTableDataSource } from '@angular/material/table';
@@ -35,13 +35,18 @@ export class CheckInOutPageComponent implements OnInit {
        this.clock = moment().format('hh:mm:ss A');
        this.currentTime = moment().format('HH:mm');
     },1000);
-  }
-
-  ngOnInit(): void {
     this.authService.userAuthDetails.subscribe( currentUser => {
       this.currUserId = currentUser.username;
     });
-    this.employeeService.getCurrUserClockInOut(this.currUserId,this.currentMonth,this.currentYear).subscribe( data => {
+  }
+
+  ngOnInit(): void {
+    this.displayClockInOut();
+  }
+
+ public displayClockInOut(){
+    this.employeeService.getCurrUserClockInOut(this.currUserId,this.currentMonth,this.currentYear)
+    .subscribe( data => {
       const ALL_DATA:any = data;
       this.CLOCK_IN_OUT_DATA = ALL_DATA.filter( data => 
         parseInt(data.date_in) <= parseInt(this.dateIn)
@@ -64,7 +69,7 @@ export class CheckInOutPageComponent implements OnInit {
     this.clockOutButton = true;
     let timeIn = moment().format('HHmm');
     this.employeeService.clockIn(this.currUserId,this.dateIn,timeIn,this.currentYear);
-    this.ngOnInit();
+    this.displayClockInOut();
   }
 
   onClockOut(){
@@ -72,6 +77,6 @@ export class CheckInOutPageComponent implements OnInit {
     let dateOut = this.localTime.transform(this.date,'dd-MM');
     let timeOut = moment().format('HHmm');
     this.employeeService.clockOut(this.currUserId,this.dateIn,dateOut,timeOut,this.currentYear);
-    this.ngOnInit();
+    this.displayClockInOut();
   }
 }

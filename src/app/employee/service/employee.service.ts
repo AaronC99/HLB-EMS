@@ -45,17 +45,13 @@ export class EmployeeService {
   }
 
   public clockIn(domainId:string,dateIn:string,timeIn:string,year:string){
-    this.httpClient.get(`${this.REST_API_SERVER}/clock/clockIn/${domainId}/${dateIn}/${timeIn}/${year}`)
-      .subscribe( data => {
-        console.log(data);
-    });
+    return this.httpClient.get(`${this.REST_API_SERVER}/clock/clockIn/${domainId}/${dateIn}/${timeIn}/${year}`)
+      .subscribe();
   }
 
   public clockOut(domainId:string,dateIn:string,dateOut:string,timeOut:string,year:string){
-    this.httpClient.get(`${this.REST_API_SERVER}/clock/clockOut/${domainId}/${dateIn}/${dateOut}/${timeOut}/${year}`)
-      .subscribe( data => {
-        console.log(data);
-      });
+    return this.httpClient.get(`${this.REST_API_SERVER}/clock/clockOut/${domainId}/${dateIn}/${dateOut}/${timeOut}/${year}`)
+      .subscribe();
   }
 
   public getCurrUserClockInOut(domainId:string,month:string,year:string){
