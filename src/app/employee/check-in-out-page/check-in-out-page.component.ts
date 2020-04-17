@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { Timesheet } from '../../model/Timesheet.model';
 import * as moment from 'moment';
 import { MatTableDataSource } from '@angular/material/table';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { EmployeeService } from '../service/employee.service';
+import { ClockInOut } from 'src/app/model/ClockInOut.model';
 
 @Component({
   selector: 'app-check-in-out-page',
@@ -13,7 +13,7 @@ import { EmployeeService } from '../service/employee.service';
 })
 
 export class CheckInOutPageComponent implements OnInit {
-  timesheet: Timesheet;
+  clockInOutObj: ClockInOut;
   clockInButton = true;
   clockOutButton = false;
   clock:string;
@@ -48,14 +48,13 @@ export class CheckInOutPageComponent implements OnInit {
   onClockIn(){
     this.clockInButton = false;
     this.clockOutButton = true;
-    this.timesheet = {
-      domain_id: this.currUserId,
+    this.clockInOutObj = {
       date_in: this.currentDate,
       time_in: this.currentTime,
       date_out: null,
       time_out: null
     }
-    this.CLOCK_IN_OUT_DATA.push(this.timesheet);
+    this.CLOCK_IN_OUT_DATA.push(this.clockInOutObj);
     this.dataSource = this.CLOCK_IN_OUT_DATA;
     let timeIn = moment().format('HHmm');
     //console.log('Clock In: ' + this.currUserId,this.dateIn,timeIn,this.currentYear);
@@ -64,9 +63,9 @@ export class CheckInOutPageComponent implements OnInit {
 
   onClockOut(){
     this.clockOutButton = false;
-    this.timesheet.date_out = this.currentDate;
-    this.timesheet.time_out= this.currentTime;
-    this.CLOCK_IN_OUT_DATA.push(this.timesheet);
+    this.clockInOutObj.date_out = this.currentDate;
+    this.clockInOutObj.time_out = this.currentTime;
+    this.CLOCK_IN_OUT_DATA.push(this.clockInOutObj);
     let dateOut = this.localTime.transform(this.date,'dd-MM');
     let timeOut = moment().format('HHmm');
     //console.log('Clock Out: '+ this.currUserId,this.dateIn,dateOut,timeOut,this.currentYear);
