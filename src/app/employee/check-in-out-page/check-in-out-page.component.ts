@@ -40,8 +40,8 @@ export class CheckInOutPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.userAuthDetails.subscribe( name => {
-      this.currUserId = name.username;
+    this.authService.userAuthDetails.subscribe( currentUser => {
+      this.currUserId = currentUser.username;
     });
   }
 
