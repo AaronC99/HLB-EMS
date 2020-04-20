@@ -1,65 +1,86 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import * as XLSX from 'xlsx';
+import { EmployeeService } from '../service/employee.service';
+import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
-export interface PeriodicElement {
-  date: string;
-  clockIn: string;
-  clockOut: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {date: '20/3/20', clockIn: '8:45', clockOut: '17:45'},
-  {date: '21/3/20', clockIn: '8:45', clockOut: '17:45'},
-  {date: '22/3/20', clockIn: '8:45', clockOut: '17:45'},
-  {date: '23/3/20', clockIn: '8:45', clockOut: '17:45'},
-];
 @Component({
   selector: 'app-timesheet',
   templateUrl: './timesheet.component.html',
   styleUrls: ['./timesheet.component.scss']
 })
-export class TimesheetComponent implements OnInit {
-  @ViewChild('TABLE') table: ElementRef;
-  months:any[] = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  years:any[] = [2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020];
-  genTimesheetForm = new FormGroup ({
-    selectedMonth: new FormControl(''),
-    selectedYear: new FormControl('')
+export class TimesheetComponent {
+  date:any;
+  timesheetForm = new FormGroup ({
+    selectedDate: new FormControl('')
   });
-  displayedColumns: string[] = ['date','clockIn','clockOut'];
-  dataSource = ELEMENT_DATA;
+  displayedColumns: string[] = ['date','timeIn','timeOut','ot','ut','lateness'];
+  TIMESHEET_DATA:any;
+  dataSource = new MatTableDataSource<any>();
+  requestVisible:boolean;
   visible = false;
-  constructor(private formBuilder:FormBuilder) { 
+  currUserDomainId:any;
+  currUserSupervisor:any;
+
+  constructor(
+    private formBuilder:FormBuilder,
+    private employeeService: EmployeeService,
+    private authService: AuthenticationService,
+    private _snackBar: MatSnackBar
+    ) { 
     this.createForm();
-  }
-
-  ngOnInit(): void {
-  }
-
-  createForm(){
-    this.genTimesheetForm = this.formBuilder.group({
-      selectedMonth: ['',Validators.required],
-      selectedYear: ['',Validators.required]
+    this.authService.userAuthDetails.subscribe( user=> {
+      this.currUserDomainId = user.username;
+    });
+    this.employeeService.getAllYear(this.currUserDomainId)
+    .subscribe(data => {
+      this.date = data;
+      this.date.forEach(element => {
+        element.period_number++;
+      });
     });
   }
+
+  get userInput(){
+    return this.timesheetForm.controls;
+  }
+  createForm(){
+    this.timesheetForm = this.formBuilder.group({
+      selectedDate: ['',Validators.required]
+    });
+  }
+
   onSubmit(){
-    //get Timesheet from database
-    console.table(this.genTimesheetForm.value);
-    this.visible = true;
+    let month = this.userInput.selectedDate.value.period_number;
+    let year = this.userInput.selectedDate.value.year;
+    this.employeeService.getCurrUserClockInOut(this.currUserDomainId,month,year)
+    .subscribe( data => {
+      this.TIMESHEET_DATA = data;
+      this.dataSource = this.TIMESHEET_DATA;
+    });
+    this.requestVisible = true;
   }
-  dwnldTimesheet(){
+
+  requestApproval(){
+    let period =  this.userInput.selectedDate.value.period_number - 1;
+    let year = this.userInput.selectedDate.value.year;
+    this.employeeService.requestApproval(this.currUserDomainId,period.toString(),year)
+      .subscribe(status => {
+        if(status !== null){
+          this.displayMessage('Request successfully sent to Department Head');
+        } else 
+          this.displayMessage('Error sending request. Please try again');
+      });
+  }
+
+  displayMessage(message:string){
+    this._snackBar.open(message,'Close',{
+      duration: 3000
+    });
+  }
+
+  dwnldTimesheet(){ 
     console.log('Download Timesheet');
-
   }
-  generateExcelFile(){
-    const ws: XLSX.WorkSheet=XLSX.utils.table_to_sheet(this.table.nativeElement);//converts a DOM TABLE element to a worksheet
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-    /* save to file */
-    XLSX.writeFile(wb, 'test.xlsx');
-  }
-
-
 }

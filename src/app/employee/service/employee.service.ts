@@ -56,4 +56,12 @@ export class EmployeeService {
     return this.httpClient.get(`${this.REST_API_SERVER}/timesheet/viewTimesheet/${domainId}/${month}/${year}`);
   }
 
+  public getAllYear(domainId:string){
+    return this.httpClient.get(`${this.REST_API_SERVER}/timesheet/availableTimesheet/${domainId}`);
+  }
+
+  public requestApproval(domainId:string,period:string,year:string){
+    return this.httpClient.get(`${this.REST_API_SERVER}/timesheet/approvalEmail/${domainId}/${period}/${year}`);
+  }
+
 }

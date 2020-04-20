@@ -5,14 +5,16 @@ mat-card{
     border-radius: 20px;
 }
 .generate-form{
-    background-image: linear-gradient(-90deg, #FFFFFF,#FFEFBA);
+   background-image: linear-gradient(to right, #dad4ec 0%, #dad4ec 1%, #f3e7e9 50%);
 }
 .timesheet-card{
-    background-image: linear-gradient(-90deg,  #FFEFBA, #FFFFFF);
+    background-image: linear-gradient(to left, #dad4ec 0%, #dad4ec 1%, #f3e7e9 50%);
 }
 mat-card-title{
     text-align: center;
-    font-family: 'Ubuntu', sans-serif;
+    th{
+        font-family: 'Ubuntu', sans-serif;
+    }
 }
 mat-card-content{
     padding:20px;
@@ -21,18 +23,24 @@ mat-label,mat-select{
     font-size: 17px;
 }
 .month,.year{
-    width: 100%;
     padding: 10px;
 }
 button{
     border-radius: 50px;
+    padding: 5px;
 }
-.generate-button{
-    width: 100%;
+.request-button{
     background-color: #00fdcb;
     color: black;
-    padding:5px;
 }
-table{
+table ,.request-button, .view-button,.month,.year{
     width:100%;
 }
+.timesheet-table{
+    max-height: 700px;
+    overflow: auto;
+}
+th{
+    font-size: 15px;
+    color: black;
+  }

@@ -17,7 +17,7 @@ import { EmployeeListComponent } from '../employee-list/employee-list.component'
 import { EmployeeService } from '../service/employee.service';
 import { AuthenticationModule } from 'src/app/authentication/module/authentication.module';
 import { MatSortModule } from '@angular/material/sort';
-
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -40,7 +40,8 @@ import { MatSortModule } from '@angular/material/sort';
     MatTableModule,
     MatSelectModule,
     MatOptionModule,
-    MatSortModule
+    MatSortModule,
+    MatSnackBarModule
   ]
 })
 export class EmployeeModule {
