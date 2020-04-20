@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, Input } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { MatTableDataSource } from '@angular/material/table';
@@ -27,6 +27,7 @@ export class CheckInOutPageComponent implements OnInit {
   CLOCK_IN_OUT_DATA:any = [];
   dataSource:any = new MatTableDataSource<any>();
   currUserId:any;
+
   constructor(
     private authService: AuthenticationService,
     private employeeService: EmployeeService
@@ -44,39 +45,68 @@ export class CheckInOutPageComponent implements OnInit {
     this.displayClockInOut();
   }
 
+  public filterTable(table:any){
+    this.CLOCK_IN_OUT_DATA = table.filter( data => 
+      parseInt(data.date_in) <= parseInt(this.dateIn)
+    );
+  }
+
+  public clockInOutValidation(dataTable:any){
+    dataTable.forEach(element => {
+      if (element.date_in === this.dateIn && element.time_in === '0000' && element.time_out === '0000'){
+        this.clockInButton = true;
+      }
+      else if(element.date_in === this.dateIn && element.time_in !== '0000' && element.time_out === '0000'){
+        this.clockInButton = false;
+        this.clockOutButton = true;
+      }
+      else {
+        this.clockInButton = false;
+        this.clockOutButton = false;
+      }
+    });
+  }
+
  public displayClockInOut(){
     this.employeeService.getCurrUserClockInOut(this.currUserId,this.currentMonth,this.currentYear)
-    .subscribe( data => {
-      const ALL_DATA:any = data;
-      this.CLOCK_IN_OUT_DATA = ALL_DATA.filter( data => 
-        parseInt(data.date_in) <= parseInt(this.dateIn)
-      );
-      this.CLOCK_IN_OUT_DATA.forEach(element => {
-        if(element.date_in === this.dateIn && element.time_out === '0000'){
-          this.clockInButton = false;
-          this.clockOutButton = true;
-        }else {
-          this.clockInButton = false;
-          this.clockOutButton = false;
-        }
-        this.dataSource = new MatTableDataSource<any>(this.CLOCK_IN_OUT_DATA);
+      .subscribe( data => {
+        this.CLOCK_IN_OUT_DATA = data;
+        this.filterTable(this.CLOCK_IN_OUT_DATA);
+        this.clockInOutValidation(this.CLOCK_IN_OUT_DATA);
+        this.dataSource = this.CLOCK_IN_OUT_DATA;
       });
-    });
+  }
+
+  public updateTable(status:number){
+    if (status === 1){
+      const timeIn = moment().format('HHmm');
+      this.employeeService.clockIn(this.currUserId,this.dateIn,timeIn,this.currentYear).subscribe( data =>{
+        this.CLOCK_IN_OUT_DATA = data;
+        this.filterTable(this.CLOCK_IN_OUT_DATA);
+        this.clockInOutValidation(this.CLOCK_IN_OUT_DATA);
+        this.dataSource = this.CLOCK_IN_OUT_DATA;
+      });
+    } else if (status === 2){
+        const dateOut = this.localTime.transform(this.date,'dd-MM');
+        const timeOut = moment().format('HHmm');
+        this.employeeService.clockOut(this.currUserId,this.dateIn,dateOut,timeOut,this.currentYear)
+        .subscribe ( data => {
+          this.CLOCK_IN_OUT_DATA = data;
+          this.filterTable(this.CLOCK_IN_OUT_DATA);
+          this.clockInOutValidation(this.CLOCK_IN_OUT_DATA);
+          this.dataSource = this.CLOCK_IN_OUT_DATA;
+        });      
+    }
   }
 
   onClockIn(){
     this.clockInButton = false;
     this.clockOutButton = true;
-    let timeIn = moment().format('HHmm');
-    this.employeeService.clockIn(this.currUserId,this.dateIn,timeIn,this.currentYear);
-    this.displayClockInOut();
+    this.updateTable(1);
   }
 
   onClockOut(){
     this.clockOutButton = false;
-    let dateOut = this.localTime.transform(this.date,'dd-MM');
-    let timeOut = moment().format('HHmm');
-    this.employeeService.clockOut(this.currUserId,this.dateIn,dateOut,timeOut,this.currentYear);
-    this.displayClockInOut();
+    this.updateTable(2);
   }
 }
