@@ -21,7 +21,10 @@ const routes: Routes = [
     canActivate:[AuthenticationGuard],
     loadChildren: ()=> NavigationModule},
   {
-    path: 'timesheet-approval',
+    //path: 'timesheet-approval?domain_id=:domainId&period=:month&year=:year',
+    path: 'timesheet-approval/:domainId/:period/:year',
+    //canActivate:[AuthenticationGuard],
+    //data:{ requiresLogin:true },
     component: ApprovalPageComponent
   }
 ];

@@ -19,6 +19,7 @@ import { AuthenticationModule } from 'src/app/authentication/module/authenticati
 import { MatSortModule } from '@angular/material/sort';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ApprovalPageComponent } from '../approval-page/approval-page.component';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { ApprovalPageComponent } from '../approval-page/approval-page.component'
     MatSelectModule,
     MatOptionModule,
     MatSortModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    RouterModule
   ]
 })
 export class EmployeeModule {
