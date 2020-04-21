@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { EmployeeService } from '../service/employee.service';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
@@ -15,13 +15,13 @@ export class TimesheetComponent {
   timesheetForm = new FormGroup ({
     selectedDate: new FormControl('')
   });
-  displayedColumns: string[] = ['date','timeIn','timeOut','ot','ut','lateness'];
+  displayedColumns: string[] = ['date','timeIn','timeOut','ot','ut','lateness','remarks'];
   TIMESHEET_DATA:any;
   dataSource = new MatTableDataSource<any>();
-  requestVisible:boolean;
-  visible = false;
+  needRequest:boolean;
   currUserDomainId:any;
   currUserSupervisor:any;
+  canDownload:boolean;
 
   @HostListener('contextmenu',['$event'])
   onRightClick(event){
@@ -38,7 +38,7 @@ export class TimesheetComponent {
     this.authService.userAuthDetails.subscribe( user=> {
       this.currUserDomainId = user.username;
     });
-    this.employeeService.getAllYear(this.currUserDomainId)
+    this.employeeService.getAvailableTimesheet(this.currUserDomainId)
     .subscribe(data => {
       this.date = data;
       this.date.forEach(element => {
@@ -50,13 +50,14 @@ export class TimesheetComponent {
   get userInput(){
     return this.timesheetForm.controls;
   }
+
   createForm(){
     this.timesheetForm = this.formBuilder.group({
       selectedDate: ['',Validators.required]
     });
   }
 
-  onSubmit(){
+  displayTimesheet(timesheet){
     let month = this.userInput.selectedDate.value.period_number;
     let year = this.userInput.selectedDate.value.year;
     this.employeeService.getTimesheet(this.currUserDomainId,month,year)
@@ -64,7 +65,10 @@ export class TimesheetComponent {
       this.TIMESHEET_DATA = data;
       this.dataSource = this.TIMESHEET_DATA;
     });
-    this.requestVisible = true;
+    if(timesheet.is_approved)
+      this.canDownload = true;
+    else 
+      this.needRequest = true;
   }
 
   requestApproval(){
@@ -88,7 +92,7 @@ export class TimesheetComponent {
     });
   }
 
-  dwnldTimesheet(){ 
+  downloadTimesheet(){ 
     console.log('Download Timesheet');
   }
 }

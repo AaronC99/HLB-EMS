@@ -29,11 +29,11 @@ button{
     border-radius: 50px;
     padding: 5px;
 }
-.request-button{
+.download-button{
     background-color: #00fdcb;
     color: black;
 }
-table ,.request-button, .view-button,.month,.year{
+table ,.request-button, .download-button,.date{
     width:100%;
 }
 .timesheet-table{
@@ -49,7 +49,4 @@ th{
 }
 .visible {
     visibility: visible;
-}
-.empty-data-message{
-    text-align: center;
 }
