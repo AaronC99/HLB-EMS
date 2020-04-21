@@ -3,12 +3,27 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginPageComponent } from './authentication/login-page/login-page.component';
 import { NavigationModule } from './navigation/navigation.module';
 import { AuthenticationGuard } from './authentication/service/authentication.guard';
+import { ApprovalPageComponent } from './employee/approval-page/approval-page.component';
 
 
 const routes: Routes = [
-  {path: '', redirectTo:'login-page', pathMatch: 'full'},
-  {path: 'login-page', component: LoginPageComponent},
-  {path: 'home',canActivate:[AuthenticationGuard],loadChildren: ()=> NavigationModule}
+  {
+    path: '', 
+    redirectTo:'login-page', 
+    pathMatch: 'full'
+  },
+  {
+    path: 'login-page', 
+    component: LoginPageComponent
+  },
+  {
+    path: 'home',
+    canActivate:[AuthenticationGuard],
+    loadChildren: ()=> NavigationModule},
+  {
+    path: 'timesheet-approval',
+    component: ApprovalPageComponent
+  }
 ];
 
 @NgModule({

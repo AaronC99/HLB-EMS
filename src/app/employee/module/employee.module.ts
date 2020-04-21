@@ -18,6 +18,7 @@ import { EmployeeService } from '../service/employee.service';
 import { AuthenticationModule } from 'src/app/authentication/module/authentication.module';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ApprovalPageComponent } from '../approval-page/approval-page.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     AccountComponent,
     CheckInOutPageComponent,
     TimesheetComponent,
-    EmployeeListComponent
+    EmployeeListComponent,
+    ApprovalPageComponent
   ],
   imports: [
     CommonModule,

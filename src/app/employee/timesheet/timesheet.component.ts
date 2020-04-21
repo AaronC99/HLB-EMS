@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { EmployeeService } from '../service/employee.service';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
@@ -22,6 +22,11 @@ export class TimesheetComponent {
   visible = false;
   currUserDomainId:any;
   currUserSupervisor:any;
+
+  @HostListener('contextmenu',['$event'])
+  onRightClick(event){
+    event.preventDefault();
+  }
 
   constructor(
     private formBuilder:FormBuilder,
@@ -67,9 +72,12 @@ export class TimesheetComponent {
     let year = this.userInput.selectedDate.value.year;
     this.employeeService.requestApproval(this.currUserDomainId,period.toString(),year)
       .subscribe(status => {
-        if(status !== null){
-          this.displayMessage('Request successfully sent to Department Head');
-        } else 
+        if(status !== null)
+          this.displayMessage('Request successfully sent to Department Head');  
+      },
+      err =>{
+        console.log(err);
+        if (err !== null)
           this.displayMessage('Error sending request. Please try again');
       });
   }
