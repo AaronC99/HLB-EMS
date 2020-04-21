@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { EmployeeService } from '../service/employee.service';
 
 @Component({
   selector: 'app-approval-page',
@@ -8,17 +9,26 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ApprovalPageComponent implements OnInit {
   currUserDomainId:string;
-  period: string;
+  month: string;
   year:string;
+  TIMESHEET:any;
   constructor(
-    private route:ActivatedRoute
+    private route:ActivatedRoute,
+    private employeeService: EmployeeService
   ) {
     this.currUserDomainId = this.route.snapshot.paramMap.get('domainId');
-    this.period = this.route.snapshot.paramMap.get('period');
+    this.month = this.route.snapshot.paramMap.get('month');
     this.year = this.route.snapshot.paramMap.get('year');
    }
 
   ngOnInit(): void {
+  }
+
+  public displayTimesheet(){
+    this.employeeService.getTimesheet(this.currUserDomainId,this.month,this.year).subscribe( timesheet =>{
+      this.TIMESHEET= timesheet;
+      
+    });
   }
 
 }

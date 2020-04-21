@@ -65,7 +65,7 @@ export class EmployeeService {
     });
   }
 
-  public getCurrUserClockInOut(domainId:string,month:string,year:string){
+  public getTimesheet(domainId:string,month:string,year:string){
     return this.httpClient.get(`${this.REST_API_SERVER}/timesheet/viewTimesheet/${domainId}/${month}/${year}`);
   }
 

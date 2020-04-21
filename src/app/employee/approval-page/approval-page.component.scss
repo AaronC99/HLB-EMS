@@ -1,7 +1,25 @@
 .row{
     margin:50px;
 }
+button{
+    border-radius: 50px; 
+    padding:5px 20px;
+}
+.approve-btn:hover{
+    background-color: rgb(63, 238, 20);
+    color:black;
+}
+.reject-btn:hover{
+    color:#f44336;
+    background-color: white;
+}
+mat-card{
+    border-radius: 20px;
+}
 mat-card-title{
     text-align: center;
     font-family: 'Ubuntu', sans-serif;
+}
+mat-card-actions{
+    text-align: center;
 }

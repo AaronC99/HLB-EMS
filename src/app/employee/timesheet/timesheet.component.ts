@@ -59,7 +59,7 @@ export class TimesheetComponent {
   onSubmit(){
     let month = this.userInput.selectedDate.value.period_number;
     let year = this.userInput.selectedDate.value.year;
-    this.employeeService.getCurrUserClockInOut(this.currUserDomainId,month,year)
+    this.employeeService.getTimesheet(this.currUserDomainId,month,year)
     .subscribe( data => {
       this.TIMESHEET_DATA = data;
       this.dataSource = this.TIMESHEET_DATA;
