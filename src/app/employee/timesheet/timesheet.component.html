@@ -10,7 +10,7 @@
                     <mat-form-field appearance="fill" class="date">
                       <mat-label>Select Month - Year</mat-label>
                       <mat-select formControlName="selectedDate" required >
-                        <mat-option *ngFor="let period of date" [value]="period"
+                        <mat-option *ngFor="let period of dateList" [value]="period"
                           (click)="displayTimesheet(period)">
                           {{ period.period_number }} - {{ period.year}}
                         </mat-option>

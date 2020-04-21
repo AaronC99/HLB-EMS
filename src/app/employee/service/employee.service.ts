@@ -40,6 +40,10 @@ export class EmployeeService {
       });
   }
 
+  public getProfile(domainId:string){
+    return this.httpClient.get(`${this.REST_API_SERVER}/profile/${domainId}`);
+  }
+
   public getAllEmployees(DomainID:String){
     return this.httpClient.get(this.REST_API_SERVER+'/employee/allEmployees/'+DomainID);
   }
