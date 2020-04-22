@@ -19,7 +19,7 @@ export class TimesheetComponent implements OnInit{
   timesheetForm = new FormGroup ({
     selectedDate: new FormControl('')
   });
-  displayedColumns: string[] = ['date','timeIn','timeOut','ot','ut','lateness','remarks'];
+  displayedColumns: string[] = ['date','timeIn','timeOut','dateOut','ot','ut','lateness','remarks'];
   TIMESHEET_DATA:any;
   dataSource: any = [];
   needRequest:boolean;

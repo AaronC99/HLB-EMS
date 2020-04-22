@@ -28,7 +28,6 @@ export class LoginPageComponent {
     private authService:AuthenticationService
     ) {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
-    console.log(this.returnUrl);
     this.createForm();
     this.authService.loggedIn.subscribe((data)=>{
       if(data !== false){

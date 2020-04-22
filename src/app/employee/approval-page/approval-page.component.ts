@@ -14,7 +14,7 @@ export class ApprovalPageComponent implements OnInit {
   month: string;
   year:string;
   TIMESHEET:any;
-  displayedColumns: string[] = ['date','timeIn','timeOut','ot','ut','lateness','remarks'];
+  displayedColumns: string[] = ['date','timeIn','timeOut','dateOut','ot','ut','lateness','remarks'];
   dataSource = [];
   canExit:boolean = false;
   currUser:any;
@@ -31,7 +31,6 @@ export class ApprovalPageComponent implements OnInit {
     this.year = this.route.snapshot.paramMap.get('year');
 
     this.authService.userAuthDetails.subscribe (user =>{
-      //console.log(user.username,user.role);
       this.supervisor = user.username; 
     });
 
@@ -42,7 +41,6 @@ export class ApprovalPageComponent implements OnInit {
           this.validUser = true;
         } else 
           this.validUser = false;
-        //console.log(this.currUser.department.department_head.domain_id);
       });
    }
 
