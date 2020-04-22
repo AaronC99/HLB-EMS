@@ -40,19 +40,36 @@ export class EmployeeService {
       });
   }
 
+  public getProfile(domainId:string){
+    return this.httpClient.get(`${this.REST_API_SERVER}/profile/${domainId}`);
+  }
+
   public getAllEmployees(DomainID:String){
     return this.httpClient.get(this.REST_API_SERVER+'/employee/allEmployees/'+DomainID);
   }
 
   public clockIn(domainId:string,dateIn:string,timeIn:string,year:string){
-    return this.httpClient.get(`${this.REST_API_SERVER}/clock/clockIn/${domainId}/${dateIn}/${timeIn}/${year}`);
+    return this.httpClient.patch(`${this.REST_API_SERVER}/clock/clockIn`
+      ,{
+        "domain_id":domainId,
+        "date_in":dateIn,
+        "time_in":timeIn,
+        "year":year
+      });
   }
 
   public clockOut(domainId:string,dateIn:string,dateOut:string,timeOut:string,year:string){
-    return this.httpClient.get(`${this.REST_API_SERVER}/clock/clockOut/${domainId}/${dateIn}/${dateOut}/${timeOut}/${year}`);
+    return this.httpClient.patch(`${this.REST_API_SERVER}/clock/clockOut`
+    ,{
+      "domain_id":domainId,
+      "date_in":dateIn,
+      "date_out":dateOut,
+      "time_out":timeOut,
+      "year":year
+    });
   }
 
-  public getCurrUserClockInOut(domainId:string,month:string,year:string){
+  public getTimesheet(domainId:string,month:string,year:string){
     return this.httpClient.get(`${this.REST_API_SERVER}/timesheet/viewTimesheet/${domainId}/${month}/${year}`);
   }
 

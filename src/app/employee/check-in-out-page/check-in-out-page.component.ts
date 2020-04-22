@@ -76,7 +76,7 @@ export class CheckInOutPageComponent implements OnInit {
   }
 
  public displayClockInOut(){
-    this.employeeService.getCurrUserClockInOut(this.currUserId,this.currentMonth,this.currentYear)
+    this.employeeService.getTimesheet(this.currUserId,this.currentMonth,this.currentYear)
       .subscribe( data => {
         this.CLOCK_IN_OUT_DATA = data;
         this.filterTable(this.CLOCK_IN_OUT_DATA);
