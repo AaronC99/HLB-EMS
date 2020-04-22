@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EmployeeService } from '../service/employee.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 
 @Component({
   selector: 'app-approval-page',
@@ -16,14 +17,33 @@ export class ApprovalPageComponent implements OnInit {
   displayedColumns: string[] = ['date','timeIn','timeOut','ot','ut','lateness','remarks'];
   dataSource = [];
   canExit:boolean = false;
+  currUser:any;
+  supervisor:any;
+  validUser:boolean;
   constructor(
     private route:ActivatedRoute,
     private employeeService: EmployeeService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private authService: AuthenticationService
   ) {
     this.currUserDomainId = this.route.snapshot.paramMap.get('domainId');
     this.month = this.route.snapshot.paramMap.get('period');
     this.year = this.route.snapshot.paramMap.get('year');
+
+    this.authService.userAuthDetails.subscribe (user =>{
+      //console.log(user.username,user.role);
+      this.supervisor = user.username; 
+    });
+
+    this.employeeService.getProfile(this.currUserDomainId)
+      .subscribe (userInfo => {
+        this.currUser = userInfo;
+        if (this.supervisor === this.currUser.department.department_head.domain_id){
+          this.validUser = true;
+        } else 
+          this.validUser = false;
+        //console.log(this.currUser.department.department_head.domain_id);
+      });
    }
 
   ngOnInit(): void {

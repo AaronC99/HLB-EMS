@@ -1,5 +1,5 @@
-<div class="container">
-    <div class="row justify-content-center">
+<div class="container" >
+    <div class="row justify-content-center" *ngIf="validUser">
         <div class="col-12">
             <mat-card>
                 <mat-card-title>
@@ -87,5 +87,9 @@
                 </mat-card-actions>
             </mat-card>
         </div>
+    </div>
+    <div class="row justify-content-center error-message" *ngIf="!validUser">
+      <h1>ACCESS DENIED</h1>
+      <h2>Oops! You dont have the access to view this page.</h2>
     </div>
 </div>
