@@ -35,7 +35,7 @@ export class LoginPageComponent {
         });
       }
     });
-    
+
     this.authService.getLoginErrors().subscribe(error=>{
       if (error !== null){
         this.showErrorMessage = true;
