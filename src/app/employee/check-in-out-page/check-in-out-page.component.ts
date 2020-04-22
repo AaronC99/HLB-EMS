@@ -23,6 +23,7 @@ export class CheckInOutPageComponent implements OnInit {
   currentMonth = this.localTime.transform(this.date,'MM');
   currentDate = this.localTime.transform(this.date,'dd-MM-y');
   dateIn = this.localTime.transform(this.date,'dd-MM');
+  dateOut = this.localTime.transform(this.date,'dd-MM');
   currentYear = this.localTime.transform(this.date,'y');
   timeOut = moment().format('HHmm');
   displayedColumns: string[] = ['dateIn','timeIn','timeOut','dateOut'];
@@ -95,8 +96,7 @@ export class CheckInOutPageComponent implements OnInit {
         this.dataSource = this.CLOCK_IN_OUT_DATA;
       });
     } else if (status === 2){
-        const dateOut = this.localTime.transform(this.date,'dd-MM');
-        this.employeeService.clockOut(this.currUserId,this.dateIn,dateOut,this.timeOut,this.currentYear)
+        this.employeeService.clockOut(this.currUserId,this.dateIn,this.dateOut,this.timeOut,this.currentYear)
         .subscribe ( data => {
           this.CLOCK_IN_OUT_DATA = data;
           this.filterTable(this.CLOCK_IN_OUT_DATA);
@@ -104,12 +104,10 @@ export class CheckInOutPageComponent implements OnInit {
           this.dataSource = this.CLOCK_IN_OUT_DATA;
         });      
     } else if (status === 3){
-      console.log(this.currUserId,this.dateIn,this.yesterday,this.timeOut,this.currentYear);
-      this.employeeService.clockOut(this.currUserId,this.dateIn,this.yesterday,this.timeOut,this.currentYear)
+      this.employeeService.clockOut(this.currUserId,this.yesterday,this.dateOut,this.timeOut,this.currentYear)
       .subscribe ( data => {
         this.CLOCK_IN_OUT_DATA = data;
         this.filterTable(this.CLOCK_IN_OUT_DATA);
-        this.clockInOutValidation(this.CLOCK_IN_OUT_DATA);
         this.dataSource = this.CLOCK_IN_OUT_DATA;
       });    
     }
