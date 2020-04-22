@@ -1,3 +1,11 @@
+<ng-template #dialogBox>
+  <div class="dialog-box">
+    <h2>Hey! You forgot to clock out yesterday ({{ yesterday }}). Click below to clock out</h2>
+    <button mat-raised-button color="warn" matDialogClose>
+      Clock Out
+    </button>
+  </div>
+</ng-template>
 <div class = "container-fluid">
   <div class = "row">
     <div class = "col">
