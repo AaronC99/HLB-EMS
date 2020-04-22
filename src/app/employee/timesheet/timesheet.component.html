@@ -1,8 +1,10 @@
-<div class="container-fluid" (contextmenu)="onRightClick($event)">
+<div class="container-fluid noprint" (contextmenu)="onRightClick($event)" >
     <div class="row justify-content-between">
         <div class="col-4">
           <mat-card class="generate-form">
-            <mat-card-title>Generate Timesheet</mat-card-title>
+            <mat-card-title>
+              Generate Timesheet
+            </mat-card-title>
             <form [formGroup]="timesheetForm">
               <mat-card-content>
                 <div class="row">
@@ -21,10 +23,12 @@
                 </div>
                 <div class="row">
                   <div class="col">
-                    <button mat-raised-button class="download-button" (click)="downloadTimesheet()" *ngIf="canDownload">
+                    <button mat-raised-button class="download-button" (click)="downloadTimesheet()" 
+                    *ngIf="canDownload">
                       Download
                     </button>
-                    <button mat-raised-button class="request-button" color="primary" *ngIf="needRequest" (click)="requestApproval()">
+                    <button mat-raised-button class="request-button" color="primary" 
+                    *ngIf="needRequest" (click)="requestApproval()">
                       Request
                     </button>
                   </div>
@@ -36,12 +40,9 @@
         <div class="col-8">
           <mat-card class="timesheet-card">
             <mat-card-content>
-              <!-- <div class="empty-table-message" [ngClass]="dataSource.length > 0 ? 'hidden': 'visible'">
-                <span>No data Found. Please generate your timesheet</span>
-              </div> -->
               <div class="timesheet-table">
                 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" >
-                  <!-- [ngClass]="dataSource.length > 0 ? 'visible': 'hidden'" -->
+                  
                   <ng-container matColumnDef="date">
                     <th mat-header-cell *matHeaderCellDef> Date </th>
                     <td mat-cell *matCellDef="let element"
@@ -100,7 +101,11 @@
 
                   <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true;"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
-                </table>
+                </table> 
+                <mat-card class="empty-table-message" 
+                  [ngStyle]="{'visibility' : dataSource.length > 0 ? 'hidden' : 'visible' }">
+                  <h3>No data found. Please generate your timesheet.</h3>
+                </mat-card>
               </div>
             </mat-card-content>
           </mat-card>

@@ -2,7 +2,6 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { EmployeeService } from '../service/employee.service';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
-import { MatTableDataSource } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
 import pdfMake from 'pdfmake/build/pdfmake';
@@ -22,7 +21,7 @@ export class TimesheetComponent implements OnInit{
   });
   displayedColumns: string[] = ['date','timeIn','timeOut','ot','ut','lateness','remarks'];
   TIMESHEET_DATA:any;
-  dataSource = new MatTableDataSource<any>();
+  dataSource: any = [];
   needRequest:boolean;
   currUserDomainId:any;
   currUserSupervisor:any;
@@ -54,7 +53,6 @@ export class TimesheetComponent implements OnInit{
         element.period_number++;
       });
     });
-    
   }
 
   ngOnInit():void{
@@ -74,7 +72,7 @@ export class TimesheetComponent implements OnInit{
     });
   }
 
-  displayTimesheet(timesheet){
+  displayTimesheet(currentMonth){
     let month = this.userInput.selectedDate.value.period_number;
     let year = this.userInput.selectedDate.value.year;
     this.employeeService.getTimesheet(this.currUserDomainId,month,year)
@@ -82,7 +80,7 @@ export class TimesheetComponent implements OnInit{
       this.TIMESHEET_DATA = data;
       this.dataSource = this.TIMESHEET_DATA;
     });
-    if(timesheet.is_approved)
+    if(currentMonth.is_approved)
       this.canDownload = true;
     else 
       this.needRequest = true;
@@ -110,8 +108,8 @@ export class TimesheetComponent implements OnInit{
   }
 
   downloadTimesheet(){ 
-    const document = this.getDocumentDefinition();
-    pdfMake.createPdf(document).open();
+    const timesheetPdf = this.getDocumentDefinition();
+    pdfMake.createPdf(timesheetPdf).open();
   }
 
   getDocumentDefinition(){

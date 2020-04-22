@@ -1,7 +1,7 @@
 .row{
     margin:30px;
 }
-mat-card{
+.generate-form , .timesheet-card{
     border-radius: 20px;
 }
 .generate-form{
@@ -12,7 +12,7 @@ mat-card{
 }
 mat-card-title{
     text-align: center;
-    th{
+    th {
         font-family: 'Ubuntu', sans-serif;
     }
 }
@@ -33,20 +33,26 @@ button{
     background-color: #00fdcb;
     color: black;
 }
-table ,.request-button, .download-button,.date{
+table ,
+.request-button, 
+.download-button,
+.date,
+.empty-table-message{
     width:100%;
 }
 .timesheet-table{
     max-height: 700px;
     overflow: auto;
 }
-th{
+th {
     font-size: 15px;
     color: black;
-  }
-.hidden {
-    visibility: hidden;
 }
-.visible {
-    visibility: visible;
+.empty-table-message{
+    text-align: center;
+}
+@media print { 
+    .noprint { 
+       visibility: hidden; 
+    } 
 }
