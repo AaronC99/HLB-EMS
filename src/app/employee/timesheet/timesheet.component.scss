@@ -6,8 +6,11 @@
     height:100%;
 }
 .generate-form{
-   background-image: linear-gradient(to right, #dad4ec 0%, #dad4ec 1%, #f3e7e9 50%);
-   height:900px;
+    background-image: linear-gradient(to right, #dad4ec 0%, #dad4ec 1%, #f3e7e9 50%);
+    height:900px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .timesheet-card{
     background-image: linear-gradient(to left, #dad4ec 0%, #dad4ec 1%, #f3e7e9 50%);
@@ -16,17 +19,10 @@ mat-card-title,button,th{
     font-family: 'Ubuntu', sans-serif;
     font-weight: bold;
 }
-mat-card-title{
-    text-align: center;
-}
-mat-card-content{
-    padding:20px;
-    height: 100%;
-}
 mat-label,mat-select{
     font-size: 17px;
 }
-.month,.year{
+.date{
     padding: 10px;
 }
 button{
@@ -54,7 +50,7 @@ th,td{
     font-size: 20px;
     color: black;
 }
-.empty-table-message{
+mat-card-title , .empty-table-message, .generate-form{
     text-align: center;
 }
 @media print { 
