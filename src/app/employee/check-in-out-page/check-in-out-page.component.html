@@ -8,20 +8,18 @@
 </ng-template>
 <div class = "container-fluid">
   <div class = "row">
-    <div class = "col">
+    <div class = "col col-lg-4">
       <mat-card class="clock-card">
-        <mat-card-title class="timer">
-          <h1>{{ clock }}</h1><br>
-          <h2>{{ currentDay }} | {{ currentDate }}</h2> 
-        </mat-card-title>
-        <mat-card-actions>
-          <button mat-raised-button class="clock-in-out-button" *ngIf="clockInButton" (click)="onClockIn()">
-            Clock In
-          </button>
-          <button mat-raised-button class="clock-out-button" *ngIf="clockOutButton" (click)="onClockOut()">
-            Clock Out
-          </button>
-        </mat-card-actions>
+          <mat-card-content>
+            <h1>{{ clock }}</h1><br>
+            <h2>{{ currentDay }} | {{ currentDate }}</h2> 
+            <button mat-raised-button class="clock-in-out-button" *ngIf="clockInButton" (click)="onClockIn()">
+              Clock In
+            </button>
+            <button mat-raised-button class="clock-out-button" *ngIf="clockOutButton" (click)="onClockOut()">
+              Clock Out
+            </button>
+          </mat-card-content>
       </mat-card>
     </div>
     <div class = "col col-lg-8">

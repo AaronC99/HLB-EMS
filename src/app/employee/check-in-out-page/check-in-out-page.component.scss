@@ -1,8 +1,13 @@
 .clock-card{
-  border-radius: 20px;
   background-image: linear-gradient(-90deg, #355C7D, #6c5b7b,#c06c84);
   color:white;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.clock-card, .clock-in-out-card{
+  border-radius: 20px;
+  height:900px;
 }
 h1{
   font-size: 60px;
@@ -21,20 +26,23 @@ button{
   width:50%;
   padding: 5px;
   font-size: 20px;
+  margin-top: 30px;
+}
+th,button{
+  font-weight: bold;
 }
 mat-card-actions{
   padding-top:10px;
   padding-bottom: 10px;
-  .clock-in-out-button{
-    background-color: #00fdcb;
-  }
-  .clock-out-button{
-    background-color: #f44336;
-    color: white;
-  }
+}
+.clock-in-out-button{
+  background-color: #00fdcb;
+}
+.clock-out-button{
+  background-color: #f44336;
+  color: white;
 }
 .clock-in-out-card{
-  border-radius: 20px;
   background-image: linear-gradient(-90deg, #c06c84, #6c5b7b, #355C7D);
 }
 .row {
@@ -43,18 +51,14 @@ mat-card-actions{
 table{
   width: 100%;
 }
-th{
-  font-size: 15px;
+th,td{
+  font-size: 20px;
   color: black;
 }
 .clock-in-out-table {
-  max-height: 500px;
+  max-height: 850px;
   overflow:auto;
 }
-.dialog-box{
-  text-align: center;
-}
-.empty-table-message{
-  border-radius: 0px;
+.dialog-box, .empty-table-message, .clock-card{
   text-align: center;
 }
