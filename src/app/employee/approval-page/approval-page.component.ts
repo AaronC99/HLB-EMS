@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService } from '../service/employee.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
@@ -20,11 +20,14 @@ export class ApprovalPageComponent implements OnInit {
   currUser:any;
   supervisor:any;
   validUser:boolean;
+  returnUrl = '';
+
   constructor(
     private route:ActivatedRoute,
     private employeeService: EmployeeService,
     private _snackBar: MatSnackBar,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private router: Router
   ) {
     this.currUserDomainId = this.route.snapshot.paramMap.get('domainId');
     this.month = this.route.snapshot.paramMap.get('period');
@@ -42,6 +45,8 @@ export class ApprovalPageComponent implements OnInit {
         } else 
           this.validUser = false;
       });
+
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'];
    }
 
   ngOnInit(): void {
@@ -65,7 +70,7 @@ export class ApprovalPageComponent implements OnInit {
     this.canExit = true;
   }
 
-  displayMessage(message:string){
+  public displayMessage(message:string){
     this._snackBar.open(message,'Close',{
       duration: 3000
     });
@@ -74,6 +79,10 @@ export class ApprovalPageComponent implements OnInit {
   public rejectTimesheet(){
     this.displayMessage('Timesheet Rejected Successfully');
     this.canExit = true;
+  }
+
+  public exit(){
+    this.router.navigateByUrl(this.returnUrl);
   }
 
 }
