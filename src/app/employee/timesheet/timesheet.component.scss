@@ -3,21 +3,25 @@
 }
 .generate-form , .timesheet-card{
     border-radius: 20px;
+    height:100%;
 }
 .generate-form{
    background-image: linear-gradient(to right, #dad4ec 0%, #dad4ec 1%, #f3e7e9 50%);
+   height:900px;
 }
 .timesheet-card{
     background-image: linear-gradient(to left, #dad4ec 0%, #dad4ec 1%, #f3e7e9 50%);
 }
+mat-card-title,button,th{
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: bold;
+}
 mat-card-title{
     text-align: center;
-    th {
-        font-family: 'Ubuntu', sans-serif;
-    }
 }
 mat-card-content{
     padding:20px;
+    height: 100%;
 }
 mat-label,mat-select{
     font-size: 17px;
@@ -28,6 +32,8 @@ mat-label,mat-select{
 button{
     border-radius: 50px;
     padding: 5px;
+    margin-top: 10px;
+    font-size: 20px;
 }
 .download-button{
     background-color: #00fdcb;
@@ -41,11 +47,11 @@ table ,
     width:100%;
 }
 .timesheet-table{
-    max-height: 700px;
+    max-height: 800px;
     overflow: auto;
 }
-th {
-    font-size: 15px;
+th,td{
+    font-size: 20px;
     color: black;
 }
 .empty-table-message{

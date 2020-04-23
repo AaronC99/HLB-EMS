@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService } from '../service/employee.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-approval-page',
@@ -10,13 +11,17 @@ import { AuthenticationService } from 'src/app/authentication/service/authentica
   styleUrls: ['./approval-page.component.scss']
 })
 export class ApprovalPageComponent implements OnInit {
+  employee:any
   currUserDomainId:string;
-  month: string;
+  period: string;
+  month:number;
+  monthName = moment(this.month).format('MMMM');
   year:string;
   TIMESHEET:any;
   displayedColumns: string[] = ['date','timeIn','timeOut','dateOut','ot','ut','lateness','remarks'];
   dataSource = [];
-  canExit:boolean = false;
+  approved:boolean = false;
+  showExit: boolean = false;
   currUser:any;
   supervisor:any;
   validUser:boolean;
@@ -30,7 +35,7 @@ export class ApprovalPageComponent implements OnInit {
     private router: Router
   ) {
     this.currUserDomainId = this.route.snapshot.paramMap.get('domainId');
-    this.month = this.route.snapshot.paramMap.get('period');
+    this.period = this.route.snapshot.paramMap.get('period');
     this.year = this.route.snapshot.paramMap.get('year');
 
     this.authService.userAuthDetails.subscribe (user =>{
@@ -51,23 +56,46 @@ export class ApprovalPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.displayTimesheet();
+    this.getEmpoyeeDetails();
+    this.approvalValidation();
+  }
+
+  public getEmpoyeeDetails(){
+    this.employeeService.getProfile(this.currUserDomainId)
+    .subscribe (userInfo => {
+      this.employee = userInfo;
+    });
+  }
+
+  public approvalValidation(){
+    this.employeeService.approveTimesheet(this.currUserDomainId,this.period,this.year)
+    .subscribe( data =>{
+      if (data['is_approved']){
+        this.approved = true;
+        this.showExit = true;
+      }
+    })
   }
 
   public displayTimesheet(){
-    this.employeeService.getTimesheet(this.currUserDomainId,this.month,this.year).subscribe( timesheet =>{
+    this.month = parseInt(this.period) + 1;
+    this.employeeService.getTimesheet(this.currUserDomainId,this.month.toString(),this.year).subscribe( timesheet =>{
       this.TIMESHEET= timesheet;
       this.dataSource = this.TIMESHEET;
     });
   }
 
   public approveTimesheet(){
-    let period = parseInt(this.month) - 1;
-    this.employeeService.approveTimesheet(this.currUserDomainId,period.toString(),this.year)
+    this.employeeService.approveTimesheet(this.currUserDomainId,this.period,this.year)
     .subscribe( data =>{
-      if(data['is_approved'])
-        this.displayMessage('Timesheet Approved Successfully')
+      if(data['is_approved']){
+        this.displayMessage('Timesheet Approved Successfully');
+        this.approved = true;
+      }
+      else 
+        this.displayMessage('Unsuccessful Timesheet approval')
+      this.showExit = true;
     })
-    this.canExit = true;
   }
 
   public displayMessage(message:string){
@@ -78,7 +106,7 @@ export class ApprovalPageComponent implements OnInit {
 
   public rejectTimesheet(){
     this.displayMessage('Timesheet Rejected Successfully');
-    this.canExit = true;
+    this.showExit = true;
   }
 
   public exit(){

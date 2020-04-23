@@ -5,10 +5,10 @@
             <mat-card-title>
               Generate Timesheet
             </mat-card-title>
-            <form [formGroup]="timesheetForm">
-              <mat-card-content>
-                <div class="row">
-                  <div class="col">
+            <mat-card-content>
+              <div class="row">
+                <div class="col-12">
+                  <form [formGroup]="timesheetForm">
                     <mat-form-field appearance="fill" class="date">
                       <mat-label>Select Month - Year</mat-label>
                       <mat-select formControlName="selectedDate" required >
@@ -17,24 +17,21 @@
                           {{ period.period_number }} - {{ period.year}}
                         </mat-option>
                       </mat-select>
-                  </mat-form-field>
-                  </div>
-                  <div class="w-100"></div>
+                    </mat-form-field>
+                  </form>
                 </div>
-                <div class="row">
-                  <div class="col">
-                    <button mat-raised-button class="download-button" (click)="downloadTimesheet()" 
-                    *ngIf="canDownload">
-                      Download
-                    </button>
-                    <button mat-raised-button class="request-button" color="primary" 
-                    *ngIf="needRequest" (click)="requestApproval()">
-                      Request
-                    </button>
-                  </div>
+                <div class="col-12">
+                  <button mat-raised-button class="download-button" (click)="downloadTimesheet()" 
+                  *ngIf="canDownload">
+                    Download
+                  </button>
+                  <button mat-raised-button class="request-button" color="primary" 
+                  *ngIf="needRequest" (click)="requestApproval()">
+                    Request
+                  </button>
                 </div>
-              </mat-card-content>
-            </form>
+              </div>
+            </mat-card-content>
           </mat-card>
         </div>
         <div class="col-8">
@@ -47,23 +44,23 @@
                     <th mat-header-cell *matHeaderCellDef> Date </th>
                     <td mat-cell *matCellDef="let element"
                     [ngStyle]="{'background-color': element.remarks === 'Weekend' ? '#DBDBDB' : ''}"> 
-                      {{element.date_in}}-{{element.year}} 
+                      {{ element.date_in }}-{{ element.year }} 
                     </td>
                   </ng-container>
                 
                   <ng-container matColumnDef="timeIn">
-                    <th mat-header-cell *matHeaderCellDef> Time In (24H) </th>
+                    <th mat-header-cell *matHeaderCellDef> Time In</th>
                     <td mat-cell *matCellDef="let element"
                     [ngStyle]="{'background-color': element.remarks === 'Weekend' ? '#DBDBDB' : ''}"> 
-                      {{element.time_in}} 
+                      {{ element.time_in }} 
                     </td>
                   </ng-container>
                 
                   <ng-container matColumnDef="timeOut">
-                    <th mat-header-cell *matHeaderCellDef> Time Out (24H) </th>
+                    <th mat-header-cell *matHeaderCellDef> Time Out</th>
                     <td mat-cell *matCellDef="let element"
                     [ngStyle]="{'background-color': element.remarks === 'Weekend' ? '#DBDBDB' : ''}"> 
-                      {{element.time_out}} 
+                      {{ element.time_out }} 
                     </td>
                   </ng-container>
 
@@ -71,7 +68,7 @@
                     <th mat-header-cell *matHeaderCellDef> Date Out </th>
                     <td mat-cell *matCellDef="let element"
                     [ngStyle]="{'background-color': element.remarks === 'Weekend' ? '#DBDBDB' : ''}"> 
-                      {{element.date_out}} 
+                      {{ element.date_out }} 
                     </td>
                   </ng-container>
 
@@ -79,7 +76,7 @@
                     <th mat-header-cell *matHeaderCellDef> Over Time (H)</th>
                     <td mat-cell *matCellDef="let element"
                     [ngStyle]="{'background-color': element.remarks === 'Weekend' ? '#DBDBDB' : ''}"> 
-                      {{element.ot}} 
+                      {{ element.ot | number }} 
                     </td>
                   </ng-container>
 
@@ -87,7 +84,7 @@
                     <th mat-header-cell *matHeaderCellDef> Under Time (H)</th>
                     <td mat-cell *matCellDef="let element"
                     [ngStyle]="{'background-color': element.remarks === 'Weekend' ? '#DBDBDB' : ''}"> 
-                      {{element.ut | number}} 
+                      {{ element.ut | number }} 
                     </td>
                   </ng-container>
 
@@ -95,7 +92,7 @@
                     <th mat-header-cell *matHeaderCellDef>Lateness (H)</th>
                     <td mat-cell *matCellDef="let element"
                     [ngStyle]="{'background-color': element.remarks === 'Weekend' ? '#DBDBDB' : ''}"> 
-                      {{element.late | number}} 
+                      {{ element.late | number }} 
                     </td>
                   </ng-container>
 
@@ -103,7 +100,7 @@
                     <th mat-header-cell *matHeaderCellDef>Remarks</th>
                     <td mat-cell *matCellDef="let element"
                     [ngStyle]="{'background-color': element.remarks === 'Weekend' ? '#DBDBDB' : ''}"> 
-                      {{element.remarks}} 
+                      {{ element.remarks }} 
                     </td>
                   </ng-container>
 

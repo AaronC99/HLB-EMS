@@ -136,21 +136,11 @@ export class TimesheetComponent implements OnInit{
               {
                 text: `Email : ${this.currEmployee.email}`,
                 style: 'header'
-              },
-              {
-                text: `Department : ${this.currEmployee.department.department_name}`,
-                style: 'header'
-              },
-              {
-                text: `Supervisor : ${this.currEmployee.department.department_head.name}`,
-                style: 'header'
-              },
+              }
             ],
           ]
         },
-        // Get Timesheet Table
         this.getTimesheet(),
-        // Get Employee and Supervisro Signature Table
         this.getEmployeeSignature()
       ],
       info:{
@@ -290,7 +280,7 @@ export class TimesheetComponent implements OnInit{
               style:'tableContent'
             },
             {
-              text:`${this.currEmployee.department.department_head.name}`,
+              text:`${this.currEmployee.department.department_head.name} (${this.currEmployee.department.department_name})`,
               style:'tableContent'
             },
           ],
