@@ -88,7 +88,7 @@
                         </button>
                     </div>
                     <div *ngIf="canExit">
-                        <button mat-raised-button color="warn" routerLink="/login-page">
+                        <button mat-raised-button color="warn" (click)="exit()">
                             Exit 
                         </button>
                     </div>
