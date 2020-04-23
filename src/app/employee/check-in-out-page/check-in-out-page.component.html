@@ -71,6 +71,10 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true;"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>
+          <mat-card class="empty-table-message" 
+              [ngStyle]="{'visibility' : CLOCK_IN_OUT_DATA.length > 0 ? 'hidden' : 'visible' }">
+              <h3>No data found. Please <b>CLOCK IN</b> to view</h3>
+          </mat-card>
         </div>
       </mat-card>
     </div>
