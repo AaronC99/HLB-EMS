@@ -7,10 +7,14 @@
 }
 .generate-form{
     background-image: linear-gradient(to right, #dad4ec 0%, #dad4ec 1%, #f3e7e9 50%);
-    height:900px;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.gf-content{
+    width: 100%;
+    flex: none;
+    padding: 0px 50px;
 }
 .timesheet-card{
     background-image: linear-gradient(to left, #dad4ec 0%, #dad4ec 1%, #f3e7e9 50%);
@@ -18,6 +22,7 @@
 mat-card-title,button,th{
     font-family: 'Ubuntu', sans-serif;
     font-weight: bold;
+    margin: 10px 0px;
 }
 mat-label,mat-select{
     font-size: 17px;
@@ -50,7 +55,9 @@ th,td{
     font-size: 20px;
     color: black;
 }
-mat-card-title , .empty-table-message, .generate-form{
+mat-card-title , .empty-table-message 
+, .generate-form
+{
     text-align: center;
 }
 @media print { 

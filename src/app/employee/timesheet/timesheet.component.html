@@ -2,34 +2,30 @@
     <div class="row justify-content-between">
         <div class="col-4">
           <mat-card class="generate-form">
-            <mat-card-content>
-              <mat-card-title>
-                Generate Timesheet
-              </mat-card-title>
-              <div class="row">
-                <div class="col-12">
-                  <form [formGroup]="timesheetForm">
-                    <mat-form-field appearance="fill" class="date">
-                      <mat-label>Select Month - Year</mat-label>
-                        <mat-select formControlName="selectedDate" required >
-                          <mat-option *ngFor="let period of dateList" [value]="period"
-                            (click)="displayTimesheet(period)">
-                            {{ period.period_number }} - {{ period.year}}
-                          </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </form>
-                  <button mat-raised-button class="download-button" (click)="downloadTimesheet()" 
-                    *ngIf="canDownload">
-                     Download
-                  </button>
-                  <button mat-raised-button class="request-button" color="primary" 
-                    *ngIf="needRequest" (click)="requestApproval()">
-                    Request
-                  </button>
-                </div>
-              </div>
-            </mat-card-content>
+              <div class="gf-content">
+                <mat-card-title>
+                  Generate Timesheet
+                </mat-card-title>
+                <form [formGroup]="timesheetForm">
+                  <mat-form-field appearance="fill" class="date">
+                    <mat-label>Select Month - Year</mat-label>
+                      <mat-select formControlName="selectedDate" required >
+                        <mat-option *ngFor="let period of dateList" [value]="period"
+                          (click)="displayTimesheet(period)">
+                          {{ period.period_number }} - {{ period.year}}
+                        </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </form>
+                <button mat-raised-button class="download-button" (click)="downloadTimesheet()" 
+                  *ngIf="canDownload">
+                   Download
+                </button>
+                <button mat-raised-button class="request-button" color="primary" 
+                  *ngIf="needRequest" (click)="requestApproval()">
+                  Request
+                </button>
+            </div>
           </mat-card>
         </div>
         <div class="col-8">

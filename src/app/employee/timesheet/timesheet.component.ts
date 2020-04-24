@@ -48,6 +48,7 @@ export class TimesheetComponent implements OnInit{
     });
     this.employeeService.getAvailableTimesheet(this.currUserDomainId)
     .subscribe(data => {
+      console.log(data);
       this.dateList = data;
       this.dateList.forEach(element => {
         element.period_number++;
