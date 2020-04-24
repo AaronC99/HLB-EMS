@@ -1,12 +1,17 @@
 <div class="row justify-content-center" *ngIf="validUser">
-  <!-- [ngStyle]="{'visibility' : validUser === true ? 'visible' : 'hidden' }" -->
   <div class="col-12">
       <mat-card>
           <mat-card-title>
               Timesheet approval request 
-              <h2>Name: {{ employee.name }}</h2>
-              <h2>Domain ID: {{ currUserDomainId }}</h2>
-              <h2>Date: {{ monthName }}-{{ year }}</h2>
+              <br>
+              <h2 class="title">Name :</h2> 
+              <h2 class="info">{{ employee.name }}</h2>
+              <br>
+              <h2 class="title">Domain ID : </h2>
+              <h2 class="info">{{ currUserDomainId }}</h2>
+              <br>
+              <h2 class="title">Date : </h2>
+              <h2 class="info">{{ monthName }}-{{ year }}</h2>
           </mat-card-title>
           <mat-card-content>
               <div class="timesheet-table">
@@ -90,7 +95,7 @@
                   </button>
               </div>
               <div *ngIf="approved">
-                  <button mat-raised-button color="warn" (click)="exit()">
+                  <button mat-raised-button color="warn" class="exit-btn" (click)="exit()">
                       Exit 
                   </button>
               </div>
@@ -99,8 +104,7 @@
   </div>
 </div>
 <div class="row justify-content-center error-message" 
-[ngStyle]="{'visibility' : validUser === true ? 'hidden' : 'visible' }">
-<!-- *ngIf="!validUser" -->
+  [ngStyle]="{'visibility' : validUser === false ? 'visible' : 'hidden' }">
   <h1>
     ACCESS DENIED
   </h1>

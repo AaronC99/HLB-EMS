@@ -5,16 +5,11 @@ button{
     border-radius: 50px; 
     padding:5px 20px;
 }
-.exit-btn{
-    color: red;
-    padding: 0px;
-    margin: 10px 0px;
-}
 .approve-btn:hover{
     background-color: rgb(63, 238, 20);
     color:black;
 }
-.reject-btn:hover{
+.exit-btn:hover , .reject-btn:hover{
     color:#f44336;
     background-color: white;
 }
@@ -32,13 +27,24 @@ table{
     width:100%
 }
 h2{
-    margin-top:10px;
+    margin-top:15px;
     margin-bottom: 0px;
+}
+.title{
+    width:150px;
+}
+.info{
+    background-color: #DBDBDB;
+    padding: 0px 10px;
+    border-radius: 50px;
+}
+.title, .info{
+    display:inline-block;
 }
 h1{
     margin: 20px;
 }
-th, h1{
+th, mat-card-title, h1{
     font-weight: bold;
 }
 .error-message{

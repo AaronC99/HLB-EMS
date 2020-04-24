@@ -15,7 +15,7 @@ export class ApprovalPageComponent implements OnInit {
   currUserDomainId:string;
   period: string;
   month:number;
-  monthName = moment(this.month).format('MMMM');
+  monthName:String;
   year:string;
   TIMESHEET:any;
   displayedColumns: string[] = ['date','timeIn','timeOut','dateOut','ot','ut','lateness','remarks'];
@@ -23,7 +23,7 @@ export class ApprovalPageComponent implements OnInit {
   approved:boolean = false;
   currUser:any;
   supervisor:any;
-  validUser:boolean = false;
+  validUser:boolean;
   returnUrl = '';
 
   constructor(
@@ -36,6 +36,7 @@ export class ApprovalPageComponent implements OnInit {
     this.currUserDomainId = this.route.snapshot.paramMap.get('domainId');
     this.period = this.route.snapshot.paramMap.get('period');
     this.month = parseInt(this.period) + 1;
+    this.monthName = moment().month(this.period).format('MMMM');
     this.year = this.route.snapshot.paramMap.get('year');
 
     this.authService.userAuthDetails.subscribe (user =>{
@@ -47,6 +48,8 @@ export class ApprovalPageComponent implements OnInit {
         this.currUser = userInfo;
         if (this.supervisor === this.currUser.department.department_head.domain_id)
           this.validUser = true;
+       else 
+          this.validUser = false;
       });
 
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'];
@@ -69,13 +72,14 @@ export class ApprovalPageComponent implements OnInit {
     this.employeeService.getAvailableTimesheet(this.currUserDomainId)
     .subscribe( data =>{
       let validateArr:any = data;
-      validateArr.forEach(element => {
-        if (element['period_number'] === this.period && element['year'] === this.year && 
-          element['is_approved'] === true){
+      for (let i = 0;i < validateArr.length;i++){
+        if (validateArr[i].period_number === this.period && 
+          validateArr[i].year === this.year && 
+          validateArr[i].is_approved === true){
           this.approved = true;
-        }  else 
-          this.approved = false;
-      });
+          break;
+        } 
+      }
     });
   }
 
