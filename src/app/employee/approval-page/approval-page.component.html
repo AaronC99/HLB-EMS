@@ -1,4 +1,5 @@
 <div class="row justify-content-center" *ngIf="validUser">
+  <!-- [ngStyle]="{'visibility' : validUser === true ? 'visible' : 'hidden' }" -->
   <div class="col-12">
       <mat-card>
           <mat-card-title>
@@ -80,7 +81,7 @@
               </div>
           </mat-card-content>
           <mat-card-actions>
-              <div *ngIf="!showExit && !approved">
+              <div *ngIf="!approved">
                   <button mat-raised-button color="primary" class="approve-btn" (click)="approveTimesheet()">
                       Approve
                   </button>
@@ -88,7 +89,7 @@
                      Reject
                   </button>
               </div>
-              <div *ngIf="showExit || approved">
+              <div *ngIf="approved">
                   <button mat-raised-button color="warn" (click)="exit()">
                       Exit 
                   </button>
@@ -97,8 +98,16 @@
       </mat-card>
   </div>
 </div>
-<div class="row justify-content-center error-message" *ngIf="!validUser">
-<h1>ACCESS DENIED</h1>
-<h2>Oops! You dont have the access to view this page.</h2>
-<button mat-raised-button class="exit-btn" (click)="exit()"> Exit </button>
+<div class="row justify-content-center error-message" 
+[ngStyle]="{'visibility' : validUser === true ? 'hidden' : 'visible' }">
+<!-- *ngIf="!validUser" -->
+  <h1>
+    ACCESS DENIED
+  </h1>
+  <h2>
+    Oops! You dont have the access to view this page.
+  </h2>
+  <button mat-raised-button class="exit-btn" (click)="exit()"> 
+    Exit 
+  </button>
 </div>

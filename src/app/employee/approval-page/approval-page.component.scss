@@ -37,6 +37,8 @@ h2{
 }
 h1{
     margin: 20px;
+}
+th, h1{
     font-weight: bold;
 }
 .error-message{
@@ -47,8 +49,8 @@ h1{
     text-align: center;
     padding: 10px 0px;
 }
-th{
-    font-size: 15px;
+th, td{
+    font-size: 20px;
     color: black;
 }
 .timesheet-table{

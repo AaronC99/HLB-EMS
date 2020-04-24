@@ -21,10 +21,9 @@ export class ApprovalPageComponent implements OnInit {
   displayedColumns: string[] = ['date','timeIn','timeOut','dateOut','ot','ut','lateness','remarks'];
   dataSource = [];
   approved:boolean = false;
-  showExit: boolean = false;
   currUser:any;
   supervisor:any;
-  validUser:boolean;
+  validUser:boolean = false;
   returnUrl = '';
 
   constructor(
@@ -36,6 +35,7 @@ export class ApprovalPageComponent implements OnInit {
   ) {
     this.currUserDomainId = this.route.snapshot.paramMap.get('domainId');
     this.period = this.route.snapshot.paramMap.get('period');
+    this.month = parseInt(this.period) + 1;
     this.year = this.route.snapshot.paramMap.get('year');
 
     this.authService.userAuthDetails.subscribe (user =>{
@@ -45,10 +45,8 @@ export class ApprovalPageComponent implements OnInit {
     this.employeeService.getProfile(this.currUserDomainId)
       .subscribe (userInfo => {
         this.currUser = userInfo;
-        if (this.supervisor === this.currUser.department.department_head.domain_id){
+        if (this.supervisor === this.currUser.department.department_head.domain_id)
           this.validUser = true;
-        } else 
-          this.validUser = false;
       });
 
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'];
@@ -68,17 +66,20 @@ export class ApprovalPageComponent implements OnInit {
   }
 
   public approvalValidation(){
-    this.employeeService.approveTimesheet(this.currUserDomainId,this.period,this.year)
+    this.employeeService.getAvailableTimesheet(this.currUserDomainId)
     .subscribe( data =>{
-      if (data['is_approved']){
-        this.approved = true;
-        this.showExit = true;
-      }
-    })
+      let validateArr:any = data;
+      validateArr.forEach(element => {
+        if (element['period_number'] === this.period && element['year'] === this.year && 
+          element['is_approved'] === true){
+          this.approved = true;
+        }  else 
+          this.approved = false;
+      });
+    });
   }
 
   public displayTimesheet(){
-    this.month = parseInt(this.period) + 1;
     this.employeeService.getTimesheet(this.currUserDomainId,this.month.toString(),this.year).subscribe( timesheet =>{
       this.TIMESHEET= timesheet;
       this.dataSource = this.TIMESHEET;
@@ -94,7 +95,6 @@ export class ApprovalPageComponent implements OnInit {
       }
       else 
         this.displayMessage('Unsuccessful Timesheet approval')
-      this.showExit = true;
     })
   }
 
@@ -106,7 +106,7 @@ export class ApprovalPageComponent implements OnInit {
 
   public rejectTimesheet(){
     this.displayMessage('Timesheet Rejected Successfully');
-    this.showExit = true;
+    this.approved = false;
   }
 
   public exit(){
