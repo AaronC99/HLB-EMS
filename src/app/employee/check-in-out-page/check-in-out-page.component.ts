@@ -59,7 +59,8 @@ export class CheckInOutPageComponent implements OnInit {
 
   public clockInOutValidation(dataTable:any){
     dataTable.forEach(element => {
-      if(element.date_in === this.yesterday && element.time_in !== '0000' && element.time_out === '0000'){
+      if(element.date_in === this.yesterday && element.time_in !== '0000' && element.time_out === '0000' 
+        && element.remarks !== 'Weekend'){
         this.openModal(this.dialog_box);
       }
       else if (element.date_in === this.dateIn && element.time_in === '0000' && element.time_out === '0000'){
