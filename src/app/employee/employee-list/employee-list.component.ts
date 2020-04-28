@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { EmployeeService } from '../service/employee.service';
-import {  MatSort } from '@angular/material/sort';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-employee-list',
@@ -10,7 +10,13 @@ import {  MatSort } from '@angular/material/sort';
   styleUrls: ['./employee-list.component.scss']
 })
 export class EmployeeListComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'domainId', 'email','role','schedule','department'];
+  displayedColumns: string[] = ['name', 'domainId', 'email','role','schedule','department','status'];
+  statusList = [
+    {id: 0, value: 'All'},
+    {id: 1, value: 'Pending'},
+    {id: 2, value: 'Approved'},
+    {id: 3, value: 'Rejected'}
+  ];
   EMPLOYEE_DATA:any = [];
   dataSource:any = new MatTableDataSource<any>(); 
   currentUserId: String;
@@ -37,6 +43,10 @@ export class EmployeeListComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  public filterTable(status){
+    console.log(status);
   }
 
 }

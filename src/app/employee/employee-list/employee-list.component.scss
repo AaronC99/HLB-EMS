@@ -12,6 +12,13 @@ mat-card-title{
 mat-card-content{
     padding: 20px;
 }
-table, .filter-textbox{
+table{ 
     width: 100%;
+}
+.filter-textbox{
+    width: 50%;
+}
+.dropdown-list{
+    width:24%;
+    margin-left: 15px;
 }
