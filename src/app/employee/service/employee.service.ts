@@ -93,4 +93,7 @@ export class EmployeeService {
     });
   }
 
+  public getTimesheetApprovalStatus(domainId:string){
+    return this.httpClient.get(`${this.REST_API_SERVER}/timesheet/approvalStatus/${domainId}`);
+  }
 }
