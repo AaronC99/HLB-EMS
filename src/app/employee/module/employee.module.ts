@@ -17,14 +17,19 @@ import { EmployeeListComponent } from '../employee-list/employee-list.component'
 import { EmployeeService } from '../service/employee.service';
 import { AuthenticationModule } from 'src/app/authentication/module/authentication.module';
 import { MatSortModule } from '@angular/material/sort';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ApprovalPageComponent } from '../approval-page/approval-page.component';
+import { RouterModule } from '@angular/router';
+
+
 
 @NgModule({
   declarations: [
     AccountComponent,
     CheckInOutPageComponent,
     TimesheetComponent,
-    EmployeeListComponent
+    EmployeeListComponent,
+    ApprovalPageComponent
   ],
   imports: [
     CommonModule,
@@ -40,7 +45,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatSelectModule,
     MatOptionModule,
     MatSortModule,
-    MatDialogModule
+    MatSnackBarModule,
+    RouterModule
   ]
 })
 export class EmployeeModule {

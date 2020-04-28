@@ -1,0 +1,117 @@
+<div class="row justify-content-center" *ngIf="validUser">
+  <div class="col-12">
+      <mat-card>
+          <mat-card-title>
+              Timesheet approval request 
+              <br>
+              <h2 class="title">Name :</h2> 
+              <h2 class="info">{{ employee.name }}</h2>
+              <br>
+              <h2 class="title">Domain ID : </h2>
+              <h2 class="info">{{ currUserDomainId }}</h2>
+              <br>
+              <h2 class="title">Date : </h2>
+              <h2 class="info">{{ monthName }}-{{ year }}</h2>
+          </mat-card-title>
+          <mat-card-content>
+              <div class="timesheet-table">
+                  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" >
+                      <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef> Date </th>
+                        <td mat-cell *matCellDef="let element"
+                        [ngStyle]="{'background-color': element.remarks === 'Weekend' ? '#DBDBDB' : ''}"> 
+                          {{element.date_in}}-{{element.year}} 
+                        </td>
+                      </ng-container>
+                    
+                      <ng-container matColumnDef="timeIn">
+                        <th mat-header-cell *matHeaderCellDef> Time In (24H) </th>
+                        <td mat-cell *matCellDef="let element"
+                        [ngStyle]="{'background-color': element.remarks === 'Weekend' ? '#DBDBDB' : ''}"> 
+                          {{element.time_in}} 
+                        </td>
+                      </ng-container>
+                    
+                      <ng-container matColumnDef="timeOut">
+                        <th mat-header-cell *matHeaderCellDef> Time Out (24H) </th>
+                        <td mat-cell *matCellDef="let element"
+                        [ngStyle]="{'background-color': element.remarks === 'Weekend' ? '#DBDBDB' : ''}"> 
+                          {{element.time_out}} 
+                        </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="dateOut">
+                        <th mat-header-cell *matHeaderCellDef> Date Out </th>
+                        <td mat-cell *matCellDef="let element"
+                        [ngStyle]="{'background-color': element.remarks === 'Weekend' ? '#DBDBDB' : ''}"> 
+                          {{element.date_out}} 
+                        </td>
+                      </ng-container>
+    
+                      <ng-container matColumnDef="ot">
+                        <th mat-header-cell *matHeaderCellDef> Over Time (H)</th>
+                        <td mat-cell *matCellDef="let element"
+                        [ngStyle]="{'background-color': element.remarks === 'Weekend' ? '#DBDBDB' : ''}"> 
+                          {{element.ot | number}} 
+                        </td>
+                      </ng-container>
+    
+                      <ng-container matColumnDef="ut">
+                        <th mat-header-cell *matHeaderCellDef> Under Time (H)</th>
+                        <td mat-cell *matCellDef="let element"
+                        [ngStyle]="{'background-color': element.remarks === 'Weekend' ? '#DBDBDB' : ''}"> 
+                          {{element.ut | number}} 
+                        </td>
+                      </ng-container>
+    
+                      <ng-container matColumnDef="lateness">
+                        <th mat-header-cell *matHeaderCellDef>Lateness (H)</th>
+                        <td mat-cell *matCellDef="let element"
+                        [ngStyle]="{'background-color': element.remarks === 'Weekend' ? '#DBDBDB' : ''}"> 
+                          {{element.late | number}} 
+                        </td>
+                      </ng-container>
+    
+                      <ng-container matColumnDef="remarks">
+                        <th mat-header-cell *matHeaderCellDef>Remarks</th>
+                        <td mat-cell *matCellDef="let element"
+                        [ngStyle]="{'background-color': element.remarks === 'Weekend' ? '#DBDBDB' : ''}"> 
+                          {{element.remarks}} 
+                        </td>
+                      </ng-container>
+    
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true;"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
+                  </table>
+              </div>
+          </mat-card-content>
+          <mat-card-actions>
+              <div *ngIf="!approved">
+                  <button mat-raised-button color="primary" class="approve-btn" (click)="approveTimesheet()">
+                      Approve
+                  </button>
+                  <button mat-raised-button color="warn" class="reject-btn" (click)="rejectTimesheet()">
+                     Reject
+                  </button>
+              </div>
+              <div *ngIf="approved">
+                  <button mat-raised-button color="warn" class="exit-btn" (click)="exit()">
+                      Exit 
+                  </button>
+              </div>
+          </mat-card-actions>
+      </mat-card>
+  </div>
+</div>
+<div class="row justify-content-center error-message" 
+  [ngStyle]="{'visibility' : validUser === false ? 'visible' : 'hidden' }">
+  <h1>
+    ACCESS DENIED
+  </h1>
+  <h2>
+    Oops! You dont have the access to view this page.
+  </h2>
+  <button mat-raised-button class="exit-btn" (click)="exit()"> 
+    Exit 
+  </button>
+</div>

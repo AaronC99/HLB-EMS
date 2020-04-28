@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../service/authentication.service';
 
 @Component({
@@ -19,11 +19,15 @@ export class LoginPageComponent {
     domainId: new FormControl(''),
     domainPass: new FormControl(''),
   });
+  returnUrl: '';
+
   constructor(
     private formBuilder:FormBuilder,
     private router:Router,
+    private route: ActivatedRoute,
     private authService:AuthenticationService
     ) {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
     this.createForm();
     this.authService.loggedIn.subscribe((data)=>{
       if(data !== false){
@@ -31,11 +35,11 @@ export class LoginPageComponent {
           if(data['role'] === 'Admin')
             this.router.navigateByUrl('/home/all-employee');
           else 
-            this.router.navigateByUrl('/home');
+            this.router.navigateByUrl(this.returnUrl);
         });
       }
     });
-    
+
     this.authService.getLoginErrors().subscribe(error=>{
       if (error !== null){
         this.showErrorMessage = true;

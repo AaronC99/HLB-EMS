@@ -73,4 +73,24 @@ export class EmployeeService {
     return this.httpClient.get(`${this.REST_API_SERVER}/timesheet/viewTimesheet/${domainId}/${month}/${year}`);
   }
 
+  public getAvailableTimesheet(domainId:string){
+    return this.httpClient.get(`${this.REST_API_SERVER}/timesheet/availableTimesheet/${domainId}`);
+  }
+
+  public requestApproval(domainId:string,period:string,year:string){
+    return this.httpClient.post(`${this.REST_API_SERVER}/timesheet/approvalEmail`
+    ,{
+      "domain_id":domainId,
+      "period":period,
+      "year":year
+    });
+  }
+
+  public approveTimesheet(domainId:string,period:string,year:string){
+    return this.httpClient.patch(`${this.REST_API_SERVER}/timesheet/approveTimesheet/${domainId}/${period}/${year}`
+    ,{
+      "is_approved":true
+    });
+  }
+
 }

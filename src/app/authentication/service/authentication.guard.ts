@@ -20,7 +20,9 @@ export class AuthenticationGuard implements CanActivate{ //CanActivateChild, Can
         .pipe(
           map((isLoggedIn:Boolean)=>{
             if(!isLoggedIn){
-              this.router.navigateByUrl('');
+              //this.router.navigateByUrl('');
+              this.router.navigate(['login-page']
+              ,{queryParams: {returnUrl: state.url}});
               return false;
             }
             return true;

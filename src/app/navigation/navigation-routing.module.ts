@@ -8,7 +8,6 @@ import { CreateEmployeeComponent } from '../admin/create-employee/create-employe
 import { EmployeeListComponent } from '../employee/employee-list/employee-list.component';
 import { AllEmployeeListComponent } from '../admin/all-employee-list/all-employee-list.component';
 
-
 const routes: Routes = [
   { 
     path:'', 
