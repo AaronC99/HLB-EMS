@@ -9,6 +9,8 @@ mat-card{
 }
 mat-card-title,h2{
     text-align: center;
+}
+th,td,mat-card-title,h2{
     font-family: 'Ubuntu', sans-serif;
 }
 mat-card-title{
@@ -17,8 +19,17 @@ mat-card-title{
 mat-card-content{
     padding: 20px;
 }
+mat-form-field{
+    font-size:15px;
+}
 table, .filter-textbox{
     width: 100%;
+}
+th{
+    color: black;
+}
+th,td{
+    font-size: 20px;
 }
 .dropdown-list{
     width:50%;
@@ -27,6 +38,8 @@ button{
     width:20%;
 }
 h2{
-    font-weight: bold;
     color:red;
+}
+th,h2{
+    font-weight: bold;
 }
