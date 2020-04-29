@@ -25,6 +25,7 @@ export class ApprovalPageComponent implements OnInit {
   supervisor:any;
   validUser:boolean;
   returnUrl = '';
+  statusType = '';
 
   constructor(
     private route:ActivatedRoute,
@@ -39,9 +40,11 @@ export class ApprovalPageComponent implements OnInit {
     this.monthName = moment().month(this.period).format('MMMM');
     this.year = this.route.snapshot.paramMap.get('year');
 
-    this.authService.userAuthDetails.subscribe (user =>{
-      this.supervisor = user.username; 
-    });
+    // this.authService.userAuthDetails.subscribe (user =>{
+    //   this.supervisor = user.username; 
+    // });
+    let _currUserObj:any = JSON.parse(localStorage.getItem('currentUser'));
+    this.supervisor = _currUserObj.username;
 
     this.employeeService.getProfile(this.currUserDomainId)
       .subscribe (userInfo => {
@@ -91,8 +94,8 @@ export class ApprovalPageComponent implements OnInit {
   }
 
   public approveTimesheet(){
-    let statusType = 'Approve';
-    this.employeeService.approveTimesheet(this.currUserDomainId,this.period,this.year,statusType)
+    this.statusType = 'Approved';
+    this.employeeService.updateTimesheetStatus(this.currUserDomainId,this.period,this.year,this.statusType)
     .subscribe( data =>{
       if(data['approval_status'] === 'Approved'){
         this.displayMessage('Timesheet Approved Successfully');
@@ -110,8 +113,14 @@ export class ApprovalPageComponent implements OnInit {
   }
 
   public rejectTimesheet(){
-    this.displayMessage('Timesheet Rejected Successfully');
-    this.approved = false;
+    this.statusType = 'Rejected';
+    this.employeeService.updateTimesheetStatus(this.currUserDomainId,this.period,this.year,this.statusType)
+      .subscribe(data => {
+        if (data['approval_status'] === 'Rejected'){
+          this.displayMessage('Timesheet Rejected Successfully');
+          this.approved = false;
+        }
+      });
   }
 
   public exit(){

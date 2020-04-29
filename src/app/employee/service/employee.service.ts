@@ -48,23 +48,18 @@ export class EmployeeService {
     return this.httpClient.get(this.REST_API_SERVER+'/employee/allEmployees/'+DomainID);
   }
 
-  public clockIn(domainId:string,dateIn:string,timeIn:string,year:string){
+  public clockIn(domainId:string){
     return this.httpClient.patch(`${this.REST_API_SERVER}/clock/clockIn`
       ,{
-        "domain_id":domainId,
-        "date_in":dateIn,
-        "time_in":timeIn,
-        "year":year
+        "domain_id":domainId
       });
   }
 
-  public clockOut(domainId:string,dateIn:string,dateOut:string,timeOut:string,year:string){
+  public clockOut(domainId:string,dateIn:string,year:string){
     return this.httpClient.patch(`${this.REST_API_SERVER}/clock/clockOut`
     ,{
       "domain_id":domainId,
       "date_in":dateIn,
-      "date_out":dateOut,
-      "time_out":timeOut,
       "year":year
     });
   }
@@ -88,7 +83,7 @@ export class EmployeeService {
   }
 
   //Pass back Approved/Rejected status
-  public approveTimesheet(domainId:string,period:string,year:string,status:string){ 
+  public updateTimesheetStatus(domainId:string,period:string,year:string,status:string){ 
     return this.httpClient.patch(`${this.REST_API_SERVER}/timesheet/updateTimesheetStatus/${domainId}/${period}/${year}`
     ,{
       "approval_status":status

@@ -90,14 +90,14 @@ export class CheckInOutPageComponent implements OnInit {
   public updateTable(status:number){
     if (status === 1){
       const timeIn = moment().format('HHmm');
-      this.employeeService.clockIn(this.currUserId,this.dateIn,timeIn,this.currentYear).subscribe( data =>{
+      this.employeeService.clockIn(this.currUserId).subscribe( data =>{
         this.CLOCK_IN_OUT_DATA = data;
         this.filterTable(this.CLOCK_IN_OUT_DATA);
         this.clockInOutValidation(this.CLOCK_IN_OUT_DATA);
         this.dataSource = this.CLOCK_IN_OUT_DATA;
       });
     } else if (status === 2){
-        this.employeeService.clockOut(this.currUserId,this.dateIn,this.dateOut,this.timeOut,this.currentYear)
+        this.employeeService.clockOut(this.currUserId,this.dateIn,this.currentYear)
         .subscribe ( data => {
           this.CLOCK_IN_OUT_DATA = data;
           this.filterTable(this.CLOCK_IN_OUT_DATA);
@@ -105,7 +105,7 @@ export class CheckInOutPageComponent implements OnInit {
           this.dataSource = this.CLOCK_IN_OUT_DATA;
         });      
     } else if (status === 3){
-      this.employeeService.clockOut(this.currUserId,this.yesterday,this.dateOut,this.timeOut,this.currentYear)
+      this.employeeService.clockOut(this.currUserId,this.yesterday,this.currentYear)
       .subscribe ( data => {
         this.CLOCK_IN_OUT_DATA = data;
         this.filterTable(this.CLOCK_IN_OUT_DATA);
