@@ -24,10 +24,8 @@ export class HeaderComponent{
     private authService: AuthenticationService,
     private router:Router,
     private adminService: AdminService) {
-    this.authService.userAuthDetails.subscribe((details) => {
-      this._authDetails = details;
-      this.account = details.username;
-    });
+    this._authDetails = JSON.parse(localStorage.getItem('currentUser'));
+    this.account = this._authDetails.username;
   }
 
   newEmployeePage(){

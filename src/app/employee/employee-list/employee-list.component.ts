@@ -38,9 +38,11 @@ export class EmployeeListComponent implements OnInit {
     private formBuilder:FormBuilder,
     private authService:AuthenticationService,
     private employeeService: EmployeeService) {
-    this.authService.userAuthDetails.subscribe(user => {
-      this.currentUserId = user.username;
-    });
+      // this.authService.userAuthDetails.subscribe(user => {
+      //   this.currentUserId = user.username;
+      // });
+      let _currUserObj:any = JSON.parse(localStorage.getItem('currentUser'));
+      this.currentUserId = _currUserObj.username;
    }
 
   ngOnInit(): void {
