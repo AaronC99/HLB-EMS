@@ -7,11 +7,11 @@
                     <mat-label>Filter</mat-label>
                     <input matInput (keyup)="applyFilter($event)" placeholder="Search">
                 </mat-form-field>
-                <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+                <form [formGroup]="searchForm">
                   <mat-form-field appearance="outline" class="dropdown-list">
                     <mat-label>Timesheet Status</mat-label>
                     <mat-select formControlName="status">
-                      <mat-option *ngFor="let status of statusList" [value]="status.id">
+                      <mat-option *ngFor="let status of statusList" [value]="status.id" (click)="onSubmit()">
                         {{ status.value }}
                       </mat-option>
                     </mat-select>
@@ -19,15 +19,11 @@
                   <mat-form-field appearance="outline" class="dropdown-list">
                     <mat-label>Month - Year</mat-label>
                     <mat-select formControlName="dateSelected">
-                      <mat-option *ngFor="let dates of dateList" [value]="dates">
+                      <mat-option *ngFor="let dates of dateList" [value]="dates" (click)="onSubmit()">
                         {{ dates }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <button mat-button color="primary" type="submit">
-                    <mat-icon>search</mat-icon>
-                    Search
-                  </button>
                 </form>
                 
                 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
@@ -75,15 +71,22 @@
                     </ng-container>
 
                     <ng-container matColumnDef="status">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-                      <td mat-cell *matCellDef="let element">
-                        {{ element.timesheet_approval[0].approval_status }}
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Timesheet Status </th>
+                      <td mat-cell *matCellDef="let element"
+                      [ngStyle]="{'color': element.timesheet_approval.approval_status === 'Approved' ? 'green' 
+                      : element.timesheet_approval.approval_status === 'Rejected' ? 'red' : ''}">
+                        {{ element.timesheet_approval.approval_status }}
                       </td>
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                   </table>
+                  <div *ngIf="EMPLOYEE_DATA.length === 0">
+                    <mat-card class="empty-data-message">
+                      <h2>No Record Found</h2>
+                    </mat-card>
+                  </div>
             </mat-card-content>
         </mat-card>
     </div>

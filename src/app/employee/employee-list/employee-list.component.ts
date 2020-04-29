@@ -25,13 +25,12 @@ export class EmployeeListComponent implements OnInit {
   currentMonth = this.localTime.transform(this.date,'MM');
   currentYear = this.localTime.transform(this.date,'y');
   dateList = [];
-  statusArray = [];
   EMPLOYEE_DATA:any = [];
   dataSource:any = new MatTableDataSource<any>(); 
   currentUserId:any;
   searchForm = new FormGroup ({
     status: new FormControl(),
-    dateSelected: new FormControl(),
+    dateSelected: new FormControl()
   });
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
@@ -67,9 +66,7 @@ export class EmployeeListComponent implements OnInit {
 
   public getEmployeeRecords(){
     this.employeeService.getAllEmployees(this.currentUserId).subscribe(data =>{
-      console.log(data);
       this.EMPLOYEE_DATA = data;
-
       let date = [this.dateList[this.dateList.length - 1]];
       let dateString = date[0].split('-',2);
       let month = dateString[0];
@@ -79,13 +76,11 @@ export class EmployeeListComponent implements OnInit {
       this.EMPLOYEE_DATA.forEach(element => {
         element.timesheet_approval.forEach(timesheetObj => {
           if (timesheetObj.period_number === period.toString() && timesheetObj.year === year){
-            filteredArray.push(timesheetObj);
+            filteredArray = timesheetObj;
           }
         });
         element.timesheet_approval = filteredArray;
       });
-      console.log(filteredArray);
-      console.log(this.EMPLOYEE_DATA);
       this.dataSource = new MatTableDataSource(this.EMPLOYEE_DATA);
       this.dataSource.sort = this.sort;
     });
@@ -112,55 +107,58 @@ export class EmployeeListComponent implements OnInit {
     this.employeeService.getAllEmployees(this.currentUserId)
       .subscribe( data =>{
         this.EMPLOYEE_DATA = data;
-        let filteredArray:any = [];
         if (status === 1){ // Pending
           this.EMPLOYEE_DATA.forEach(element => {
             element.timesheet_approval.forEach(info => {
               if (info.approval_status === 'Pending' && info.period_number === period.toString() 
                 && info.year === year){
-                filteredArray.push(info);
+                element.timesheet_approval = info;
               }
             });
-            element.timesheet_approval = filteredArray;
           });
-          console.log(filteredArray);
-          console.log(this.EMPLOYEE_DATA);
+          this.EMPLOYEE_DATA = this.EMPLOYEE_DATA.filter(item => 
+            item.timesheet_approval.approval_status === 'Pending' && 
+            item.timesheet_approval.period_number === period.toString() &&
+            item.timesheet_approval.year === year
+          );
         }else if (status === 2){ // Approved
           this.EMPLOYEE_DATA.forEach(element => {
             element.timesheet_approval.forEach(info => {
               if (info.approval_status === 'Approved' && info.period_number === period.toString() 
                 && info.year === year){
-                filteredArray.push(info);
+                element.timesheet_approval = info;
               }
             });
-            element.timesheet_approval = filteredArray;
           });
-          console.log(filteredArray);
-          console.log(this.EMPLOYEE_DATA);
+          this.EMPLOYEE_DATA = this.EMPLOYEE_DATA.filter(item => 
+            item.timesheet_approval.approval_status === 'Approved' && 
+            item.timesheet_approval.period_number === period.toString() &&
+            item.timesheet_approval.year === year
+          );
         }else if(status === 3){ // Rejected
           this.EMPLOYEE_DATA.forEach(element => {
             element.timesheet_approval.forEach(info => {
               if (info.approval_status === 'Rejected' && info.period_number === period.toString() 
                 && info.year === year){
-                filteredArray.push(info);
+                element.timesheet_approval = info;
               }
             });
-            element.timesheet_approval = filteredArray;
           });
-          console.log(filteredArray);
-          console.log(this.EMPLOYEE_DATA);
+          this.EMPLOYEE_DATA = this.EMPLOYEE_DATA.filter(item => 
+            item.timesheet_approval.approval_status === 'Rejected' && 
+            item.timesheet_approval.period_number === period.toString() &&
+            item.timesheet_approval.year === year
+          );
         } else { // All
           this.EMPLOYEE_DATA.forEach(element => {
             element.timesheet_approval.forEach(info => {
               if (info.period_number === period.toString() && info.year === year){
-                filteredArray.push(info);
+                element.timesheet_approval = info;
               }
             });
-            element.timesheet_approval = filteredArray;
           });
-          console.log(filteredArray);
-          console.log(this.EMPLOYEE_DATA);
         }
+        this.dataSource = new MatTableDataSource(this.EMPLOYEE_DATA);
       });
   }
 

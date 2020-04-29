@@ -4,23 +4,29 @@
 .employee-list-card{
     border-radius: 20px;
 }
-mat-card-title{
+mat-card{
+    background-image: linear-gradient(to top, #dfe9f3 0%, white 100%);
+}
+mat-card-title,h2{
     text-align: center;
     font-family: 'Ubuntu', sans-serif;
+}
+mat-card-title{
     text-transform: uppercase;
 }
 mat-card-content{
     padding: 20px;
 }
-table{ 
-    width: 100%;
-}
-.filter-textbox{
+table, .filter-textbox{
     width: 100%;
 }
 .dropdown-list{
-    width:40%;
+    width:50%;
 }
 button{
     width:20%;
+}
+h2{
+    font-weight: bold;
+    color:red;
 }
