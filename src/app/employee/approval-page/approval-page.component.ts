@@ -91,9 +91,10 @@ export class ApprovalPageComponent implements OnInit {
   }
 
   public approveTimesheet(){
-    this.employeeService.approveTimesheet(this.currUserDomainId,this.period,this.year)
+    let statusType = 'Approve';
+    this.employeeService.approveTimesheet(this.currUserDomainId,this.period,this.year,statusType)
     .subscribe( data =>{
-      if(data['is_approved']){
+      if(data['approval_status'] === 'Approved'){
         this.displayMessage('Timesheet Approved Successfully');
         this.approved = true;
       }

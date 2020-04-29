@@ -75,7 +75,13 @@
                       <td mat-cell *matCellDef="let element"
                       [ngStyle]="{'color': element.timesheet_approval.approval_status === 'Approved' ? 'green' 
                       : element.timesheet_approval.approval_status === 'Rejected' ? 'red' : ''}">
-                        {{ element.timesheet_approval.approval_status }}
+                        <div *ngIf="element.timesheet_approval.approval_status === 'Pending' 
+                          && element.timesheet_approval.date_submitted === null; else showStatus">
+                          Not Submitted
+                        </div>
+                        <ng-template #showStatus>
+                          {{ element.timesheet_approval.approval_status }}
+                        </ng-template>
                       </td>
                     </ng-container>
 

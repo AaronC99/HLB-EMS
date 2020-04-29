@@ -89,7 +89,8 @@ export class TimesheetComponent implements OnInit{
   requestApproval(){
     let period =  this.userInput.selectedDate.value.period_number - 1;
     let year = this.userInput.selectedDate.value.year;
-    this.employeeService.requestApproval(this.currUserDomainId,period.toString(),year)
+    let statusType = 'Approval';
+    this.employeeService.requestApproval(this.currUserDomainId,period.toString(),year,statusType)
       .subscribe(status => {
         if(status !== null)
           this.displayMessage('Request successfully sent to Department Head');  
