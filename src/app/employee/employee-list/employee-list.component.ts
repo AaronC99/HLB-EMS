@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { EmployeeService } from '../service/employee.service';
 import { MatSort } from '@angular/material/sort';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -36,11 +35,7 @@ export class EmployeeListComponent implements OnInit {
 
   constructor(
     private formBuilder:FormBuilder,
-    private authService:AuthenticationService,
     private employeeService: EmployeeService) {
-      // this.authService.userAuthDetails.subscribe(user => {
-      //   this.currentUserId = user.username;
-      // });
       let _currUserObj:any = JSON.parse(localStorage.getItem('currentUser'));
       this.currentUserId = _currUserObj.username;
    }
@@ -109,7 +104,8 @@ export class EmployeeListComponent implements OnInit {
     this.employeeService.getAllEmployees(this.currentUserId)
       .subscribe( data =>{
         this.EMPLOYEE_DATA = data;
-        if (status === 1){ // Pending
+        // If timesheet status is Pending
+        if (status === 1){ 
           this.EMPLOYEE_DATA.forEach(element => {
             element.timesheet_approval.forEach(info => {
               if (info.approval_status === 'Pending' && info.period_number === period.toString() 
@@ -123,7 +119,8 @@ export class EmployeeListComponent implements OnInit {
             item.timesheet_approval.period_number === period.toString() &&
             item.timesheet_approval.year === year
           );
-        }else if (status === 2){ // Approved
+        }else if (status === 2){ 
+          // If timesheet status is Approved
           this.EMPLOYEE_DATA.forEach(element => {
             element.timesheet_approval.forEach(info => {
               if (info.approval_status === 'Approved' && info.period_number === period.toString() 
@@ -137,7 +134,8 @@ export class EmployeeListComponent implements OnInit {
             item.timesheet_approval.period_number === period.toString() &&
             item.timesheet_approval.year === year
           );
-        }else if(status === 3){ // Rejected
+        }else if(status === 3){ 
+          // If timesheet status is Rejected
           this.EMPLOYEE_DATA.forEach(element => {
             element.timesheet_approval.forEach(info => {
               if (info.approval_status === 'Rejected' && info.period_number === period.toString() 
@@ -151,7 +149,8 @@ export class EmployeeListComponent implements OnInit {
             item.timesheet_approval.period_number === period.toString() &&
             item.timesheet_approval.year === year
           );
-        } else { // All
+        } else { 
+          // Display All timesheet status
           this.EMPLOYEE_DATA.forEach(element => {
             element.timesheet_approval.forEach(info => {
               if (info.period_number === period.toString() && info.year === year){
