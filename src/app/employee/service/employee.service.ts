@@ -72,7 +72,7 @@ export class EmployeeService {
     return this.httpClient.get(`${this.REST_API_SERVER}/timesheet/availableTimesheet/${domainId}`);
   }
 
-  public requestApproval(domainId:string,period:string,year:string,status:string){
+  public sendEmail(domainId:string,period:string,year:string,status:string){
     return this.httpClient.post(`${this.REST_API_SERVER}/timesheet/sendEmail`
     ,{
       "domain_id":domainId,
@@ -90,13 +90,8 @@ export class EmployeeService {
     });
   }
 
-  public allowTimesheetEdit(domainId:string,dateIn:string,year:string){
-    return this.httpClient.patch(`${this.REST_API_SERVER}/timesheet/setEditableTimesheet`
-    ,{
-      "domain_id":domainId,
-      "date_in":dateIn,
-      "year":year
-    });
+  public allowTimesheetEdit(recordsForEdit){
+    return this.httpClient.patch(`${this.REST_API_SERVER}/timesheet/setEditableTimesheet` ,recordsForEdit);
   }
 
   // for date out, let them select current day or next day

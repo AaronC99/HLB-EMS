@@ -18,16 +18,16 @@ export class ApprovalPageComponent implements OnInit {
   monthName:string;
   year:string;
   TIMESHEET:any;
-  displayedColumns: string[] = ['editStatus','date','timeIn','timeOut','dateOut','ot','ut','lateness','remarks'];
+  displayedColumns: string[];
   dataSource = [];
-  approved:boolean = false;
+  allowExit:boolean = false;
   currUser:any;
   supervisor:any;
   validUser:boolean;
   returnUrl = '';
   statusType = '';
-  checked = false;
-  seletedRows = new SelectionModel<any>(true,[]);
+  showCheckBox = false;
+  selectedRows = new SelectionModel<any>(true,[]);
 
   constructor(
     private route:ActivatedRoute,
@@ -42,13 +42,12 @@ export class ApprovalPageComponent implements OnInit {
     this.year = this.route.snapshot.paramMap.get('year');
 
     let _currUserObj:any = JSON.parse(localStorage.getItem('currentUser'));
-    this.supervisor = _currUserObj.username;
-    console.log(this.supervisor);
     let url = this.router.url;
-    if(this.supervisor === undefined){
+    if(localStorage.getItem('currentUser') === null){
       this.router.navigateByUrl(this.returnUrl);
       localStorage.setItem('timesheetApprovalUrl',JSON.stringify(url));
     }
+    this.supervisor = _currUserObj.username;
     this.employeeService.getProfile(this.currUserDomainId)
       .subscribe (userInfo => {
         this.currUser = userInfo;
@@ -79,10 +78,18 @@ export class ApprovalPageComponent implements OnInit {
       for (let i = 0;i < validateArr.length;i++){
         if (validateArr[i].period_number === this.period && 
           validateArr[i].year === this.year && 
-          validateArr[i].is_approved === true){
-          this.approved = true;
-          break;
+          validateArr[i].approval_status !== 'Pending'){
+            this.allowExit = true;
+            this.displayedColumns = ['date','timeIn','timeOut','dateOut','ot','ut','lateness','remarks'];
+            break;
         } 
+        else if ( validateArr[i].period_number === this.period && 
+          validateArr[i].year === this.year && 
+          validateArr[i].approval_status === 'Pending'){
+            this.allowExit = false;
+            this.displayedColumns = ['editStatus','date','timeIn','timeOut','dateOut','ot','ut','lateness','remarks'];
+            break;
+        }
       }
     });
   }
@@ -97,13 +104,13 @@ export class ApprovalPageComponent implements OnInit {
   public approveTimesheet(){
     this.statusType = 'Approved';
     this.employeeService.updateTimesheetStatus(this.currUserDomainId,this.period,this.year,this.statusType)
-    .subscribe( data =>{
+    .subscribe( data => {
       if(data['approval_status'] === 'Approved'){
         this.displayMessage('Timesheet Approved Successfully');
-        this.approved = true;
+        this.allowExit = true;
       }
       else 
-        this.displayMessage('Unsuccessful Timesheet approval')
+        this.displayMessage('Unsuccessful Timesheet approval');
     })
   }
 
@@ -114,45 +121,33 @@ export class ApprovalPageComponent implements OnInit {
   }
 
   public rejectTimesheet(){
-    // this.statusType = 'Rejected';
-    // this.employeeService.updateTimesheetStatus(this.currUserDomainId,this.period,this.year,this.statusType)
-    //   .subscribe(data => {
-    //     if (data['approval_status'] === 'Rejected'){
-    //       this.displayMessage('Timesheet Rejected Successfully');
-    //       this.approved = false;
-    //     }
-    //   });
-    console.log(this.seletedRows.selected);
+    this.statusType = 'Rejected';
+    let status = 'Reject';
+    this.employeeService.updateTimesheetStatus(this.currUserDomainId,this.period,this.year,this.statusType)
+      .subscribe(data => {
+        if (data['approval_status'] === 'Rejected'){
+          this.displayMessage('Timesheet Rejected Successfully');
+          this.allowExit = true;
+        }
+      });
+    this.employeeService.allowTimesheetEdit(this.selectedRows.selected);
+    this.employeeService.sendEmail(this.currUserDomainId,this.period,this.year,status);
   }
 
-  // public allowEdit(event,row){
-  //   let editableRows = [];
-  //   if(event.checked){
-  //     editableRows.push(row);
-  //   }else {
-  //     let index = editableRows.indexOf(row);
-  //     if(index > -1)
-  //       editableRows.splice(index,1);
-  //   }
-  //   console.log(editableRows);
-  // }
-
   public isAllSelected() {
-    const numSelected = this.seletedRows.selected.length;
-    //const numRows = this.dataSource.length;
-    //return numSelected === numRows;
+    const numSelected = this.selectedRows.selected.length;
     return numSelected;
   }
 
   public masterToggle() {
-    this.isAllSelected() ? this.seletedRows.clear() : this.dataSource.forEach(row => this.seletedRows.select(row));
+    this.isAllSelected() ? this.selectedRows.clear() : this.dataSource.forEach(row => {
+      if(row.remarks !== 'Weekend' && row.time_in === '0000' && row.time_out ==='0000')
+        this.selectedRows.select(row)
+    });
   }
 
   public exit(){
     localStorage.removeItem('timesheetApprovalUrl');
     this.router.navigateByUrl(this.returnUrl);
   }
-
-
-
 }

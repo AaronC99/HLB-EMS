@@ -5,11 +5,12 @@ button{
     border-radius: 50px; 
     padding:5px 20px;
 }
-.approve-btn:hover{
+.approve-btn:not([disabled]):hover{
     background-color: rgb(63, 238, 20);
     color:black;
 }
-.exit-btn:hover , .reject-btn:hover{
+.exit-btn:hover , 
+.reject-btn:not([disabled]):hover{
     color:#f44336;
     background-color: white;
 }
