@@ -1,7 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { EmployeeService } from '../service/employee.service';
-import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
 import pdfMake from 'pdfmake/build/pdfmake';
@@ -23,6 +22,7 @@ export class TimesheetComponent implements OnInit{
   TIMESHEET_DATA:any;
   dataSource: any = [];
   needRequest:boolean;
+  currentUser:any;
   currUserDomainId:any;
   currUserSupervisor:any;
   canDownload:boolean;
@@ -39,13 +39,11 @@ export class TimesheetComponent implements OnInit{
   constructor(
     private formBuilder:FormBuilder,
     private employeeService: EmployeeService,
-    private authService: AuthenticationService,
     private _snackBar: MatSnackBar
     ) { 
     this.createForm();
-    this.authService.userAuthDetails.subscribe( user=> {
-      this.currUserDomainId = user.username;
-    });
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.currUserDomainId = this.currentUser.username;
     this.employeeService.getAvailableTimesheet(this.currUserDomainId)
     .subscribe(data => {
       this.dateList = data;
@@ -80,7 +78,7 @@ export class TimesheetComponent implements OnInit{
       this.TIMESHEET_DATA = data;
       this.dataSource = this.TIMESHEET_DATA;
     });
-    if(currentMonth.is_approved)
+    if(currentMonth.is_approved || this.currentUser.role === 'Manager')
       this.canDownload = true;
     else 
       this.needRequest = true;

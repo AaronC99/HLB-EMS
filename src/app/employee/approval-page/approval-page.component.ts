@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService } from '../service/employee.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import * as moment from 'moment';
 
 @Component({
@@ -15,7 +14,7 @@ export class ApprovalPageComponent implements OnInit {
   currUserDomainId:string;
   period: string;
   month:number;
-  monthName:String;
+  monthName:string;
   year:string;
   TIMESHEET:any;
   displayedColumns: string[] = ['date','timeIn','timeOut','dateOut','ot','ut','lateness','remarks'];
@@ -31,7 +30,6 @@ export class ApprovalPageComponent implements OnInit {
     private route:ActivatedRoute,
     private employeeService: EmployeeService,
     private _snackBar: MatSnackBar,
-    private authService: AuthenticationService,
     private router: Router
   ) {
     this.currUserDomainId = this.route.snapshot.paramMap.get('domainId');
@@ -40,12 +38,14 @@ export class ApprovalPageComponent implements OnInit {
     this.monthName = moment().month(this.period).format('MMMM');
     this.year = this.route.snapshot.paramMap.get('year');
 
-    // this.authService.userAuthDetails.subscribe (user =>{
-    //   this.supervisor = user.username; 
-    // });
     let _currUserObj:any = JSON.parse(localStorage.getItem('currentUser'));
     this.supervisor = _currUserObj.username;
-
+    console.log(_currUserObj.username);
+    let url = this.router.url;
+    if(this.supervisor === undefined){
+      this.router.navigateByUrl(this.returnUrl);
+      localStorage.setItem('timesheetApprovalUrl',JSON.stringify(url));
+    }
     this.employeeService.getProfile(this.currUserDomainId)
       .subscribe (userInfo => {
         this.currUser = userInfo;
@@ -54,8 +54,6 @@ export class ApprovalPageComponent implements OnInit {
        else 
           this.validUser = false;
       });
-
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'];
    }
 
   ngOnInit(): void {
@@ -124,6 +122,7 @@ export class ApprovalPageComponent implements OnInit {
   }
 
   public exit(){
+    localStorage.removeItem('timesheetApprovalUrl');
     this.router.navigateByUrl(this.returnUrl);
   }
 
