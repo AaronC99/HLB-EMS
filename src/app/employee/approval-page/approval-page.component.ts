@@ -4,6 +4,7 @@ import { EmployeeService } from '../service/employee.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as moment from 'moment';
 import { SelectionModel } from '@angular/cdk/collections';
+import { AuthModel } from 'src/app/model/Authentication.model';
 
 @Component({
   selector: 'app-approval-page',
@@ -18,11 +19,12 @@ export class ApprovalPageComponent implements OnInit {
   monthName:string;
   year:string;
   TIMESHEET:any;
-  displayedColumns: string[];
+  displayedColumns:string[] = ['date','timeIn','timeOut','dateOut','ot','ut','lateness','remarks'];
   dataSource = [];
   allowExit:boolean = false;
-  currUser:any;
-  supervisor:any;
+  invalidInput:boolean = false;
+  currentUser:any;
+  user:AuthModel;
   validUser:boolean;
   returnUrl = '';
   statusType = '';
@@ -45,23 +47,29 @@ export class ApprovalPageComponent implements OnInit {
     let url = this.router.url;
     if(localStorage.getItem('currentUser') === null){
       this.router.navigateByUrl(this.returnUrl);
-      localStorage.setItem('timesheetApprovalUrl',JSON.stringify(url));
+      localStorage.setItem('temproraryUrl',JSON.stringify(url));
     }
-    this.supervisor = _currUserObj.username;
+    this.user = _currUserObj;
+   }
+
+  ngOnInit(): void {
+    this.userValidation();
+    this.displayTimesheet();
+    this.getEmpoyeeDetails();
+    if (this.user.role === 'Manager')
+      this.approvalValidation();
+  }
+
+  public userValidation(){
     this.employeeService.getProfile(this.currUserDomainId)
       .subscribe (userInfo => {
-        this.currUser = userInfo;
-        if (this.supervisor === this.currUser.department.department_head.domain_id)
+        this.currentUser = userInfo;
+        if (this.user.username === this.currentUser.department.department_head.domain_id || 
+          this.user.username === this.currentUser.domain_id)
           this.validUser = true;
        else 
           this.validUser = false;
       });
-   }
-
-  ngOnInit(): void {
-    this.displayTimesheet();
-    this.getEmpoyeeDetails();
-    this.approvalValidation();
   }
 
   public getEmpoyeeDetails(){
@@ -80,7 +88,6 @@ export class ApprovalPageComponent implements OnInit {
           validateArr[i].year === this.year && 
           validateArr[i].approval_status !== 'Pending'){
             this.allowExit = true;
-            this.displayedColumns = ['date','timeIn','timeOut','dateOut','ot','ut','lateness','remarks'];
             break;
         } 
         else if ( validateArr[i].period_number === this.period && 
@@ -99,6 +106,14 @@ export class ApprovalPageComponent implements OnInit {
       this.TIMESHEET= timesheet;
       this.dataSource = this.TIMESHEET;
     });
+  }
+
+  public tomorrow(date){
+    let dateString = date.split('-',2);
+    let day = parseInt(dateString[0]) + 1;
+    let dayString = ("0" + day).slice(-2);
+    let tomorrowDate = `${dayString}-${dateString[1]}`;
+    return tomorrowDate;
   }
 
   public approveTimesheet(){
@@ -130,8 +145,8 @@ export class ApprovalPageComponent implements OnInit {
           this.allowExit = true;
         }
       });
-    this.employeeService.allowTimesheetEdit(this.selectedRows.selected);
-    this.employeeService.sendEmail(this.currUserDomainId,this.period,this.year,status);
+    this.employeeService.allowTimesheetEdit(this.selectedRows.selected).subscribe();
+    this.employeeService.sendEmail(this.currUserDomainId,this.period,this.year,status).subscribe();
   }
 
   public isAllSelected() {
@@ -146,8 +161,59 @@ export class ApprovalPageComponent implements OnInit {
     });
   }
 
+  public requestApproval(){
+    let status = 'Reapproval';
+    this.TIMESHEET = this.dataSource;
+    //this.employeeService.sendEmail(this.currUserDomainId,this.period,this.year,status).subscribe();
+    //this.employeeService.editTimesheet(this.TIMESHEET).subscribe();
+    console.log(this.TIMESHEET)
+  }
+
+  public updateTimeIn(row,newTimeIn){
+    this.dataSource.forEach(element => {
+      if (element.date_in === row.date_in){
+        row.time_in = newTimeIn;
+      }
+    });
+  }
+
+  public updateTimeOut(row,newTimeOut){
+    this.dataSource.forEach(element => {
+      if (element.date_in === row.date_in){
+        if(newTimeOut > row.time_in)
+          row.time_out = newTimeOut;
+        else if (newTimeOut < row.time_in && row.date_out !== null){
+          row.time_out = newTimeOut;
+          this.invalidInput = false;
+        }
+        else 
+          this.invalidInput = true;
+      }
+    });
+  }
+
+  public updateRemarks(row,newValue){
+    this.dataSource.forEach( element => {
+      if(element.date_in === row.date_in)
+        row.remarks = newValue;
+    });
+  }
+
+  public updateDateOut(row,newDateOut){
+    this.dataSource.forEach(element => {
+      if(element.date_in === row.date_in){
+        if (row.date_in !== newDateOut){
+          row.date_out = newDateOut;
+        }
+        else{
+          row.date_out = null;  
+        }
+      }
+    });
+  }
+
   public exit(){
-    localStorage.removeItem('timesheetApprovalUrl');
+    localStorage.removeItem('temproraryUrl');
     this.router.navigateByUrl(this.returnUrl);
   }
 }

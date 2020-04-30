@@ -97,15 +97,8 @@ export class EmployeeService {
   // for date out, let them select current day or next day
   // if date out and date in same,  send back null for date out 
   // time out cannot be earlier than time in unless is next day
-  public editTimesheet(domainId:string,dateIn:string,dateOut:string,year:string,timeIn:string,timeOut:string){
-    return this.httpClient.patch(`${this.REST_API_SERVER}/timesheet/editTimesheet`
-    ,{
-      "domain_id": domainId,
-      "date_in": dateIn,
-      "date_out": dateOut,
-      "year": year,
-      "time_in": timeIn,
-      "time_out": timeOut,
-    });
+  // after request, send email : staus = 'Reapproval';
+  public editTimesheet(editedArray){
+    return this.httpClient.patch(`${this.REST_API_SERVER}/timesheet/editTimesheet`,editedArray);
   }
 }

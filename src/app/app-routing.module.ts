@@ -25,6 +25,11 @@ const routes: Routes = [
     path: 'timesheet-approval/:domainId/:period/:year',
     canActivate:[AuthenticationGuard],
     component: ApprovalPageComponent
+  },
+  {
+    path:'timesheet-reject/:domainId/:period/:year',
+    canActivate:[AuthenticationGuard],
+    component: ApprovalPageComponent
   }
 ];
 
