@@ -27,7 +27,7 @@ export class LoginPageComponent {
     private route: ActivatedRoute,
     private authService:AuthenticationService
     ) {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
+    this.returnUrl = JSON.parse(localStorage.getItem('timesheetApprovalUrl')) || '/home';
     this.createForm();
     this.authService.loggedIn.subscribe((data)=>{
       if(data !== false){
