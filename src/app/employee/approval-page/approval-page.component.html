@@ -16,6 +16,25 @@
           <mat-card-content>
               <div class="timesheet-table">
                   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" >
+                    <ng-container matColumnDef="editStatus">
+                      <th mat-header-cell *matHeaderCellDef> 
+                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                          [checked]="seletedRows.hasValue() && isAllSelected()"
+                          [indeterminate]="seletedRows.hasValue() && !isAllSelected()">
+                        </mat-checkbox>
+                      </th>
+                      <td mat-cell *matCellDef="let element"
+                      [ngStyle]="{'background-color': element.remarks === 'Weekend' ? '#DBDBDB' : ''}"> 
+                        <!-- <mat-checkbox *ngIf="element.remarks !== 'Weekend'" (change)="allowEdit($event,element)">
+                        </mat-checkbox> -->
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? seletedRows.toggle(element) : null"
+                          [checked]="seletedRows.isSelected(element)"
+                          *ngIf="element.remarks !== 'Weekend'">
+                        </mat-checkbox>
+                      </td>
+                    </ng-container>
+
                       <ng-container matColumnDef="date">
                         <th mat-header-cell *matHeaderCellDef> Date </th>
                         <td mat-cell *matCellDef="let element"
@@ -87,7 +106,8 @@
           </mat-card-content>
           <mat-card-actions>
               <div *ngIf="!approved">
-                  <button mat-raised-button color="primary" class="approve-btn" (click)="approveTimesheet()">
+                  <button mat-raised-button color="primary" class="approve-btn" 
+                    (click)="approveTimesheet()" [disabled]="checked">
                       Approve
                   </button>
                   <button mat-raised-button color="warn" class="reject-btn" (click)="rejectTimesheet()">

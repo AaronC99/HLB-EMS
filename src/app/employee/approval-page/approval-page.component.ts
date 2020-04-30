@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService } from '../service/employee.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as moment from 'moment';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-approval-page',
@@ -17,7 +18,7 @@ export class ApprovalPageComponent implements OnInit {
   monthName:string;
   year:string;
   TIMESHEET:any;
-  displayedColumns: string[] = ['date','timeIn','timeOut','dateOut','ot','ut','lateness','remarks'];
+  displayedColumns: string[] = ['editStatus','date','timeIn','timeOut','dateOut','ot','ut','lateness','remarks'];
   dataSource = [];
   approved:boolean = false;
   currUser:any;
@@ -25,6 +26,8 @@ export class ApprovalPageComponent implements OnInit {
   validUser:boolean;
   returnUrl = '';
   statusType = '';
+  checked = false;
+  seletedRows = new SelectionModel<any>(true,[]);
 
   constructor(
     private route:ActivatedRoute,
@@ -40,7 +43,7 @@ export class ApprovalPageComponent implements OnInit {
 
     let _currUserObj:any = JSON.parse(localStorage.getItem('currentUser'));
     this.supervisor = _currUserObj.username;
-    console.log(_currUserObj.username);
+    console.log(this.supervisor);
     let url = this.router.url;
     if(this.supervisor === undefined){
       this.router.navigateByUrl(this.returnUrl);
@@ -111,19 +114,45 @@ export class ApprovalPageComponent implements OnInit {
   }
 
   public rejectTimesheet(){
-    this.statusType = 'Rejected';
-    this.employeeService.updateTimesheetStatus(this.currUserDomainId,this.period,this.year,this.statusType)
-      .subscribe(data => {
-        if (data['approval_status'] === 'Rejected'){
-          this.displayMessage('Timesheet Rejected Successfully');
-          this.approved = false;
-        }
-      });
+    // this.statusType = 'Rejected';
+    // this.employeeService.updateTimesheetStatus(this.currUserDomainId,this.period,this.year,this.statusType)
+    //   .subscribe(data => {
+    //     if (data['approval_status'] === 'Rejected'){
+    //       this.displayMessage('Timesheet Rejected Successfully');
+    //       this.approved = false;
+    //     }
+    //   });
+    console.log(this.seletedRows.selected);
+  }
+
+  // public allowEdit(event,row){
+  //   let editableRows = [];
+  //   if(event.checked){
+  //     editableRows.push(row);
+  //   }else {
+  //     let index = editableRows.indexOf(row);
+  //     if(index > -1)
+  //       editableRows.splice(index,1);
+  //   }
+  //   console.log(editableRows);
+  // }
+
+  public isAllSelected() {
+    const numSelected = this.seletedRows.selected.length;
+    //const numRows = this.dataSource.length;
+    //return numSelected === numRows;
+    return numSelected;
+  }
+
+  public masterToggle() {
+    this.isAllSelected() ? this.seletedRows.clear() : this.dataSource.forEach(row => this.seletedRows.select(row));
   }
 
   public exit(){
     localStorage.removeItem('timesheetApprovalUrl');
     this.router.navigateByUrl(this.returnUrl);
   }
+
+
 
 }
