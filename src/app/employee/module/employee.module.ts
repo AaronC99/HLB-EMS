@@ -20,6 +20,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ApprovalPageComponent } from '../approval-page/approval-page.component';
 import { RouterModule } from '@angular/router';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 
@@ -46,7 +48,9 @@ import { RouterModule } from '@angular/router';
     MatOptionModule,
     MatSortModule,
     MatSnackBarModule,
-    RouterModule
+    RouterModule,
+    MatDialogModule,
+    MatCheckboxModule
   ]
 })
 export class EmployeeModule {

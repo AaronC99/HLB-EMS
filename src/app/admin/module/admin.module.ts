@@ -15,13 +15,16 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { LeaveDeclarationComponent } from '../leave-declaration/leave-declaration.component';
+//import { NgbdDatepickerRangeModule } from './app/datepicker-range.module';
 
 
 
 @NgModule({
   declarations: [
     CreateEmployeeComponent,
-    AllEmployeeListComponent
+    AllEmployeeListComponent,
+    LeaveDeclarationComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +39,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatTableModule,
     MatIconModule,
     MatSortModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    //NgbdDatepickerRangeModule
   ]
 })
 export class AdminModule {
