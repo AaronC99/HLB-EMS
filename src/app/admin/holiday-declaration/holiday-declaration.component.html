@@ -26,8 +26,7 @@
                     <form [formGroup]="createHolidayForm" (ngSubmit)="onSubmit()">
                         <mat-form-field appearance="outline">
                             <mat-label>Holiday Duration</mat-label>
-                            <input matInput formControlName="duration" 
-                                value="{{fromDate.day}}-{{fromDate.month}}-{{fromDate.year}}" [readonly]="true">
+                            <input matInput formControlName="duration" [readonly]="true">
                         </mat-form-field>
                         <mat-form-field appearance="fill">
                             <mat-label>Holiday Name</mat-label>

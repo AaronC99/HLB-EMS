@@ -22,8 +22,8 @@ export class HolidayDeclarationComponent implements OnInit {
     ) { 
     this.fromDate = calendar.getToday();
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 4);
-    this.startDate = `${this.fromDate.day}-${this.fromDate.month}-${this.fromDate.year}`;
-    this.endDate = `${this.toDate.day}-${this.toDate.month}-${this.toDate.year}`;
+    this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
+    this.endDate = `${this.toDate.day}/${this.toDate.month}/${this.toDate.year}`;
     //this.admin = localStorage.getItem('currentUser');
   }
 
@@ -35,7 +35,7 @@ export class HolidayDeclarationComponent implements OnInit {
     this.createHolidayForm = this.formBuilder.group({
       holidayName: ['',Validators.required],
       holidayType: ['',Validators.required],
-      duration: ['']
+      duration: [`${this.startDate}-${this.endDate}`]
     });
   }
 
@@ -48,10 +48,13 @@ export class HolidayDeclarationComponent implements OnInit {
       this.fromDate = date;
     } else if (this.fromDate && !this.toDate && date.after(this.fromDate)) {
       this.toDate = date;
+      this.endDate = `${this.toDate.day}/${this.toDate.month}/${this.toDate.year}`;
     } else {
       this.toDate = null;
       this.fromDate = date;
     }
+    this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
+    this.createHolidayForm.get('duration').setValue(`${this.startDate} - ${this.endDate}`);
   }
 
   isHovered(date: NgbDate) {
@@ -67,8 +70,6 @@ export class HolidayDeclarationComponent implements OnInit {
   }
 
   onSubmit(){
-    // console.log(`${this.fromDate.day}-${this.fromDate.month}-${this.fromDate.year}`
-    //   ,`${this.toDate.day}-${this.toDate.month}-${this.toDate.year}`)
-    console.table(this.createHolidayForm.value);
+    console.log(this.createHolidayForm.value);
   }
 }
