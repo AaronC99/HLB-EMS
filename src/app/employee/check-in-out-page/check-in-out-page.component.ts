@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { MatTableDataSource } from '@angular/material/table';
-import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { EmployeeService } from '../service/employee.service';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -34,7 +33,6 @@ export class CheckInOutPageComponent implements OnInit {
   @ViewChild('dialogBox',{ static: true }) dialog_box: TemplateRef<any>;
 
   constructor(
-    private authService: AuthenticationService,
     private employeeService: EmployeeService,
     private dialog: MatDialog
   ) { 
@@ -42,9 +40,6 @@ export class CheckInOutPageComponent implements OnInit {
        this.clock = moment().format('hh:mm:ss A');
        this.currentTime = moment().format('HH:mm');
     },1000);
-    // this.authService.userAuthDetails.subscribe( currentUser => {
-    //   this.currUserId = currentUser.username;
-    // });
     let _currUserObj:any = JSON.parse(localStorage.getItem('currentUser'));
     this.currUserId = _currUserObj.username;
   }
@@ -60,23 +55,26 @@ export class CheckInOutPageComponent implements OnInit {
   }
 
   public clockInOutValidation(dataTable:any){
-    dataTable.forEach(element => {
-      if(element.date_in === this.yesterday && element.time_in !== '0000' && element.time_out === '0000' 
-        && element.remarks !== 'Weekend'){
-        this.openModal(this.dialog_box);
-      }
-      else if (element.date_in === this.dateIn && element.time_in === '0000' && element.time_out === '0000'){
-        this.clockInButton = true;
-      }
-      else if(element.date_in === this.dateIn && element.time_in !== '0000' && element.time_out === '0000'){
-        this.clockInButton = false;
-        this.clockOutButton = true;
-      }
-      else {
-        this.clockInButton = false;
-        this.clockOutButton = false;
-      }
-    });
+    this.employeeService.getClockInOutStatus(this.currUserId)
+      .subscribe( data => {
+        dataTable.forEach(element => {
+          if(element.date_in === this.yesterday && data['last_clock_in'] === true
+            && element.remarks !== 'Weekend'){
+            this.openModal(this.dialog_box);
+          }
+          else if (element.time_in === '0000' && data['last_clock_in'] === false){
+            this.clockInButton = true;
+          }
+          else if(data['last_clock_in'] === true){
+            this.clockInButton = false;
+            this.clockOutButton = true;
+          }
+          else if (element.time_in !== '0000' && data['last_clock_in'] === false){
+            this.clockInButton = false;
+            this.clockOutButton = false;
+          }
+        });
+      });
   }
 
  public displayClockInOut(){
@@ -91,7 +89,6 @@ export class CheckInOutPageComponent implements OnInit {
 
   public updateTable(status:number){
     if (status === 1){
-      const timeIn = moment().format('HHmm');
       this.employeeService.clockIn(this.currUserId).subscribe( data =>{
         this.CLOCK_IN_OUT_DATA = data;
         this.filterTable(this.CLOCK_IN_OUT_DATA);
@@ -99,7 +96,7 @@ export class CheckInOutPageComponent implements OnInit {
         this.dataSource = this.CLOCK_IN_OUT_DATA;
       });
     } else if (status === 2){
-        this.employeeService.clockOut(this.currUserId,this.dateIn,this.currentYear)
+        this.employeeService.clockOut(this.currUserId)
         .subscribe ( data => {
           this.CLOCK_IN_OUT_DATA = data;
           this.filterTable(this.CLOCK_IN_OUT_DATA);
@@ -107,7 +104,7 @@ export class CheckInOutPageComponent implements OnInit {
           this.dataSource = this.CLOCK_IN_OUT_DATA;
         });      
     } else if (status === 3){
-      this.employeeService.clockOut(this.currUserId,this.yesterday,this.currentYear)
+      this.employeeService.clockOut(this.currUserId)
       .subscribe ( data => {
         this.CLOCK_IN_OUT_DATA = data;
         this.filterTable(this.CLOCK_IN_OUT_DATA);

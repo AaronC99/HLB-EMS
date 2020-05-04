@@ -55,13 +55,15 @@ export class EmployeeService {
       });
   }
 
-  public clockOut(domainId:string,dateIn:string,year:string){
+  public clockOut(domainId:string){
     return this.httpClient.patch(`${this.REST_API_SERVER}/clock/clockOut`
     ,{
-      "domain_id":domainId,
-      "date_in":dateIn,
-      "year":year
+      "domain_id":domainId
     });
+  }
+
+  public getClockInOutStatus(domainId:string){
+    return this.httpClient.get(`${this.REST_API_SERVER}/clock/checkClockInStatus/${domainId}`);
   }
 
   public getTimesheet(domainId:string,month:string,year:string){
@@ -94,10 +96,6 @@ export class EmployeeService {
     return this.httpClient.patch(`${this.REST_API_SERVER}/timesheet/setEditableTimesheet` ,recordsForEdit);
   }
 
-  // for date out, let them select current day or next day
-  // if date out and date in same,  send back null for date out 
-  // time out cannot be earlier than time in unless is next day
-  // after request, send email : staus = 'Reapproval';
   public editTimesheet(editedArray){
     return this.httpClient.patch(`${this.REST_API_SERVER}/timesheet/editTimesheet`,editedArray);
   }
