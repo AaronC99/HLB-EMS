@@ -15,16 +15,15 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { LeaveDeclarationComponent } from '../leave-declaration/leave-declaration.component';
-//import { NgbdDatepickerRangeModule } from './app/datepicker-range.module';
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HolidayDeclarationComponent } from '../holiday-declaration/holiday-declaration.component';
 
 
 @NgModule({
   declarations: [
     CreateEmployeeComponent,
     AllEmployeeListComponent,
-    LeaveDeclarationComponent
+    HolidayDeclarationComponent
   ],
   imports: [
     CommonModule,
@@ -40,7 +39,7 @@ import { LeaveDeclarationComponent } from '../leave-declaration/leave-declaratio
     MatIconModule,
     MatSortModule,
     MatSlideToggleModule,
-    //NgbdDatepickerRangeModule
+    NgbModule
   ]
 })
 export class AdminModule {

@@ -7,7 +7,7 @@ import { NavigationComponent } from './navigation.component';
 import { CreateEmployeeComponent } from '../admin/create-employee/create-employee.component';
 import { EmployeeListComponent } from '../employee/employee-list/employee-list.component';
 import { AllEmployeeListComponent } from '../admin/all-employee-list/all-employee-list.component';
-import { LeaveDeclarationComponent } from '../admin/leave-declaration/leave-declaration.component';
+import { HolidayDeclarationComponent } from '../admin/holiday-declaration/holiday-declaration.component';
 
 const routes: Routes = [
   { 
@@ -48,8 +48,8 @@ const routes: Routes = [
         component: AllEmployeeListComponent
       },
       {
-        path: 'leave-declaration',
-        component: LeaveDeclarationComponent
+        path: 'holiday-declaration',
+        component: HolidayDeclarationComponent
       }
     ]}
 ];
