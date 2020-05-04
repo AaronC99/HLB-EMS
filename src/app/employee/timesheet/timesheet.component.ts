@@ -78,7 +78,7 @@ export class TimesheetComponent implements OnInit{
       this.TIMESHEET_DATA = data;
       this.dataSource = this.TIMESHEET_DATA;
     });
-    if(currentMonth.is_approved || this.currentUser.role === 'Manager')
+    if(currentMonth.approval_status === 'Approved' || this.currentUser.role === 'Manager')
       this.canDownload = true;
     else 
       this.needRequest = true;
@@ -94,7 +94,6 @@ export class TimesheetComponent implements OnInit{
           this.displayMessage('Request successfully sent to Department Head');  
       },
       err =>{
-        console.log(err);
         if (err !== null)
           this.displayMessage('Error sending request. Please try again');
       });

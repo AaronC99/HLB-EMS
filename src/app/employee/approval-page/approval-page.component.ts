@@ -23,9 +23,11 @@ export class ApprovalPageComponent implements OnInit {
   dataSource = [];
   allowExit:boolean = false;
   invalidInput:boolean = false;
+  updateError:boolean = false;
   currentUser:any;
   user:AuthModel;
   validUser:boolean;
+  errorMessage = '';
   returnUrl = '';
   statusType = '';
   showCheckBox = false;
@@ -101,9 +103,22 @@ export class ApprovalPageComponent implements OnInit {
     });
   }
 
+  public editedValidation(timesheet){
+    for ( let i = 0; i < timesheet.length; i++){
+      if (timesheet[i].edit_status === 'Edited'){
+        this.allowExit = true;
+        break;
+      } else {
+        this.allowExit = false;
+        break;
+      }
+    }
+  }
+
   public displayTimesheet(){
     this.employeeService.getTimesheet(this.currUserDomainId,this.month.toString(),this.year).subscribe( timesheet =>{
-      this.TIMESHEET= timesheet;
+      this.TIMESHEET = timesheet;
+      this.editedValidation(this.TIMESHEET);
       this.dataSource = this.TIMESHEET;
     });
   }
@@ -158,15 +173,55 @@ export class ApprovalPageComponent implements OnInit {
     this.isAllSelected() ? this.selectedRows.clear() : this.dataSource.forEach(row => {
       if(row.remarks !== 'Weekend' && row.time_in === '0000' && row.time_out ==='0000')
         this.selectedRows.select(row)
+      else if(row.edit_status === 'Edited')
+        this.selectedRows.select(row)
     });
+  }
+
+  public displayCheckBox(row){
+    if (row.remarks !== 'Weekend' && row.time_in === '0000' && row.time_out ==='0000')
+      return true;
+    else if (row.edit_status === 'Edited')
+      return true;
+    else 
+      return false;
   }
 
   public requestApproval(){
     let status = 'Reapproval';
     this.TIMESHEET = this.dataSource;
-    //this.employeeService.sendEmail(this.currUserDomainId,this.period,this.year,status).subscribe();
-    //this.employeeService.editTimesheet(this.TIMESHEET).subscribe();
-    console.log(this.TIMESHEET)
+    this.TIMESHEET = this.TIMESHEET.filter (
+      data => data.edit_status === 'Editable'
+      );
+    let editedRows = this.TIMESHEET;
+    for(let i = 0;i < editedRows.length; i++){
+      if (editedRows[i].time_in === '0000' && editedRows[i].time_out === '0000' 
+        && editedRows[i].date_out === null && editedRows[i].remarks === null){
+        this.updateError = true;
+        this.errorMessage = 'Make sure all field is filled.';
+        break;
+      } else{
+        this.updateError = false;
+          this.employeeService.sendEmail(this.currUserDomainId,this.period,this.year,status).subscribe();
+          this.employeeService.editTimesheet(this.TIMESHEET)
+            .subscribe(
+              data => {
+                let editedArray:any = data;
+                for (let i = 0;i< editedArray.length;i++){
+                  if(editedArray[i].edit_status === 'Edited'){
+                    this.displayMessage('Timesheet Updated Successfully');
+                    this.allowExit = true;
+                    break;
+                  } else {
+                    this.displayMessage('Unsuccessful Timesheet Update. Please Try Again');
+                    this.allowExit = false;
+                    break;
+                  }
+                }
+              });
+            break;
+      }
+    }
   }
 
   public updateTimeIn(row,newTimeIn){
@@ -180,33 +235,36 @@ export class ApprovalPageComponent implements OnInit {
   public updateTimeOut(row,newTimeOut){
     this.dataSource.forEach(element => {
       if (element.date_in === row.date_in){
-        if(newTimeOut > row.time_in)
-          row.time_out = newTimeOut;
-        else if (newTimeOut < row.time_in && row.date_out !== null){
+        if(newTimeOut > row.time_in){
           row.time_out = newTimeOut;
           this.invalidInput = false;
         }
-        else 
+        else
           this.invalidInput = true;
       }
     });
   }
 
-  public updateRemarks(row,newValue){
+  public updateRemarks(row,newRemarks){
     this.dataSource.forEach( element => {
       if(element.date_in === row.date_in)
-        row.remarks = newValue;
+        row.remarks = newRemarks;
     });
   }
 
   public updateDateOut(row,newDateOut){
     this.dataSource.forEach(element => {
       if(element.date_in === row.date_in){
-        if (row.date_in !== newDateOut){
+        if (row.date_in !== newDateOut && row.time_out !== row.time_in){
           row.date_out = newDateOut;
+          this.invalidInput = false;
+        } 
+        else if (newDateOut === row.date_in && row.time_out > row.time_in){
+          row.date_out = null;  
+          this.invalidInput = false;
         }
         else{
-          row.date_out = null;  
+          this.invalidInput = true;
         }
       }
     });
