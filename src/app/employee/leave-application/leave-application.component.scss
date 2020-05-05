@@ -1,0 +1,61 @@
+.row{
+    margin: 50px;
+}
+mat-card,button{
+    border-radius: 20px;
+}
+button{
+    padding: 5px 0px;
+}
+mat-card-title{
+    text-align: center;
+    font-family: 'Ubuntu', sans-serif;
+    text-transform: uppercase;
+}
+.date-picker,button{
+    text-align: center;
+    margin-top: 20px;
+}
+.custom-day {
+    text-align: center;
+    padding: 0.185rem 0.25rem;
+    display: inline-block;
+    height: 2rem;
+    width: 2rem;
+}
+.custom-day.focused {
+    background-color: #e6e6e6;
+}
+.custom-day.range, .custom-day:hover {
+    background-color: rgb(2, 117, 216);
+    color: white;
+}
+.custom-day.faded {
+    background-color: rgba(2, 117, 216, 0.5);
+}
+mat-form-field,button{
+    width:100%
+}
+// .form-group.hidden {
+//     width: 0;
+//     margin: 0;
+//     border: none;
+//     padding: 0;
+//   }
+//   .custom-day {
+//     text-align: center;
+//     padding: 0.185rem 0.25rem;
+//     display: inline-block;
+//     height: 2rem;
+//     width: 2rem;
+//   }
+//   .custom-day.focused {
+//     background-color: #e6e6e6;
+//   }
+//   .custom-day.range, .custom-day:hover {
+//     background-color: rgb(2, 117, 216);
+//     color: white;
+//   }
+//   .custom-day.faded {
+//     background-color: rgba(2, 117, 216, 0.5);
+//   }

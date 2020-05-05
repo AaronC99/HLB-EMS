@@ -8,6 +8,7 @@ import { CreateEmployeeComponent } from '../admin/create-employee/create-employe
 import { EmployeeListComponent } from '../employee/employee-list/employee-list.component';
 import { AllEmployeeListComponent } from '../admin/all-employee-list/all-employee-list.component';
 import { HolidayDeclarationComponent } from '../admin/holiday-declaration/holiday-declaration.component';
+import { LeaveApplicationComponent } from '../employee/leave-application/leave-application.component';
 
 const routes: Routes = [
   { 
@@ -50,6 +51,10 @@ const routes: Routes = [
       {
         path: 'holiday-declaration',
         component: HolidayDeclarationComponent
+      },
+      {
+        path:'leave-application',
+        component: LeaveApplicationComponent
       }
     ]}
 ];
