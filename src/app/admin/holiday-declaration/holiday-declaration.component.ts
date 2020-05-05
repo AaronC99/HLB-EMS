@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { NgbDate, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import * as moment from 'moment';
+import { Holiday } from 'src/app/model/Holiday.model';
+import { AdminService } from '../service/admin.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-holiday-declaration',
@@ -13,12 +17,17 @@ export class HolidayDeclarationComponent implements OnInit {
   toDate: NgbDate | null = null;
   holidayTypes = ['Working','Non-Working'];
   createHolidayForm:FormGroup;
-  startDate = '';
-  endDate = '';
+  startDate:any;
+  endDate:any;
+  holidayDuration = [];
+  holiday: Holiday;
 
   constructor(
-    calendar: NgbCalendar,
+    private calendar: NgbCalendar,
     private formBuilder:FormBuilder,
+    private formatter: NgbDateParserFormatter,
+    private adminService: AdminService,
+    private _snackBar: MatSnackBar
     ) { 
     this.fromDate = calendar.getToday();
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 4);
@@ -52,6 +61,7 @@ export class HolidayDeclarationComponent implements OnInit {
     } else {
       this.toDate = null;
       this.fromDate = date;
+      this.endDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
     }
     this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
     this.createHolidayForm.get('duration').setValue(`${this.startDate} - ${this.endDate}`);
@@ -70,6 +80,41 @@ export class HolidayDeclarationComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log(this.createHolidayForm.value);
+    this.holidayDuration.splice(0,this.holidayDuration.length);
+    this.startDate = moment(this.formatter.format(this.fromDate));
+    this.endDate = moment(this.formatter.format(this.toDate));
+    if (this.endDate.format("DD-MM-YYYY") === 'Invalid date')
+      this.endDate = this.startDate;
+
+    for(let i=moment(this.startDate); i.isSameOrBefore(this.endDate);i.add(1,'days')){
+      let date = i.format("DD-MM");
+      let year = i.format("YYYY");
+      this.holiday = {
+        holiday_name: this.userInput.holidayName.value,
+        holiday_type: this.userInput.holidayType.value,
+        date: date,
+        year: year
+      }
+      this.holidayDuration.push(this.holiday);
+    }
+    this.createHolidayForm.reset();
+    this.adminService.createHoliday(this.holidayDuration).subscribe(
+      data =>{
+        let holidayArray:any = data;
+        holidayArray.forEach(element => {
+          if (element === null)
+            this.displayMessage('This date already is a holiday');
+          else 
+            this.displayMessage('Holiday Created Successfully');
+        });
+      }
+    );
   }
+
+  public displayMessage(message:string){
+    this._snackBar.open(message,'Close',{
+      duration: 3000
+    });
+  }
+
 }

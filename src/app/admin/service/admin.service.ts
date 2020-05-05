@@ -49,4 +49,8 @@ export class AdminService {
       console.log(data);
     });
   }
+
+  public createHoliday(holidayDates){
+    return this.httpClient.post(`${this.REST_API_SERVER}/holiday/saveHoliday`,holidayDates);
+  }
 }

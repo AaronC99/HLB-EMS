@@ -4,6 +4,9 @@
 mat-card,button{
     border-radius: 20px;
 }
+button{
+    padding: 5px 0px;
+}
 mat-card-title{
     text-align: center;
     font-family: 'Ubuntu', sans-serif;
@@ -12,11 +15,6 @@ mat-card-title{
 .date-picker,button{
     text-align: center;
     margin-top: 20px;
-}
-ngb-datepicker{
-    ngb-dp-week,ng-star-inserted{
-        width: 100%;
-    }
 }
 .custom-day {
     text-align: center;

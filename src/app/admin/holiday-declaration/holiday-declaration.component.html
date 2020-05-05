@@ -46,7 +46,7 @@
                                 Please Select a Holiday Type
                             </mat-error>
                         </mat-form-field>
-                        <button mat-raised-button color="primary" type="submit">Create Holiday</button>
+                        <button mat-raised-button color="primary" type="submit" [disabled]="createHolidayForm.invalid">Create Holiday</button>
                     </form>
                 </div>
             </div>
