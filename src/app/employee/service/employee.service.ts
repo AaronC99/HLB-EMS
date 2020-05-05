@@ -34,7 +34,9 @@ export class EmployeeService {
           email: data['email'],
           role: data['role'],
           schedule: data['schedule'],
-          department: data['department'] 
+          department: data['department'], 
+          annual_leave: data['annual_leave'],
+          medical_leave: data['medical_leave']
         };
         this.currUserSubj.next(this.currUserObj);
       });

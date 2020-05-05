@@ -92,7 +92,8 @@
                                         <mat-form-field>
                                             <mat-label>Select Department</mat-label>
                                             <mat-select formControlName="department" required>
-                                                <mat-option *ngFor="let dpt of departmentDetails" [value]="dpt._id" (click)="displayDptDetails(dpt)">
+                                                <mat-option *ngFor="let dpt of departmentDetails" 
+                                                    [value]="dpt._id" (click)="displayDptDetails(dpt)">
                                                     {{ dpt.department_name }}
                                                 </mat-option>
                                             </mat-select>
@@ -126,7 +127,8 @@
                                             <mat-form-field appearance="fill">
                                                 <mat-label>Schedule Name</mat-label>
                                                 <mat-select formControlName="schedule" required>
-                                                    <mat-option *ngFor="let schedule of scheduleDetails" (click)="displaySchDetails(schedule)" [value]="schedule._id">
+                                                    <mat-option *ngFor="let schedule of scheduleDetails" (click)="displaySchDetails(schedule)" 
+                                                        [value]="schedule._id">
                                                         {{ schedule.schedule_name }}
                                                     </mat-option>
                                                 </mat-select> 
@@ -152,6 +154,24 @@
                                                     <div class="col-6"><h3>{{ start_time }} - {{ end_time }}</h3></div>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="w-100"></div>
+                                        <div class="col-5">
+                                            <mat-form-field>
+                                                <mat-label>
+                                                    Enter Annual Leave
+                                                </mat-label>
+                                                <input matInput placeholder="Ex: 1,2,3..." formControlName="annual_leave" required type="number">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="w-100"></div>
+                                        <div class="col-5">
+                                            <mat-form-field>
+                                                <mat-label>
+                                                    Enter Medical Leave
+                                                </mat-label>
+                                                <input matInput placeholder="Ex: 1,2,3..." formControlName="medical_leave" required type="number">
+                                            </mat-form-field>
                                         </div>
                                     </div>
                                     <div class="next-button">

@@ -11,6 +11,8 @@ export class Employee{
     public role: string;
     public schedule: Schedule;
     public department: Department;
+    public annual_leave: Number;
+    public medical_leave: Number;
 
     constructor() {
         this.schedule = new Schedule();

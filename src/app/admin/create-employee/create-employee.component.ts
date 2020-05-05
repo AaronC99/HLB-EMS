@@ -3,6 +3,7 @@ import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from
 import { AdminService } from '../service/admin.service';
 import { Employee } from 'src/app/model/Employee.model';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-employee',
@@ -39,6 +40,8 @@ export class CreateEmployeeComponent implements AfterContentInit {
     address: new FormControl(''),
     department: new FormControl(''),
     schedule: new FormControl(''),
+    annual_leave : new FormControl(''),
+    medical_leave: new FormControl('')
   });
   
   get formArray(): AbstractControl | null { 
@@ -47,7 +50,8 @@ export class CreateEmployeeComponent implements AfterContentInit {
   
   constructor(
     private formBuilder:FormBuilder,
-    private adminService: AdminService
+    private adminService: AdminService,
+    private router:Router
     ) {
     this.employee = new Employee();
     this.getDepartments();
@@ -103,7 +107,9 @@ export class CreateEmployeeComponent implements AfterContentInit {
           department: [ '', Validators.required]
         }),
         this.formBuilder.group({
-          schedule: ['',Validators.required]
+          schedule: ['',Validators.required],
+          annual_leave:['',Validators.required],
+          medical_leave: ['',Validators.required]
         })
       ])
     });
@@ -118,14 +124,16 @@ export class CreateEmployeeComponent implements AfterContentInit {
           ic_passportNo: [this.employee.ic,[Validators.required]],
           email: [this.employee.email,[Validators.required,Validators.email]],
           address: [this.employee.address,Validators.required],
-          gender:[this.employee.gender,Validators.required],
-          role:[this.employee.role,Validators.required],
+          gender: [this.employee.gender,Validators.required],
+          role: [this.employee.role,Validators.required]
         }),
         this.formBuilder.group({
           department: [ this.employee.department._id, Validators.required]
         }),
         this.formBuilder.group({
-          schedule: [ this.employee.schedule._id, Validators.required]
+          schedule: [ this.employee.schedule._id, Validators.required],
+          annual_leave: [this.employee.annual_leave,Validators.required],
+          medical_leave: [this.employee.medical_leave,Validators.required]
         })
       ])
     });
@@ -143,14 +151,21 @@ export class CreateEmployeeComponent implements AfterContentInit {
       email: this.formArray.value[0].email,
       department: this.formArray.value[1].department,
       schedule: this.formArray.value[2].schedule,
-      role: this.formArray.value[0].role
+      role: this.formArray.value[0].role,
+      annual_leave:this.formArray.value[2].annual_leave,
+      medical_leave:this.formArray.value[2].medical_leave
     }
     if (this.isEditting === false){
       this.completeMessage = 'A new employee has been registered.';
       this.adminService.addEmployee(this.employee);
     } else {
-      this.completeMessage = `${this.employee.name} record have been updated.`;
-      this.adminService.updateEmployee(this.employee.domain_id, this.employee);
+      this.adminService.updateEmployee(this.employee.domain_id,this.employee).subscribe(data => {
+        if(data !== null)
+          this.completeMessage = `${this.employee.name} record have been updated.`;
+      },err => {
+        console.log(err);
+        this.completeMessage = `Fail to Update ${this.employee.name} record.`;
+      });
       this.isEditting = false;
     }
   }
