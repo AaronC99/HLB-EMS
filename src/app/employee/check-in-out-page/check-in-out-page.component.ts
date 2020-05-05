@@ -57,19 +57,20 @@ export class CheckInOutPageComponent implements OnInit {
   public clockInOutValidation(dataTable:any){
     this.employeeService.getClockInOutStatus(this.currUserId)
       .subscribe( data => {
-        dataTable.forEach(element => {
-          if(element.date_in === this.yesterday && data['last_clock_in'] === true
+        dataTable.forEach(element => { //If yesterday forget to colock out
+          if(element.date_in === this.yesterday && element.time_out === '0000' && data['last_clock_in'] === true
             && element.remarks !== 'Weekend'){
             this.openModal(this.dialog_box);
-          }
-          else if (element.time_in === '0000' && data['last_clock_in'] === false){
+          }// For clocking in
+          else if (element.date_in === this.dateIn && element.time_in === '0000' && data['last_clock_in'] === false){
             this.clockInButton = true;
-          }
-          else if(data['last_clock_in'] === true){
+          }// For Clcoking out
+          else if(element.date_in === this.dateIn && data['last_clock_in'] === true){
             this.clockInButton = false;
             this.clockOutButton = true;
-          }
-          else if (element.time_in !== '0000' && data['last_clock_in'] === false){
+          }// After clock in and clock out 
+          else if (element.date_in === this.dateIn && element.time_in !== '0000' && 
+            element.time_out !== '0000' && data['last_clock_in'] === false){
             this.clockInButton = false;
             this.clockOutButton = false;
           }
