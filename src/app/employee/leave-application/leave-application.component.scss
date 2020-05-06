@@ -14,7 +14,7 @@ mat-card-title{
 }
 .date-picker,button{
     text-align: center;
-    margin-top: 20px;
+    margin: 20px 0px;
 }
 .custom-day {
     text-align: center;
@@ -36,8 +36,14 @@ mat-card-title{
 mat-form-field,button{
     width:100%
 }
+mat-form-field{
+    font-size: 17px;
+}
 .calendar-button{
     padding:5px;
     color: white;
     background: linear-gradient(to right, #0052d4, #4364f7); 
+}
+.date-input{
+    margin-top: 20px;
 }

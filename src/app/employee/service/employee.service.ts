@@ -95,6 +95,10 @@ export class EmployeeService {
     });
   }
 
+  public checkAvailableLeaves(domainID,year,leaveType){
+    return this.httpClient.get(`${this.REST_API_SERVER}/leave/checkAvailableLeaves/${domainID}/${year}/${leaveType}`)
+  }
+  
   public applyLeave(leaveDuration){
     return this.httpClient.post(`${this.REST_API_SERVER}/leave/applyLeave`,leaveDuration);
   }

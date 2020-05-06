@@ -39,6 +39,7 @@ export class LeaveApplicationComponent implements OnInit {
   showDateInput:boolean = false;
   currentUser:AuthModel;
   currentUserSupervisor:Employee;
+  remainingLeaves:number;
 
   constructor(
     private calendar: NgbCalendar,
@@ -79,6 +80,10 @@ export class LeaveApplicationComponent implements OnInit {
   setMinMaxDate(leaveType){
     let month = parseInt(this.currentMonth);
     let year = parseInt(this.currentYear);
+    this.employeeService.checkAvailableLeaves(this.currentUser.username,this.currentYear,leaveType.value)
+      .subscribe (data => {
+        this.remainingLeaves = data['remaining_leaves'];
+      });
     if(leaveType.id === 1){ // If is Annual Leave
       this.minDate = {
         year: year,
@@ -129,6 +134,17 @@ export class LeaveApplicationComponent implements OnInit {
     }
     this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
     this.leaveApplicationForm.get('duration').setValue(`${this.startDate} - ${this.endDate}`);
+    let total = this.daysDiff(this.fromDate,this.toDate);
+    if (total > this.remainingLeaves)
+      this.leaveApplicationForm.controls['duration'].setErrors({'exceeded':true});
+    else 
+      this.leaveApplicationForm.controls['duration'].setErrors(null);
+  }
+
+  daysDiff(startDay,endDay){
+    let start = moment(this.formatter.format(startDay));
+    let end = moment(this.formatter.format(endDay));
+    return Math.abs(start.diff(end,'days')) + 1;
   }
 
   isHovered(date: NgbDate) {

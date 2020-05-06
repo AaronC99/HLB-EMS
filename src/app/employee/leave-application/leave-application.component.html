@@ -14,17 +14,21 @@
                                   {{ leave.value }}
                                 </mat-option>
                             </mat-select>
+                            <mat-hint>Remaining Leaves: <b>{{ remainingLeaves }}</b></mat-hint>
                             <mat-error *ngIf="userInput.leaveType.invalid">
                                 Please Select a Leave Type
                             </mat-error>
                         </mat-form-field>
-                        <div *ngIf="showDateInput">
+                        <div *ngIf="showDateInput" class="date-input">
                             <mat-form-field appearance="outline">
                                 <mat-label>Leave Duration</mat-label>
                                 <input matInput formControlName="duration" [readonly]="true">
                                 <button mat-icon-button matSuffix type="button" class="calendar-button" (click)="showCalendar = true">
                                     <mat-icon>calendar_today</mat-icon>
                                 </button>
+                                <mat-error *ngIf="userInput.duration.invalid">
+                                    Leave Date(s) Exceeds Limit!!
+                                </mat-error>
                             </mat-form-field>
                         </div>
                         <div class="date-picker" *ngIf="showCalendar">
