@@ -10,7 +10,7 @@
                         <mat-form-field appearance="fill">
                             <mat-label>Select Leave Type</mat-label>
                             <mat-select formControlName="leaveType" required>
-                              <mat-option *ngFor="let leave of leaveTypes" [value]="leave.id" (click)="setMinMaxDate(leave)">
+                              <mat-option *ngFor="let leave of leaveTypes" [value]="leave.value" (click)="setMinMaxDate(leave)">
                                   {{ leave.value }}
                                 </mat-option>
                             </mat-select>
@@ -18,32 +18,37 @@
                                 Please Select a Leave Type
                             </mat-error>
                         </mat-form-field>
-                        <mat-form-field appearance="outline">
-                            <mat-label>Leave Duration</mat-label>
-                            <input matInput formControlName="duration" [readonly]="true">
-                        </mat-form-field>
+                        <div *ngIf="showDateInput">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Leave Duration</mat-label>
+                                <input matInput formControlName="duration" [readonly]="true">
+                                <button mat-icon-button matSuffix type="button" class="calendar-button" (click)="showCalendar = true">
+                                    <mat-icon>calendar_today</mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </div>
+                        <div class="date-picker" *ngIf="showCalendar">
+                            <ngb-datepicker #dp (dateSelect)="onDateSelection($event)" [displayMonths]="1" 
+                                [dayTemplate]="t" outsideDays="hidden" [minDate]="minDate" [maxDate]="maxDate">
+                            </ngb-datepicker>
+                            
+                            <ng-template #t let-date let-focused="focused">
+                                <span class="custom-day"
+                                        [class.focused]="focused"
+                                        [class.range]="isRange(date)"
+                                        [class.faded]="isHovered(date) || isInside(date)"
+                                        (mouseenter)="hoveredDate = date"
+                                        (mouseleave)="hoveredDate = null">
+                                    {{ date.day }}
+                                </span>
+                            </ng-template>
+                        </div>
                         <button mat-raised-button color="primary" type="submit" 
                             [disabled]="leaveApplicationForm.invalid">
                             Request Leave
                         </button>
                     </form>
                 </div>
-            </div>
-            <div class="date-picker">
-                <ngb-datepicker #dp (dateSelect)="onDateSelection($event)" [displayMonths]="1" 
-                    [dayTemplate]="t" outsideDays="hidden" [minDate]="minDate" [maxDate]="maxDate">
-                </ngb-datepicker>
-                
-                <ng-template #t let-date let-focused="focused">
-                    <span class="custom-day"
-                            [class.focused]="focused"
-                            [class.range]="isRange(date)"
-                            [class.faded]="isHovered(date) || isInside(date)"
-                            (mouseenter)="hoveredDate = date"
-                            (mouseleave)="hoveredDate = null">
-                        {{ date.day }}
-                    </span>
-                </ng-template>
             </div> 
         </mat-card>
     </div>

@@ -12,7 +12,7 @@ export class EmployeeService {
   private currUserObj:Employee = new Employee();
   private currUserSubj: BehaviorSubject<Employee>;
 
-  get currUserDetils(){
+  get currUserDetails(){
     return this.currUserSubj.asObservable();
   }
   constructor(
@@ -42,7 +42,7 @@ export class EmployeeService {
       });
   }
 
-  public getProfile(domainId:string){
+  public getProfile(domainId){
     return this.httpClient.get(`${this.REST_API_SERVER}/profile/${domainId}`);
   }
 
@@ -93,6 +93,14 @@ export class EmployeeService {
     ,{
       "is_approved":true
     });
+  }
+
+  public applyLeave(leaveDuration){
+    return this.httpClient.post(`${this.REST_API_SERVER}/leave/applyLeave`,leaveDuration);
+  }
+
+  public sendLeaveRequestEmail(leaveDuration){
+    return this.httpClient.post(`${this.REST_API_SERVER}/leave/sendEmail`,leaveDuration);
   }
 
 }
