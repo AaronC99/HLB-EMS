@@ -24,6 +24,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { LeaveApplicationComponent } from '../leave-application/leave-application.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { LeaveApprovalComponent } from '../leave-approval/leave-approval.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     TimesheetComponent,
     EmployeeListComponent,
     ApprovalPageComponent,
-    LeaveApplicationComponent
+    LeaveApplicationComponent,
+    LeaveApprovalComponent
   ],
   imports: [
     CommonModule,
