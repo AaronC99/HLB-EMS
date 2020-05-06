@@ -98,7 +98,7 @@ export class EmployeeService {
   public checkAvailableLeaves(domainID,year,leaveType){
     return this.httpClient.get(`${this.REST_API_SERVER}/leave/checkAvailableLeaves/${domainID}/${year}/${leaveType}`)
   }
-  
+
   public applyLeave(leaveDuration){
     return this.httpClient.post(`${this.REST_API_SERVER}/leave/applyLeave`,leaveDuration);
   }
@@ -107,4 +107,15 @@ export class EmployeeService {
     return this.httpClient.post(`${this.REST_API_SERVER}/leave/sendEmail`,leaveDuration);
   }
 
+  public getMinDate(domainId){
+    return this.httpClient.get(`${this.REST_API_SERVER}/leave/calcMinLeaveDate/${domainId}`);
+  }
+
+  public viewLeaveDetails(domainId,dateSubmitted){
+    return this.httpClient.get(`${this.REST_API_SERVER}/leave/viewLeave/${domainId}/${dateSubmitted}`);
+  }
+
+  public updateLeaveStatus(leaveApprovalDetails){
+    return this.httpClient.patch(`${this.REST_API_SERVER}/leave/updateLeaveStatus`,leaveApprovalDetails);
+  }
 }

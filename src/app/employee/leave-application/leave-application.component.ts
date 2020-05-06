@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbCalendar, NgbDateParserFormatter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as moment from 'moment';
@@ -47,7 +47,7 @@ export class LeaveApplicationComponent implements OnInit {
     public formatter: NgbDateParserFormatter,
     private employeeService: EmployeeService,
     private _snackBar: MatSnackBar,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
     ) { 
       this.currentDate();
       this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
@@ -85,13 +85,20 @@ export class LeaveApplicationComponent implements OnInit {
         this.remainingLeaves = data['remaining_leaves'];
       });
     if(leaveType.id === 1){ // If is Annual Leave
-      this.minDate = {
-        year: year,
-        month: month + 1,
-        day: parseInt(this.currentDay)
-      };
+      let getDate = string => (([day,month,year]) => ({day,month,year}))(string.split('-'));
+      this.employeeService.getMinDate(this.currentUser.username)
+        .subscribe(data => {
+          this.minDate = {
+            year: parseInt(getDate(data).year),
+            month: parseInt(getDate(data).month),
+            day: parseInt(getDate(data).day)
+          };
+          let start = moment(this.formatter.format(this.fromDate));
+          let end = `${getDate(data).year}-${parseInt(getDate(data).month)}-${parseInt(getDate(data).day)}`;
+          let diff = Math.abs(start.diff(end,'days'));
+          this.fromDate = this.calendar.getNext(this.calendar.getToday(),'d',diff);
+        });
       this.maxDate = null;
-      this.fromDate = this.calendar.getNext(this.calendar.getToday(),'m',1);
       this.toDate = null;
     } else { // If is Medical Leave
       this.minDate = {
@@ -147,6 +154,11 @@ export class LeaveApplicationComponent implements OnInit {
     return Math.abs(start.diff(end,'days')) + 1;
   }
 
+  formatNumber(value){
+    let formattedNum = ("0" + value).slice(-2);
+    return formattedNum
+  }
+
   isHovered(date: NgbDate) {
     return this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate);
   }
@@ -160,7 +172,7 @@ export class LeaveApplicationComponent implements OnInit {
   }
 
   onSubmit(){
-    let leaveDetailsApproval = [];
+    //let dateSubmitted:string;
     this.leaveDuration.splice(0,this.leaveDuration.length);
     this.startDate = moment(this.formatter.format(this.fromDate));
     this.endDate = moment(this.formatter.format(this.toDate));
@@ -177,27 +189,42 @@ export class LeaveApplicationComponent implements OnInit {
         date: date,
         year: year
       };
-      let leaveApprovalEmail = {
-        domain_id: this.currentUser.username,
-        leave_type: this.userInput.leaveType.value,
-        date: date,
-        year: year
-      };
       this.leaveDuration.push(this.leave);
-      leaveDetailsApproval.push(leaveApprovalEmail);
     }
-    console.log(this.leaveDuration);
-    // this.employeeService.applyLeave(this.leaveDuration)
-    //   .subscribe(data => {
-    //     if (data !==  null) 
-    //       this.displayMessage('Leave Request Successful')
-    //     else 
-    //       this.displayMessage('Leave Request Unsuccessful. Please try again.')
-    // });
-    //this.employeeService.sendEmail(leaveDetailsApproval)
+    this.employeeService.applyLeave(this.leaveDuration)
+      .subscribe(data => {
+        let info:any = data;
+        let dateSubmitted = data[0]['date_submitted'];
+        if (info.lenth !== 0) {
+          this.displayMessage('Leave Applied Successful');
+          this.sendEmail(dateSubmitted);
+        }
+        else 
+          this.displayMessage('Selected Dates Have Existing');
+    },err => {
+      this.displayMessage('Leave Applied Unsuccessful. Please try again.')
+    });
+    
     this.leaveApplicationForm.reset();
   }
 
+  public sendEmail(dateSubmitted){
+    let leaveRequestDetails = {
+      domain_id: this.currentUser.username,
+      type: 'Approval',
+      date: `${this.formatNumber(this.fromDate.day)}-${this.formatNumber(this.fromDate.month)}`,
+      year: this.fromDate.year.toString(), 
+      date_submitted: dateSubmitted
+    };
+    this.employeeService.sendLeaveRequestEmail(leaveRequestDetails)
+      .subscribe(data => {
+        if (data !== null)
+          this.displayMessage('Leave Request Email Successful Sent')
+      },err =>{
+        this.displayMessage('Unable to Send Email. Please try again.')
+      });
+  }
+  
   public displayMessage(message:string){
     this._snackBar.open(message,'Close',{
       duration: 3000

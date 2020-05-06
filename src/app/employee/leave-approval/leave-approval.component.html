@@ -1,1 +1,72 @@
-<p>leave-approval works!</p>
+<div class="row" *ngIf="validUser">
+    <div class="col-12">
+        <mat-card>
+            <mat-card-title>
+                Leave Approval Request
+            </mat-card-title>
+            <mat-card-content>
+                <div class="row justify-content-center">
+                    <div *ngIf="canExit">
+                        <h2>You Already Approve/Reject {{ employee.name }} Leave Request</h2>
+                    </div>
+                    <div *ngIf="!canExit">
+                        <div class="col-3">
+                            <h1>Employee Name</h1>
+                        </div>
+                        <div class="col-3">
+                            <h2 class="name"> {{ employee.name }}</h2>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-3">
+                            <h1>Leave Type</h1>
+                        </div>
+                        <div class="col-3">
+                            <h2 class="leave"> {{ leaveDetails[0].leave_type }}</h2>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-3">
+                            <h1>Date(s)</h1>
+                        </div>
+                        <div class="col-3">
+                            <h2 class="dates"> 
+                                <ul>
+                                    <li *ngFor="let date of dates">
+                                        {{ date.fullDate }} ({{date.day}})
+                                    </li>
+                                </ul>
+                            </h2>
+                        </div>
+                        <div class="w-100"></div>
+                    </div> 
+                </div>
+            </mat-card-content>
+            <mat-card-actions>
+                <div *ngIf="!canExit">
+                    <button mat-raised-button class="approve-btn" color="primary" (click)="approveLeave()">
+                        Approve
+                    </button>
+                    <button mat-raised-button class="reject-btn" color="warn" (click)="rejectLeave()">
+                        Reject
+                    </button>
+                </div>
+                <div *ngIf="canExit">
+                    <button mat-raised-button class="exit-btn" color="warn" (click)="exit()"> 
+                        Exit 
+                      </button>
+                </div>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>
+<div class="row justify-content-center error-message" 
+  [ngStyle]="{'visibility' : validUser === false ? 'visible' : 'hidden' }">
+  <h1>
+    ACCESS DENIED
+  </h1>
+  <h2>
+    Oops! You dont have the access to view this page.
+  </h2>
+  <button mat-raised-button class="exit-btn" (click)="exit()"> 
+    Exit 
+  </button>
+</div>

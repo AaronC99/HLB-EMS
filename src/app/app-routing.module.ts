@@ -28,7 +28,7 @@ const routes: Routes = [
     component: ApprovalPageComponent
   },
   {
-    path:'leave-approval',
+    path:'leave-approval/:domainId/:date_submitted',
     canActivate:[AuthenticationGuard],
     component: LeaveApprovalComponent
   }

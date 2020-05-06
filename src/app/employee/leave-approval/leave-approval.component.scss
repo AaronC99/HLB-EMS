@@ -1,0 +1,46 @@
+.row{
+    margin: 50px
+}
+mat-card-title{
+    text-align: center;
+    text-transform: uppercase;
+}
+h1,mat-card-title{
+    font-family: 'Ubuntu', sans-serif;
+}
+h2{
+    font-family: 'Sen', sans-serif;
+}
+.dates,.leave,.name{
+    background-color: rgba(192,192,192,0.3);
+    border-radius: 20px;
+}
+.leave,.name{
+    padding-left: 20px;
+}
+mat-card{
+    border-radius:20px;
+}
+mat-card-actions,mat-card-title{
+    text-align: center;
+}
+button{
+    border-radius: 50px; 
+    padding:5px 20px;
+}
+.approve-btn:hover{
+    background-color: rgb(63, 238, 20);
+    color:black;
+}
+.exit-btn:hover , .reject-btn:hover{
+    color:#f44336;
+    background-color: white;
+}
+.error-message{
+    background-color: red;
+    color: white;
+    border-radius: 20px;
+    display: block;
+    text-align: center;
+    padding: 10px 0px;
+}
