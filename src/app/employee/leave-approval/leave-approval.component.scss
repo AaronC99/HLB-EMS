@@ -2,7 +2,6 @@
     margin: 50px
 }
 mat-card-title{
-    text-align: center;
     text-transform: uppercase;
 }
 h1,mat-card-title{
@@ -21,7 +20,10 @@ h2{
 mat-card{
     border-radius:20px;
 }
-mat-card-actions,mat-card-title{
+mat-card-actions,
+mat-card-title,
+.approve-reject-message,
+.error-message{
     text-align: center;
 }
 button{
@@ -41,6 +43,5 @@ button{
     color: white;
     border-radius: 20px;
     display: block;
-    text-align: center;
     padding: 10px 0px;
 }

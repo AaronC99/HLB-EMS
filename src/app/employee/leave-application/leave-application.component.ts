@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgbDate, NgbCalendar, NgbDateParserFormatter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbCalendar, NgbDateParserFormatter, NgbDatepickerConfig, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as moment from 'moment';
@@ -49,7 +49,8 @@ export class LeaveApplicationComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private authService: AuthenticationService,
     ) { 
-      this.currentDate();
+      this.fromDate = this.calendar.getToday();
+      this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 0);
       this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
       this.endDate = `${this.toDate.day}/${this.toDate.month}/${this.toDate.year}`;
       this.authService.userAuthDetails.subscribe( userInfo => {
@@ -72,9 +73,9 @@ export class LeaveApplicationComponent implements OnInit {
     });
   }
 
-  currentDate(){
-    this.fromDate = this.calendar.getToday();
-    this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 0);
+  isWeekends(date: NgbDateStruct) {
+    const d = new Date(date.year, date.month - 1, date.day);
+    return date.day === 13 || d.getDay() === 0 || d.getDay() === 6;
   }
 
   setMinMaxDate(leaveType){
@@ -93,10 +94,10 @@ export class LeaveApplicationComponent implements OnInit {
             month: parseInt(getDate(data).month),
             day: parseInt(getDate(data).day)
           };
-          let start = moment(this.formatter.format(this.fromDate));
-          let end = `${getDate(data).year}-${parseInt(getDate(data).month)}-${parseInt(getDate(data).day)}`;
-          let diff = Math.abs(start.diff(end,'days'));
-          this.fromDate = this.calendar.getNext(this.calendar.getToday(),'d',diff);
+          this.fromDate = this.minDate;
+          this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
+          this.endDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
+          this.leaveApplicationForm.get('duration').setValue(`${this.startDate} - ${this.endDate}`);
         });
       this.maxDate = null;
       this.toDate = null;
@@ -112,11 +113,10 @@ export class LeaveApplicationComponent implements OnInit {
         month: month,
         day: maxDay
       };
-      this.currentDate();
+      this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
+      this.endDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
+      this.leaveApplicationForm.get('duration').setValue(`${this.startDate} - ${this.endDate}`);
     }
-    this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
-    this.endDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
-    this.leaveApplicationForm.get('duration').setValue(`${this.startDate} - ${this.endDate}`);
     this.showDateInput = true;
   }
 
@@ -172,7 +172,6 @@ export class LeaveApplicationComponent implements OnInit {
   }
 
   onSubmit(){
-    //let dateSubmitted:string;
     this.leaveDuration.splice(0,this.leaveDuration.length);
     this.startDate = moment(this.formatter.format(this.fromDate));
     this.endDate = moment(this.formatter.format(this.toDate));
@@ -180,6 +179,7 @@ export class LeaveApplicationComponent implements OnInit {
       this.endDate = this.startDate;
 
     for(let i=moment(this.startDate); i.isSameOrBefore(this.endDate);i.add(1,'days')){
+      let day = i.format("DD");
       let date = i.format("DD-MM");
       let year = i.format("YYYY");
       this.leave = {
