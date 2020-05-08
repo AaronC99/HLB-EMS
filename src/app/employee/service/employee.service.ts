@@ -118,4 +118,8 @@ export class EmployeeService {
   public updateLeaveStatus(leaveApprovalDetails){
     return this.httpClient.patch(`${this.REST_API_SERVER}/leave/updateLeaveStatus`,leaveApprovalDetails);
   }
+
+  public getExisitingLeavesDates(domainId){
+    return this.httpClient.get(`${this.REST_API_SERVER}/leave/getApprovedOrPendingLeaveDates/${domainId}`);
+  }
 }

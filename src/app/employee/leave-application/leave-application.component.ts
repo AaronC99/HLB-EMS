@@ -40,6 +40,8 @@ export class LeaveApplicationComponent implements OnInit {
   currentUser:AuthModel;
   currentUserSupervisor:Employee;
   remainingLeaves:number;
+  disabledDates:any = [];
+  isDisabled:any;
 
   constructor(
     private calendar: NgbCalendar,
@@ -60,6 +62,10 @@ export class LeaveApplicationComponent implements OnInit {
         .subscribe(data=>{
           this.currentUserSupervisor = data['department']['department_head'];
         });
+      this.disableDays();
+      this.isDisabled = (date:NgbDateStruct,current: {month:number,year:number}) =>{
+        return this.disabledDates.find(x=>NgbDate.from(x).equals(date))?true:false;
+      }
   }
 
   ngOnInit(): void {
@@ -73,9 +79,29 @@ export class LeaveApplicationComponent implements OnInit {
     });
   }
 
-  isWeekends(date: NgbDateStruct) {
-    const d = new Date(date.year, date.month - 1, date.day);
-    return date.day === 13 || d.getDay() === 0 || d.getDay() === 6;
+  // isWeekends(date: NgbDateStruct) {
+  //   const d = new Date(date.year, date.month - 1, date.day);
+  //   console.log(date);
+  //   return date.day === 13 || d.getDay() === 0 || d.getDay() === 6;
+  // }
+
+  disableDays(){
+      this.employeeService.getExisitingLeavesDates(this.currentUser.username)
+      .subscribe( data => {
+        let exisitngDates:any = data;
+        let getDate = string => (([day,month]) => ({day,month}))(string.split('-'));
+        exisitngDates.forEach(element => {
+          let day = parseInt(getDate(element.date).day);
+          let month = parseInt(getDate(element.date).month);
+          let year = parseInt(element.year);
+          let disabledDate = {
+            year: year,
+            month:month,
+            day:day
+          }
+          this.disabledDates.push(disabledDate);
+        });
+      });
   }
 
   setMinMaxDate(leaveType){
@@ -85,7 +111,9 @@ export class LeaveApplicationComponent implements OnInit {
       .subscribe (data => {
         this.remainingLeaves = data['remaining_leaves'];
       });
-    if(leaveType.id === 1){ // If is Annual Leave
+    
+    if(leaveType.id === 1){ 
+      // If is Annual Leave
       let getDate = string => (([day,month,year]) => ({day,month,year}))(string.split('-'));
       this.employeeService.getMinDate(this.currentUser.username)
         .subscribe(data => {
@@ -101,7 +129,8 @@ export class LeaveApplicationComponent implements OnInit {
         });
       this.maxDate = null;
       this.toDate = null;
-    } else { // If is Medical Leave
+    } else { 
+      // If is Medical Leave
       this.minDate = {
         year: year,
         month: month,
@@ -109,7 +138,7 @@ export class LeaveApplicationComponent implements OnInit {
       };
       let maxDay= this.daysInMonth(month,year);
       this.maxDate = {
-        year: parseInt(this.currentYear),
+        year: year,
         month: month,
         day: maxDay
       };
