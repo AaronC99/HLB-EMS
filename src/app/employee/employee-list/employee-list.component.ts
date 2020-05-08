@@ -61,6 +61,13 @@ export class EmployeeListComponent implements OnInit {
     }
   }
 
+  public displayStatus(row){
+    if (row.timesheet_approval.approval_status === 'Pending' && row.timesheet_approval.date_submitted === null)
+      return 'Not Submitted';
+    else
+      return row.timesheet_approval.approval_status;
+  }
+
   public getEmployeeRecords(){
     this.employeeService.getAllEmployees(this.currentUserId).subscribe(data =>{
       this.EMPLOYEE_DATA = data;

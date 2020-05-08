@@ -21,7 +21,7 @@ mat-card{
 mat-card-title , h1,h2{
     font-family: 'Ubuntu', sans-serif;
 }
-mat-card-actions{
+mat-card-actions,.requested-message,.error-message{
     text-align: center;
 }
 table{
@@ -53,7 +53,6 @@ th, mat-card-title, h1{
     color: white;
     border-radius: 20px;
     display: block;
-    text-align: center;
     padding: 10px 0px;
 }
 th, td{
@@ -63,4 +62,7 @@ th, td{
 .timesheet-table{
     max-height: 700px;
     overflow: auto;
+}
+.requested-message{
+    background-color: #A5FECB;
 }

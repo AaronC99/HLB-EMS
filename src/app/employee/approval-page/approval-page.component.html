@@ -15,7 +15,17 @@
               <h2 class="info">{{ monthName }}-{{ year }}</h2>
           </mat-card-title>
           <mat-card-content>
-              <div class="timesheet-table">
+            <div class="requested-message" *ngIf="allowExit">
+              <mat-card>
+                <mat-card-title *ngIf="user.role === 'Manager'">
+                  You Already Approve/Reject {{ employee.name }} Timesheet
+                </mat-card-title>
+                <mat-card-title *ngIf="user.role === 'Staff'">
+                  You Updated and Requested {{ monthName }}-{{ year }} Timesheet
+                </mat-card-title>
+              </mat-card>
+            </div>
+              <div class="timesheet-table" *ngIf="!allowExit">
                   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" >
                     <ng-container matColumnDef="editStatus">
                       <th mat-header-cell *matHeaderCellDef> 
