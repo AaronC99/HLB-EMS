@@ -5,8 +5,11 @@
                 Create New Leave Date
             </mat-card-title>
             <div class="date-picker">
-                <ngb-datepicker #dp (dateSelect)="onDateSelection($event)" [displayMonths]="1" 
-                    [dayTemplate]="t" outsideDays="hidden" >
+                <ngb-datepicker #dp (dateSelect)="onDateSelection($event)" 
+                    [displayMonths]="1" 
+                    [dayTemplate]="t" 
+                    outsideDays="hidden" 
+                    [markDisabled]="isDisabled">
                 </ngb-datepicker>
                 
                 <ng-template #t let-date let-focused="focused">

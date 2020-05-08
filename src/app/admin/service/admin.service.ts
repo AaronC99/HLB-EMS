@@ -49,4 +49,8 @@ export class AdminService {
   public createHoliday(holidayDates){
     return this.httpClient.post(`${this.REST_API_SERVER}/holiday/saveHoliday`,holidayDates);
   }
+
+  public viewHolidays(){
+    return this.httpClient.get(`${this.REST_API_SERVER}/holiday/viewAllHoliday`);
+  }
 }
