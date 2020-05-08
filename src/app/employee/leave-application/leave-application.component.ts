@@ -79,11 +79,10 @@ export class LeaveApplicationComponent implements OnInit {
     });
   }
 
-  // isWeekends(date: NgbDateStruct) {
-  //   const d = new Date(date.year, date.month - 1, date.day);
-  //   console.log(date);
-  //   return date.day === 13 || d.getDay() === 0 || d.getDay() === 6;
-  // }
+  isWeekends(date: NgbDateStruct) {
+    const d = new Date(date.year, date.month - 1, date.day);
+    return d.getDay() === 0 || d.getDay() === 6;
+  }
 
   disableDays(){
       this.employeeService.getExisitingLeavesDates(this.currentUser.username)
@@ -208,7 +207,6 @@ export class LeaveApplicationComponent implements OnInit {
       this.endDate = this.startDate;
 
     for(let i=moment(this.startDate); i.isSameOrBefore(this.endDate);i.add(1,'days')){
-      let day = i.format("DD");
       let date = i.format("DD-MM");
       let year = i.format("YYYY");
       this.leave = {
@@ -218,7 +216,15 @@ export class LeaveApplicationComponent implements OnInit {
         date: date,
         year: year
       };
-      this.leaveDuration.push(this.leave);
+      let isWeekend = this.isWeekends({
+        year: parseInt(year),
+        month: parseInt(i.format("MM")),
+        day: parseInt(i.format("DD"))
+      });
+      if (isWeekend !== true)
+        this.leaveDuration.push(this.leave);
+      else 
+        continue;
     }
     this.employeeService.applyLeave(this.leaveDuration)
       .subscribe(data => {
@@ -233,7 +239,6 @@ export class LeaveApplicationComponent implements OnInit {
     },err => {
       this.displayMessage('Leave Applied Unsuccessful. Please try again.')
     });
-    
     this.leaveApplicationForm.reset();
   }
 

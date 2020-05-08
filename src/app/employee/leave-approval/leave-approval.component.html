@@ -6,7 +6,7 @@
             </mat-card-title>
             <mat-card-content>
                 <div class="approve-reject-message" *ngIf="canExit">
-                    <h2>You Already Approve/Reject {{ employee.name }} Leave Request</h2>
+                    <h2>You Already Approve/Reject <b>{{ employee.name }}</b> Leave Request</h2>
                 </div>
                 <div *ngIf="!canExit">
                     <div class="row justify-content-center">
