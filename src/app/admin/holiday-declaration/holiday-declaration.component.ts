@@ -36,13 +36,10 @@ export class HolidayDeclarationComponent implements OnInit {
     this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
     this.endDate = `${this.toDate.day}/${this.toDate.month}/${this.toDate.year}`;
     //this.admin = localStorage.getItem('currentUser');
-    this.viewAllHolidays();
-    this.isDisabled = (date:NgbDateStruct,current: {month:number,year:number}) =>{
-      return this.exisitingHolidays.find(x=>NgbDate.from(x).equals(date))?true:false;
-    }
   }
 
   ngOnInit(): void {
+    this.viewAllHolidays();
     this.createForm();
   }
 
@@ -52,6 +49,12 @@ export class HolidayDeclarationComponent implements OnInit {
       holidayType: ['',Validators.required],
       duration: [`${this.startDate}-${this.endDate}`]
     });
+  }
+
+  public disableDates(dates){
+    this.isDisabled = (date:NgbDateStruct,current: {month:number,year:number}) =>{
+      return dates.find(x=>NgbDate.from(x).equals(date))?true:false;
+    }
   }
 
   get userInput(){
@@ -101,7 +104,7 @@ export class HolidayDeclarationComponent implements OnInit {
           };
           this.exisitingHolidays.push(holidays);
         });
-        console.log(this.exisitingHolidays)
+        this.disableDates(this.exisitingHolidays);
       });
   }
 
