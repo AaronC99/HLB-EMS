@@ -48,25 +48,22 @@ export class EmployeeService {
     return this.httpClient.get(this.REST_API_SERVER+'/employee/allEmployees/'+DomainID);
   }
 
-  public clockIn(domainId:string,dateIn:string,timeIn:string,year:string){
+  public clockIn(domainId:string){
     return this.httpClient.patch(`${this.REST_API_SERVER}/clock/clockIn`
       ,{
-        "domain_id":domainId,
-        "date_in":dateIn,
-        "time_in":timeIn,
-        "year":year
+        "domain_id":domainId
       });
   }
 
-  public clockOut(domainId:string,dateIn:string,dateOut:string,timeOut:string,year:string){
+  public clockOut(domainId:string){
     return this.httpClient.patch(`${this.REST_API_SERVER}/clock/clockOut`
     ,{
-      "domain_id":domainId,
-      "date_in":dateIn,
-      "date_out":dateOut,
-      "time_out":timeOut,
-      "year":year
+      "domain_id":domainId
     });
+  }
+
+  public getClockInOutStatus(domainId:string){
+    return this.httpClient.get(`${this.REST_API_SERVER}/clock/checkClockInStatus/${domainId}`);
   }
 
   public getTimesheet(domainId:string,month:string,year:string){
@@ -77,23 +74,29 @@ export class EmployeeService {
     return this.httpClient.get(`${this.REST_API_SERVER}/timesheet/availableTimesheet/${domainId}`);
   }
 
-  public requestApproval(domainId:string,period:string,year:string){
-    return this.httpClient.post(`${this.REST_API_SERVER}/timesheet/approvalEmail`
+  public sendEmail(domainId:string,period:string,year:string,status:string){
+    return this.httpClient.post(`${this.REST_API_SERVER}/timesheet/sendEmail`
     ,{
       "domain_id":domainId,
       "period":period,
-      "year":year
+      "year":year,
+      "type":status
     });
   }
 
-  public approveTimesheet(domainId:string,period:string,year:string){
-    return this.httpClient.patch(`${this.REST_API_SERVER}/timesheet/approveTimesheet/${domainId}/${period}/${year}`
+  //Pass back Approved/Rejected status
+  public updateTimesheetStatus(domainId:string,period:string,year:string,status:string){ 
+    return this.httpClient.patch(`${this.REST_API_SERVER}/timesheet/updateTimesheetStatus/${domainId}/${period}/${year}`
     ,{
-      "is_approved":true
+      "approval_status":status
     });
   }
 
-  public getTimesheetApprovalStatus(domainId:string){
-    return this.httpClient.get(`${this.REST_API_SERVER}/timesheet/approvalStatus/${domainId}`);
+  public allowTimesheetEdit(recordsForEdit){
+    return this.httpClient.patch(`${this.REST_API_SERVER}/timesheet/setEditableTimesheet` ,recordsForEdit);
+  }
+
+  public editTimesheet(editedArray){
+    return this.httpClient.patch(`${this.REST_API_SERVER}/timesheet/editTimesheet`,editedArray);
   }
 }
