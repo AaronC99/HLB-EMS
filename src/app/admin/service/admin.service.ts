@@ -35,18 +35,22 @@ export class AdminService {
   }
 
   public addEmployee(employeeDetails:any){
-    this.httpClient.post(this.REST_API_SERVER+'/employee/addEmployee',employeeDetails).subscribe(data=>{
-      console.log(data);
-    });
+    this.httpClient.post(this.REST_API_SERVER+'/employee/addEmployee',employeeDetails).subscribe();
   }
 
   public checkDuplicate(userInput:string){
     return this.httpClient.get(this.REST_API_SERVER+'/employee/checkduplicate/'+userInput);
   }
 
-  public updateEmployee(SelectedEmpID: string, updateDetails:any){
-    this.httpClient.patch(this.REST_API_SERVER+'/employee/updateEmployee/'+SelectedEmpID, updateDetails).subscribe(data=>{
-      console.log(data);
-    });
+  public updateEmployee(selectedDomainId: string, updateDetails:any){
+    return this.httpClient.patch(`${this.REST_API_SERVER}/employee/updateEmployee/${selectedDomainId}`,updateDetails)
+  }
+
+  public createHoliday(holidayDates){
+    return this.httpClient.post(`${this.REST_API_SERVER}/holiday/saveHoliday`,holidayDates);
+  }
+
+  public viewHolidays(){
+    return this.httpClient.get(`${this.REST_API_SERVER}/holiday/viewAllHoliday`);
   }
 }

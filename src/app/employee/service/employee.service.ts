@@ -12,7 +12,7 @@ export class EmployeeService {
   private currUserObj:Employee = new Employee();
   private currUserSubj: BehaviorSubject<Employee>;
 
-  get currUserDetils(){
+  get currUserDetails(){
     return this.currUserSubj.asObservable();
   }
   constructor(
@@ -34,13 +34,15 @@ export class EmployeeService {
           email: data['email'],
           role: data['role'],
           schedule: data['schedule'],
-          department: data['department'] 
+          department: data['department'], 
+          annual_leave: data['annual_leave'],
+          medical_leave: data['medical_leave']
         };
         this.currUserSubj.next(this.currUserObj);
       });
   }
 
-  public getProfile(domainId:string){
+  public getProfile(domainId){
     return this.httpClient.get(`${this.REST_API_SERVER}/profile/${domainId}`);
   }
 
@@ -98,5 +100,32 @@ export class EmployeeService {
 
   public editTimesheet(editedArray){
     return this.httpClient.patch(`${this.REST_API_SERVER}/timesheet/editTimesheet`,editedArray);
+  }
+  public checkAvailableLeaves(domainID,year,leaveType){
+    return this.httpClient.get(`${this.REST_API_SERVER}/leave/checkAvailableLeaves/${domainID}/${year}/${leaveType}`)
+  }
+
+  public applyLeave(leaveDuration){
+    return this.httpClient.post(`${this.REST_API_SERVER}/leave/applyLeave`,leaveDuration);
+  }
+
+  public sendLeaveRequestEmail(leaveDuration){
+    return this.httpClient.post(`${this.REST_API_SERVER}/leave/sendEmail`,leaveDuration);
+  }
+
+  public getMinDate(domainId){
+    return this.httpClient.get(`${this.REST_API_SERVER}/leave/calcMinLeaveDate/${domainId}`);
+  }
+
+  public viewLeaveDetails(domainId,dateSubmitted){
+    return this.httpClient.get(`${this.REST_API_SERVER}/leave/viewLeave/${domainId}/${dateSubmitted}`);
+  }
+
+  public updateLeaveStatus(leaveApprovalDetails){
+    return this.httpClient.patch(`${this.REST_API_SERVER}/leave/updateLeaveStatus`,leaveApprovalDetails);
+  }
+
+  public getExisitingLeavesDates(domainId){
+    return this.httpClient.get(`${this.REST_API_SERVER}/leave/getApprovedOrPendingLeaveDates/${domainId}`);
   }
 }

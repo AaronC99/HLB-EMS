@@ -15,13 +15,16 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HolidayDeclarationComponent } from '../holiday-declaration/holiday-declaration.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
   declarations: [
     CreateEmployeeComponent,
-    AllEmployeeListComponent
+    AllEmployeeListComponent,
+    HolidayDeclarationComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +39,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatTableModule,
     MatIconModule,
     MatSortModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    NgbModule,
+    MatSnackBarModule
   ]
 })
 export class AdminModule {

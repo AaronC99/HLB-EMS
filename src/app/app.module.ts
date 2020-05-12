@@ -9,6 +9,7 @@ import { AuthenticationModule } from './authentication/module/authentication.mod
 import { EmployeeModule } from './employee/module/employee.module';
 import { AdminModule } from './admin/module/admin.module';
 import { NavigationModule } from './navigation/navigation.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { NavigationModule } from './navigation/navigation.module';
     AuthenticationModule.forRoot(),
     EmployeeModule,
     AdminModule,
-    NavigationModule
+    NavigationModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

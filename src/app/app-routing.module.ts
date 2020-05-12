@@ -4,6 +4,7 @@ import { LoginPageComponent } from './authentication/login-page/login-page.compo
 import { NavigationModule } from './navigation/navigation.module';
 import { AuthenticationGuard } from './authentication/service/authentication.guard';
 import { ApprovalPageComponent } from './employee/approval-page/approval-page.component';
+import { LeaveApprovalComponent } from './employee/leave-approval/leave-approval.component';
 
 
 const routes: Routes = [
@@ -25,6 +26,11 @@ const routes: Routes = [
     path: 'timesheet-approval/:domainId/:period/:year',
     canActivate:[AuthenticationGuard],
     component: ApprovalPageComponent
+  },
+  {
+    path:'leave-approval/:domainId/:date_submitted',
+    canActivate:[AuthenticationGuard],
+    component: LeaveApprovalComponent
   },
   {
     path:'timesheet-reject/:domainId/:period/:year',

@@ -16,6 +16,10 @@
             <mat-icon>supervised_user_circle</mat-icon>
             {{ employeeList }}
           </a>
+          <a routerLink="leave-application" mat-button *ngIf="_authDetails.role==='Staff'">
+            <mat-icon>work_off</mat-icon>
+            Apply Leave
+          </a>
           <a routerLink="my-account/{{_authDetails.username}}" mat-button *ngIf="_authDetails.role==='Manager' || _authDetails.role==='Staff'">
             <mat-icon>account_circle</mat-icon>
             {{ account }}
@@ -40,6 +44,10 @@
             <button mat-menu-item>
               <mat-icon>schedule</mat-icon>
               <span>New Schedule</span>
+            </button>
+            <button mat-menu-item routerLink="holiday-declaration">
+              <mat-icon>event</mat-icon>
+              <span>New Leave Date</span>
             </button>
           </mat-menu>
           <a mat-raised-button color="warn" class="log-out" (click)="onLogOut()">

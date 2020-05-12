@@ -18,7 +18,7 @@ export class AccountComponent implements OnInit {
     private employeeService: EmployeeService,
     private route: ActivatedRoute
   ) {
-    this.employeeService.currUserDetils.subscribe((details)=>{
+    this.employeeService.currUserDetails.subscribe((details)=>{
       this.currUser = details;
       this.currUserSchedule = details.schedule;
       this.currUserDepartment = details.department;

@@ -22,7 +22,9 @@ import { ApprovalPageComponent } from '../approval-page/approval-page.component'
 import { RouterModule } from '@angular/router';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
+import { LeaveApplicationComponent } from '../leave-application/leave-application.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { LeaveApprovalComponent } from '../leave-approval/leave-approval.component';
 
 
 @NgModule({
@@ -31,7 +33,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     CheckInOutPageComponent,
     TimesheetComponent,
     EmployeeListComponent,
-    ApprovalPageComponent
+    ApprovalPageComponent,
+    LeaveApplicationComponent,
+    LeaveApprovalComponent
   ],
   imports: [
     CommonModule,
@@ -50,7 +54,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatSnackBarModule,
     RouterModule,
     MatDialogModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    NgbModule
   ]
 })
 export class EmployeeModule {
