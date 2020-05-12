@@ -1,32 +1,22 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, CanActivateChild, CanDeactivate, CanLoad, Route, UrlSegment, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { AuthenticationService } from './authentication.service';
-import { LoginPageComponent } from '../login-page/login-page.component';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationGuard implements CanActivate{ //CanActivateChild, CanDeactivate<unknown>, CanLoad 
+export class AuthenticationGuard implements CanActivate{ 
   
   constructor(
     private authService: AuthenticationService,
     private router:Router
   ){}
-  canActivate(
-      next: ActivatedRouteSnapshot, state: RouterStateSnapshot):Observable<boolean>{
-      return this.authService.isLoggedIn
-        .pipe(
-          map((isLoggedIn:Boolean)=>{
-            if(!isLoggedIn){
-              //this.router.navigateByUrl('');
-              this.router.navigate(['login-page']
-              ,{queryParams: {returnUrl: state.url}});
-              return false;
-            }
-            return true;
-          })
-        )
-   }
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    const currentUser = this.authService.currentUserValue;
+    if(currentUser && this.authService.isLoggedIn){
+      return true;
+    }
+    this.router.navigate(['login-page'],{queryParams: {returnUrl: state.url}});
+    return false;
+  }
 }

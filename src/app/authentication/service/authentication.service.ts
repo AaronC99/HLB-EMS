@@ -15,6 +15,7 @@ export class AuthenticationService {
   constructor(
     private httpClient: HttpClient
   ) {
+    this._authSubj = new BehaviorSubject<AuthModel>(JSON.parse(localStorage.getItem('currentUser')));
     this._authSubj = new BehaviorSubject(this._authObj);
     this._authSubj.next(this._authObj);
    }
@@ -30,6 +31,10 @@ export class AuthenticationService {
     return this._authSubj.asObservable();
   }
 
+  get currentUserValue(): AuthModel {
+    return this._authSubj.value;
+  }
+
 
   getLoginDetails = (loginID: string, pwd: string) => {
     this.httpClient.get(this.REST_API_SERVER+'/login/'+loginID+'/'+pwd)
@@ -43,6 +48,7 @@ export class AuthenticationService {
           username: loginID, 
           role: this.role
         };
+        localStorage.setItem('currentUser',JSON.stringify(this._authObj));
         this._authSubj.next(this._authObj);
         this.loggedIn.next(true);
       }
@@ -52,6 +58,7 @@ export class AuthenticationService {
   }
 
   logout(){
+    localStorage.removeItem('currentUser');
     this.loggedIn.next(false);
     this._authSubj.next(new AuthModel());
   }
