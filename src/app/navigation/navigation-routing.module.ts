@@ -9,6 +9,7 @@ import { EmployeeListComponent } from '../employee/employee-list/employee-list.c
 import { AllEmployeeListComponent } from '../admin/all-employee-list/all-employee-list.component';
 import { HolidayDeclarationComponent } from '../admin/holiday-declaration/holiday-declaration.component';
 import { LeaveApplicationComponent } from '../employee/leave-application/leave-application.component';
+import { AllHolidaysComponent } from '../maintenance/all-holidays/all-holidays.component';
 
 const routes: Routes = [
   { 
@@ -55,6 +56,10 @@ const routes: Routes = [
       {
         path:'leave-application',
         component: LeaveApplicationComponent
+      },
+      {
+        path: 'all-holiday',
+        component: AllHolidaysComponent
       }
     ]}
 ];

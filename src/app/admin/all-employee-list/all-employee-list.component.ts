@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { EmployeeService } from 'src/app/employee/service/employee.service';
 import { MatSort } from '@angular/material/sort';
 import { AdminService } from '../service/admin.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Router } from '@angular/router';
+import { AuthModel } from 'src/app/model/Authentication.model';
 
 @Component({
   selector: 'app-all-employee-list',
@@ -17,19 +17,16 @@ export class AllEmployeeListComponent implements OnInit{
   ALL_DATA: any = [];
   ACTIVE_DATA:any = [];
   dataSource:any = new MatTableDataSource<any>();
-  currentUserId: String;
+  currentUser: AuthModel;
   checked:boolean = false;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(
-    private authService: AuthenticationService,
     private employeeService: EmployeeService,
     private adminService: AdminService,
     private router: Router
   ) {
-    this.authService.userAuthDetails.subscribe(userId => {
-      this.currentUserId = userId.username;
-    });
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
    }
   
   ngOnInit(): void {
@@ -37,7 +34,7 @@ export class AllEmployeeListComponent implements OnInit{
   }
 
   public getAllEmployeeDetails(){
-    this.employeeService.getAllEmployees(this.currentUserId).subscribe( data => {
+    this.employeeService.getAllEmployees(this.currentUser.username).subscribe( data => {
       this.ALL_DATA = data;
       if (this.checked){
         this.dataSource = new MatTableDataSource<any>(this.ALL_DATA);
