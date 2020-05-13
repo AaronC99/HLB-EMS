@@ -172,18 +172,17 @@ export class HolidayDeclarationComponent implements OnInit {
       data =>{
         let holidayArray:any = data;
         holidayArray.forEach(element => {
-          if (element === null)
-            this.displayMessage('This date already is a holiday');
-          else 
-            this.displayMessage('Holiday Created Successfully');
+          if (element !== null)
+            this.displayMessage('Holiday Created Successfully','success');
         });
       }
     );
   }
 
-  public displayMessage(message:string){
+  public displayMessage(message:string,status:string){
     this._snackBar.open(message,'Close',{
-      duration: 3000
+      duration: 5000,
+      panelClass: `notif-${status}`
     });
   }
 
