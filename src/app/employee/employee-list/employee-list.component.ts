@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-employee-list',
@@ -35,7 +36,8 @@ export class EmployeeListComponent implements OnInit {
 
   constructor(
     private formBuilder:FormBuilder,
-    private employeeService: EmployeeService) {
+    private employeeService: EmployeeService,
+    private router:Router) {
       let _currUserObj:any = JSON.parse(localStorage.getItem('currentUser'));
       this.currentUserId = _currUserObj.username;
    }
@@ -168,6 +170,14 @@ export class EmployeeListComponent implements OnInit {
         }
         this.dataSource = new MatTableDataSource(this.EMPLOYEE_DATA);
       });
+  }
+
+  public approveTimesheet(currentUser){
+    let timesheet = currentUser.timesheet_approval;
+    let period = timesheet.period_number;
+    let year = timesheet.year;
+    let link = `timesheet-approval/${currentUser.domain_id}/${period}/${year}`;
+    this.router.navigateByUrl(link);
   }
 
 }

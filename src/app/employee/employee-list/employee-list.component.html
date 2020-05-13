@@ -75,7 +75,14 @@
                       <td mat-cell *matCellDef="let element"
                       [ngStyle]="{'color': element.timesheet_approval.approval_status === 'Approved' ? 'green' 
                       : element.timesheet_approval.approval_status === 'Rejected' ? 'red' : ''}">
+                      <button mat-raised-button class="pending-btn" color="primary" 
+                        *ngIf="displayStatus(element) === 'Pending' else showStatus"
+                        (click)="approveTimesheet(element)">
+                        {{ displayStatus(element) }} 
+                      </button>
+                      <ng-template #showStatus>
                         {{ displayStatus(element) }}
+                      </ng-template>
                       </td>
                     </ng-container>
 
