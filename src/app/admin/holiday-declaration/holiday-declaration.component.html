@@ -2,14 +2,15 @@
     <div class="col">
         <mat-card>
             <mat-card-title>
-                Create New Leave Date
+                Create New Holiday
             </mat-card-title>
             <div class="date-picker">
                 <ngb-datepicker #dp (dateSelect)="onDateSelection($event)" 
                     [displayMonths]="1" 
                     [dayTemplate]="t" 
                     outsideDays="hidden" 
-                    [markDisabled]="isDisabled">
+                    [markDisabled]="isDisabled"
+                    [minDate]="minDate">
                 </ngb-datepicker>
                 
                 <ng-template #t let-date let-focused="focused">
@@ -26,11 +27,11 @@
             <hr>
             <div class="row justify-content-center">
                 <div class="col-6">
+                    <h2>Holiday Duration: 
+                        <span class="date-label">{{ startDate }} - {{ endDate }}</span>
+                        <span *ngIf="isDuplicate" class="error-message">*You selected existing holiday</span>
+                    </h2>
                     <form [formGroup]="createHolidayForm" (ngSubmit)="onSubmit()">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Holiday Duration</mat-label>
-                            <input matInput formControlName="duration" [readonly]="true">
-                        </mat-form-field>
                         <mat-form-field appearance="fill">
                             <mat-label>Holiday Name</mat-label>
                             <input matInput formControlName="holidayName" required>
@@ -49,7 +50,7 @@
                                 Please Select a Holiday Type
                             </mat-error>
                         </mat-form-field>
-                        <button mat-raised-button color="primary" type="submit" [disabled]="createHolidayForm.invalid">Create Holiday</button>
+                        <button mat-raised-button color="primary" type="submit" [disabled]="createHolidayForm.invalid || isDuplicate">Create Holiday</button>
                     </form>
                 </div>
             </div>

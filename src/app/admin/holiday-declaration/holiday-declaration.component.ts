@@ -23,6 +23,8 @@ export class HolidayDeclarationComponent implements OnInit {
   holiday: Holiday;
   exisitingHolidays = [];
   isDisabled:any;
+  minDate:any;
+  isDuplicate:boolean;
 
   constructor(
     private calendar: NgbCalendar,
@@ -32,10 +34,10 @@ export class HolidayDeclarationComponent implements OnInit {
     private _snackBar: MatSnackBar
     ) { 
     this.fromDate = calendar.getToday();
-    this.toDate = calendar.getNext(calendar.getToday(), 'd', 4);
+    this.toDate = calendar.getNext(calendar.getToday(), 'd', 0);
+    this.setMinDate();
     this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
     this.endDate = `${this.toDate.day}/${this.toDate.month}/${this.toDate.year}`;
-    //this.admin = localStorage.getItem('currentUser');
   }
 
   ngOnInit(): void {
@@ -46,9 +48,18 @@ export class HolidayDeclarationComponent implements OnInit {
   createForm(){
     this.createHolidayForm = this.formBuilder.group({
       holidayName: ['',Validators.required],
-      holidayType: ['',Validators.required],
-      duration: [`${this.startDate}-${this.endDate}`]
+      holidayType: ['',Validators.required]
     });
+  }
+
+  public setMinDate(){
+    this.minDate = {
+      year: this.fromDate.year,
+      month: this.fromDate.month + 1,
+      day: 1
+    };
+    this.fromDate = this.minDate;
+    this.toDate = this.minDate;
   }
 
   public disableDates(dates){
@@ -73,7 +84,7 @@ export class HolidayDeclarationComponent implements OnInit {
       this.endDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
     }
     this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
-    this.createHolidayForm.get('duration').setValue(`${this.startDate} - ${this.endDate}`);
+    this.validateHoliday(this.fromDate,this.toDate);
   }
 
   isHovered(date: NgbDate) {
@@ -106,6 +117,36 @@ export class HolidayDeclarationComponent implements OnInit {
         });
         this.disableDates(this.exisitingHolidays);
       });
+  }
+
+  public validateHoliday(startDay,endDay){
+    this.isDuplicate = false;
+    let startDate = moment(this.formatter.format(startDay));
+    let endDate = moment(this.formatter.format(endDay));
+    let duration = [];
+    if (endDate.format("DD-MM-YYYY") === 'Invalid date')
+      endDate = startDate;
+
+    for(let i=moment(startDate); i.isSameOrBefore(endDate);i.add(1,'days')){
+      let date = i.format("DD-MM");
+      let year = i.format("YYYY");
+      let holiday = {
+        date: date,
+        year: year
+      }
+      duration.push(holiday);
+    }
+    this.adminService.viewHolidays().subscribe ( data => {
+      let existingDates:any = data;
+      for (let i=0;i<existingDates.length;i++){
+        for (let j=0;j<duration.length;j++){
+          if (existingDates[i].date === duration[j].date && existingDates[i].year === duration[j].year){
+            this.isDuplicate = true;
+            break;
+          }
+        }
+      }
+    });
   }
 
   onSubmit(){

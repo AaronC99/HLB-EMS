@@ -12,6 +12,20 @@ mat-card-title{
     font-family: 'Ubuntu', sans-serif;
     text-transform: uppercase;
 }
+h2{
+    font-family: 'Sen', sans-serif;
+}
+.date-label{
+    background-color: #0275d8;
+    color: white;
+    border-radius: 20px;
+    padding: 0px 20px;
+}
+.error-message{
+    color: red;
+    padding: 0px 10px;
+    font-size: smaller;
+}
 .date-picker,button{
     text-align: center;
     margin-top: 20px;
