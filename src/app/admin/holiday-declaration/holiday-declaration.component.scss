@@ -8,11 +8,13 @@ button{
     padding: 5px 0px;
 }
 mat-card-title{
-    text-align: center;
     font-family: 'Ubuntu', sans-serif;
     text-transform: uppercase;
 }
-h2{
+mat-card-title,.date-picker,button,.custom-day{
+    text-align: center;
+}
+h2,.custom-day{
     font-family: 'Sen', sans-serif;
 }
 .date-label{
@@ -27,15 +29,14 @@ h2{
     font-size: smaller;
 }
 .date-picker,button{
-    text-align: center;
     margin-top: 20px;
 }
 .custom-day {
-    text-align: center;
     padding: 0.185rem 0.25rem;
     display: inline-block;
     height: 2rem;
     width: 2rem;
+    font-size: 20px;
 }
 .custom-day.focused {
     background-color: #e6e6e6;
@@ -49,4 +50,7 @@ h2{
 }
 mat-form-field,button{
     width:100%
+}
+.custom-day.exist{
+    color: lightgray;
 }
