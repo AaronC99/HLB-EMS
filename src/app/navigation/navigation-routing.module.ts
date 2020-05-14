@@ -60,6 +60,10 @@ const routes: Routes = [
       {
         path: 'all-holiday',
         component: AllHolidaysComponent
+      },
+      {
+        path: 'edit-holiday/:holidayId',
+        component: HolidayDeclarationComponent
       }
     ]}
 ];

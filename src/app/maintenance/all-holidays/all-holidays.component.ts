@@ -3,6 +3,8 @@ import { AdminService } from 'src/app/admin/service/admin.service';
 import { NgbCalendar, NgbDateStruct, NgbDate, NgbDatepicker, NgbDatepickerI18n } from '@ng-bootstrap/ng-bootstrap';
 import { Holiday } from 'src/app/model/Holiday.model';
 import * as moment from 'moment';
+import { Router } from '@angular/router';
+import { MaintenanceService } from '../service/maintenance.service';
 
 @Component({
   selector: 'app-all-holidays',
@@ -19,7 +21,9 @@ export class AllHolidaysComponent implements OnInit {
   isSelected:any;
   holidayDetails:any = [];
   minDate:any;
+  holidayObj:Holiday;
   holiday = {
+    holidayId: '',
     holidayName :'',
     holidayType : '',
     holidayDate : ''
@@ -29,7 +33,9 @@ export class AllHolidaysComponent implements OnInit {
   
   constructor(
     private adminService: AdminService,
-    private calendar: NgbCalendar
+    private calendar: NgbCalendar,
+    private router:Router,
+    private maintainService: MaintenanceService
   ) {
     this.getAllHolidays();
     this.minDate = {
@@ -94,16 +100,24 @@ export class AllHolidaysComponent implements OnInit {
     // Display Holiday Info 
     this.holidayDetails.forEach(element =>{
       if(element.date === day_month && element.year === year){
+        this.holiday.holidayId = element._id;
         this.holiday.holidayName =  element.holiday_name;
         this.holiday.holidayType = element.holiday_type;
         this.holiday.holidayDate = `${element.date}-${element.year}`;
-        this.editable = true;
+        this.holidayObj = {
+          holiday_name:element.holiday_name,
+          holiday_type:element.holiday_type,
+          date:element.date,
+          year: element.year
+        };
       }
     });
   }
 
   public editHoliday(){
-    console.log(this.holiday);
+    console.log(this.holidayObj);
+    this.maintainService.setHolidayToEdit(this.holidayObj);
+    this.router.navigateByUrl(`edit-holiday/${this.holiday.holidayId}`);
   }
 
 }

@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MaintenanceService } from '../service/maintenance.service';
 
 
 @NgModule({
@@ -23,4 +24,13 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NgbModule
   ]
 })
-export class MaintenanceModule { }
+export class MaintenanceModule { 
+  public static forRoot(){
+    return{
+      NgModule: MaintenanceModule,
+      providers: [
+        MaintenanceService
+      ]
+    };
+  }
+}

@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { Holiday } from 'src/app/model/Holiday.model';
 import { AdminService } from '../service/admin.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MaintenanceService } from 'src/app/maintenance/service/maintenance.service';
 
 @Component({
   selector: 'app-holiday-declaration',
   templateUrl: './holiday-declaration.component.html',
   styleUrls: ['./holiday-declaration.component.scss']
 })
-export class HolidayDeclarationComponent implements OnInit {
+export class HolidayDeclarationComponent implements OnInit,AfterViewInit {
   hoveredDate: NgbDate | null = null;
   fromDate: NgbDate;
   toDate: NgbDate | null = null;
@@ -24,14 +25,17 @@ export class HolidayDeclarationComponent implements OnInit {
   exisitingHolidays = [];
   isDisabled:any;
   minDate:any;
+  editDate:any;
   isDuplicate:boolean;
+  newRecord:boolean = true;
 
   constructor(
     private calendar: NgbCalendar,
     private formBuilder:FormBuilder,
     private formatter: NgbDateParserFormatter,
     private adminService: AdminService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private maintainService: MaintenanceService
     ) { 
     this.fromDate = calendar.getToday();
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 0);
@@ -43,6 +47,10 @@ export class HolidayDeclarationComponent implements OnInit {
   ngOnInit(): void {
     this.viewAllHolidays();
     this.createForm();
+  }
+
+  ngAfterViewInit(){
+    this.checkHolidayForEdit();
   }
 
   createForm(){
@@ -179,11 +187,40 @@ export class HolidayDeclarationComponent implements OnInit {
     );
   }
 
+  public getButtonType(){
+    let buttonType = this.newRecord === true ? 'Create Holiday' : 'Edit Holiday';
+    return buttonType;
+  }
+
   public displayMessage(message:string,status:string){
     this._snackBar.open(message,'Close',{
       duration: 5000,
       panelClass: `notif-${status}`
     });
+  }
+
+  public checkHolidayForEdit(){
+    this.maintainService.getHolidayForEdit().subscribe(holidayInfo => {
+      this.holiday = holidayInfo;
+      if (Object.keys(this.holiday).length !== 0){
+        this.newRecord = false;
+        let getDate = string => (([day,month]) => ({day,month}))(string.split('-'));
+        let fullDate = `${getDate(this.holiday.date).day}/${getDate(this.holiday.date).month}/${this.holiday.year}`;
+        this.startDate = fullDate;
+        this.endDate = fullDate;
+        this.editDate = {
+          day: parseInt(getDate(this.holiday.date).day),
+          month: parseInt(getDate(this.holiday.date).month),
+          year: parseInt(this.holiday.year)
+        };
+        this.fromDate = this.editDate;
+        this.toDate = this.editDate;
+        this.createHolidayForm.patchValue ({
+          holidayName: this.holiday.holiday_name,
+          holidayType: this.holiday.holiday_type
+        });
+      }
+    })
   }
 
 }
