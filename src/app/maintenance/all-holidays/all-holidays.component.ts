@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AdminService } from 'src/app/admin/service/admin.service';
 import { NgbCalendar, NgbDateStruct, NgbDate, NgbDatepicker, NgbDatepickerI18n } from '@ng-bootstrap/ng-bootstrap';
 import { Holiday } from 'src/app/model/Holiday.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-all-holidays',
@@ -17,6 +18,7 @@ export class AllHolidaysComponent implements OnInit {
   existingHolidays = [];
   isSelected:any;
   holidayDetails:any = [];
+  minDate:any;
   holiday = {
     holidayName :'',
     holidayType : '',
@@ -30,6 +32,11 @@ export class AllHolidaysComponent implements OnInit {
     private calendar: NgbCalendar
   ) {
     this.getAllHolidays();
+    this.minDate = {
+      day: 1,
+      month: this.calendar.getToday().month + 1,
+      year: this.calendar.getToday().year
+    }
    }  
 
   ngOnInit(): void {
@@ -57,7 +64,6 @@ export class AllHolidaysComponent implements OnInit {
         };
         this.existingHolidays.push(date);
       });
-      this.disableDates(this.existingHolidays);
   }
 
   public myClass(date:NgbDateStruct){
@@ -66,28 +72,26 @@ export class AllHolidaysComponent implements OnInit {
       return this.isSelected ? 'classSelected' : 'classNormal';
   }
 
-  public disableDates(dates){
-    this.isHoliday = (date:NgbDateStruct,current: {month:number,year:number}) =>{
-      return dates.find(x => NgbDate.from(x).equals(date)) ? true : false;
-    }
-  }
-
-  public transformDayMonth(day,month){
-    let dayString = ("0" + day).slice(-2);
-    let monthString = ("0" + month).slice(-2);
-    return `${dayString}-${monthString}`;
+  public transformDayMonth(value){
+    let formattedValue = ("0" + value).slice(-2);
+    return formattedValue;
   }
 
   public onDateSelect(date: NgbDate){
-    this.holiday = {
-      holidayName :'',
-      holidayType : '',
-      holidayDate : ''
-    };
-    this.editable = false;
     let year = date.year.toString();
-    let day_month = this.transformDayMonth(date.day,date.month);
+    let day = this.transformDayMonth(date.day);
+    let month = this.transformDayMonth(date.month);
+    let day_month = `${day}-${month}`;
+    let selectedDate = `${year}-${month}-${day}`;
+    let startingDate = `${this.minDate.year}-${this.transformDayMonth(this.minDate.month)}-${this.transformDayMonth(this.minDate.day)}`;
 
+    // Disable edit button if selected holiday is before minimum date
+    if(moment(selectedDate).isAfter(startingDate))
+      this.editable = true;
+    else
+      this.editable = false;
+
+    // Display Holiday Info 
     this.holidayDetails.forEach(element =>{
       if(element.date === day_month && element.year === year){
         this.holiday.holidayName =  element.holiday_name;

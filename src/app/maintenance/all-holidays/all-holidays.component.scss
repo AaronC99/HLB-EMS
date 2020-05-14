@@ -1,17 +1,19 @@
 .row{
     margin: 50px;
 }
-mat-card{
+mat-card ,h2{
     border-radius: 20px;
 }
-mat-card-title{
+mat-card-title,h1{
     font-family: 'Ubuntu',sans-serif;
 }
 mat-card-title,mat-card-content{
     text-align: center;
 }
-.custom-day {
+h2,.custom-day {
     font-family: 'Sen',sans-serif;
+}
+.custom-day {
     padding: 0.185rem 0.25rem;
     display: inline-block;
     height: 2rem;
@@ -21,7 +23,8 @@ mat-card-title,mat-card-content{
 .custom-day.focused {
     background-color: #e6e6e6;
 }
-.classSelected
+.classSelected,
+h2
 {
   background-color: coral!important;
   color: white;
@@ -31,15 +34,3 @@ button{
     border-radius: 20px;
     margin-top: 10px;
 }
-// .custom-datepicker .ngb-dp-header {
-//     padding: 0;
-//   }
-// .custom-datepicker .ngb-dp-content {
-//     display: grid;
-//     grid-template-columns: auto auto;
-//     grid-column-gap: 1rem;
-//     grid-row-gap: 0.5rem;
-// }
-// .custom-datepicker{
-//     width: 100%;
-// }

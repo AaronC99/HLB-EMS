@@ -5,19 +5,14 @@
                 All Holidays
             </mat-card-title>
             <mat-card-content>
-                <!-- <ngb-datepicker [displayMonths]="displayMonths" 
-                    [navigation]="navigation"
-                    [showWeekNumbers]="showWeekNumbers" 
-                    [outsideDays]="outsideDays"
-                    [markDisabled]="isHoliday">
-                </ngb-datepicker> -->
                 <div class="row justify-content-center">
                     <div class="col-12">
                         <div class="d-flex align-content-stretch flex-wrap">
                             <ngb-datepicker #dp
                                 [displayMonths]="6" 
                                 [dayTemplate]="t" 
-                                outsideDays="hidden">
+                                outsideDays="hidden"
+                                >
                             </ngb-datepicker>
 
                             <ng-template #t 
@@ -38,30 +33,30 @@
                                 <h1>Holiday Name</h1>
                             </div>
                             <div class="col col-lg-2">
-                                <h2>: {{ holiday.holidayName }}</h2>
+                                <h2> {{ holiday.holidayName }}</h2>
                             </div>
                             <div class="w-100"></div>
                             <div class="col col-lg-2">
                                 <h1>Holiday Type</h1>
                             </div>
                             <div class="col col-lg-2">
-                                <h2>: {{ holiday.holidayType }}</h2>
+                                <h2> {{ holiday.holidayType }}</h2>
                             </div>
                             <div class="w-100"></div>
                             <div class="col col-lg-2">
                                 <h1>Date </h1>
                             </div>
                             <div class="col col-lg-2">
-                                <h2>: {{ holiday.holidayDate }}</h2>
+                                <h2>{{ holiday.holidayDate }}</h2>
                             </div>
                             <div class="w-100"></div>
-                            <div class="col col-lg-4">
+                            <div class="col col-lg-3">
                                 <button mat-raised-button color="primary" [disabled]="!editable" (click)="editHoliday()">
                                     Edit
                                 </button>
                             </div>
                             <div class="w-100"></div>
-                            <div class="col col-lg-4">
+                            <div class="col col-lg-3">
                                 <button mat-raised-button color="warn" [disabled]="!editable">Deactivate</button>
                             </div>
                         </div>
