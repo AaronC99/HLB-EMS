@@ -3,6 +3,7 @@ import { AuthenticationService } from 'src/app/authentication/service/authentica
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { Router } from '@angular/router';
 import { AdminService } from 'src/app/admin/service/admin.service';
+import { MaintenanceService } from 'src/app/maintenance/service/maintenance.service';
 
 @Component({
   selector: 'app-header',
@@ -23,13 +24,18 @@ export class HeaderComponent{
   constructor(
     private authService: AuthenticationService,
     private router:Router,
-    private adminService: AdminService) {
+    private adminService: AdminService,
+    private maintenanceService: MaintenanceService) {
     this._authDetails = JSON.parse(localStorage.getItem('currentUser'));
     this.account = this._authDetails.username;
   }
 
   newEmployeePage(){
     this.adminService.userToEdit = null;
+  }
+
+  newHolidayPage(){
+    this.maintenanceService.setHolidayToEdit = null;
   }
 
   onLogOut(){

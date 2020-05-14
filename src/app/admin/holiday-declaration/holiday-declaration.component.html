@@ -2,7 +2,12 @@
     <div class="col">
         <mat-card>
             <mat-card-title>
-                Create New Holiday
+                <div *ngIf="newRecord">
+                    Create New Holiday
+                </div>
+                <div *ngIf="!newRecord">
+                    Edit Holiday: {{ holiday.holiday_name }}
+                </div>
             </mat-card-title>
             <div class="date-picker">
                 <ngb-datepicker #dp (dateSelect)="onDateSelection($event)" 
@@ -51,7 +56,7 @@
                                 Please Select a Holiday Type
                             </mat-error>
                         </mat-form-field>
-                        <button mat-raised-button color="primary" type="submit" [disabled]="createHolidayForm.invalid || isDuplicate">
+                        <button mat-raised-button color="primary" type="submit" [disabled]="newRecord || createHolidayForm.invalid || isDuplicate">
                             {{ getButtonType() }}
                         </button>
                     </form>

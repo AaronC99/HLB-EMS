@@ -26,27 +26,27 @@
                             </ng-template>
                         </div>
                     </div>
-                    <div class="col-12">
+                    <div class="col-12" *ngIf="showDetails">
                         <div class="row justify-content-md-center">
                             <div class="col col-lg-2">
                                 <h1>Holiday Name</h1>
                             </div>
                             <div class="col col-lg-2">
-                                <h2> {{ holiday.holidayName }}</h2>
+                                <h2> {{ holidayObj.holiday_name }}</h2>
                             </div>
                             <div class="w-100"></div>
                             <div class="col col-lg-2">
                                 <h1>Holiday Type</h1>
                             </div>
                             <div class="col col-lg-2">
-                                <h2> {{ holiday.holidayType }}</h2>
+                                <h2> {{ holidayObj.holiday_type }}</h2>
                             </div>
                             <div class="w-100"></div>
                             <div class="col col-lg-2">
                                 <h1>Date </h1>
                             </div>
                             <div class="col col-lg-2">
-                                <h2>{{ holiday.holidayDate }}</h2>
+                                <h2>{{ holidayObj.date }}-{{ holidayObj.year }}</h2>
                             </div>
                             <div class="w-100"></div>
                             <div class="col col-lg-3">

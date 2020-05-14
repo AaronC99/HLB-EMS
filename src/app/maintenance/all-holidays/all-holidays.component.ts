@@ -22,13 +22,7 @@ export class AllHolidaysComponent implements OnInit {
   holidayDetails:any = [];
   minDate:any;
   holidayObj:Holiday;
-  holiday = {
-    holidayId: '',
-    holidayName :'',
-    holidayType : '',
-    holidayDate : ''
-  };
-  
+  showDetails:boolean = false;
   editable:boolean;
   
   constructor(
@@ -46,7 +40,6 @@ export class AllHolidaysComponent implements OnInit {
    }  
 
   ngOnInit(): void {
-    
   }
 
   public getAllHolidays(){
@@ -98,26 +91,24 @@ export class AllHolidaysComponent implements OnInit {
       this.editable = false;
 
     // Display Holiday Info 
+    this.showDetails = false;
     this.holidayDetails.forEach(element =>{
       if(element.date === day_month && element.year === year){
-        this.holiday.holidayId = element._id;
-        this.holiday.holidayName =  element.holiday_name;
-        this.holiday.holidayType = element.holiday_type;
-        this.holiday.holidayDate = `${element.date}-${element.year}`;
         this.holidayObj = {
+          _id: element._id,
           holiday_name:element.holiday_name,
           holiday_type:element.holiday_type,
           date:element.date,
           year: element.year
         };
+        this.showDetails = true;
       }
     });
   }
 
   public editHoliday(){
-    console.log(this.holidayObj);
-    this.maintainService.setHolidayToEdit(this.holidayObj);
-    this.router.navigateByUrl(`edit-holiday/${this.holiday.holidayId}`);
+    this.maintainService.setHolidayToEdit = this.holidayObj;
+    this.router.navigateByUrl(`/home/edit-holiday/${this.holidayObj._id}`);
   }
 
 }
