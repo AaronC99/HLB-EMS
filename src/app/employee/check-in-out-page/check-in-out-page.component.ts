@@ -67,7 +67,7 @@ export class CheckInOutPageComponent implements OnInit {
           else if (element.date_in === this.dateIn && element.time_in === '0000' && data['last_clock_in'] === false){
             this.clockInButton = true;
           }// For Clcoking out
-          else if(element.date_in === this.dateIn && data['last_clock_in'] === true){
+          else if(element.date_in === this.dateIn && element.time_in !== '0000' && data['last_clock_in'] === true){
             this.clockInButton = false;
             this.clockOutButton = true;
           }// After clock in and clock out 
