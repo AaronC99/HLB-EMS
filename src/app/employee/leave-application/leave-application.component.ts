@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { NgbDate, NgbCalendar, NgbDateParserFormatter, NgbDatepickerConfig, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbCalendar, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
 import { EmployeeService } from '../service/employee.service';
 import { LeaveApproval } from 'src/app/model/LeaveApproval.model';
-import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { Employee } from 'src/app/model/Employee.model';
 
@@ -42,22 +41,20 @@ export class LeaveApplicationComponent implements OnInit {
   remainingLeaves:number;
   disabledDates:any = [];
   isDisabled:any;
+  isExceeded: boolean;
 
   constructor(
     private calendar: NgbCalendar,
     private formBuilder:FormBuilder,
     public formatter: NgbDateParserFormatter,
     private employeeService: EmployeeService,
-    private _snackBar: MatSnackBar,
-    private authService: AuthenticationService,
+    private _snackBar: MatSnackBar
     ) { 
       this.fromDate = this.calendar.getToday();
       this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 0);
       this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
       this.endDate = `${this.toDate.day}/${this.toDate.month}/${this.toDate.year}`;
-      this.authService.userAuthDetails.subscribe( userInfo => {
-        this.currentUser = userInfo;
-      });
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
       this.employeeService.getProfile(this.currentUser.username)
         .subscribe(data=>{
           this.currentUserSupervisor = data['department']['department_head'];
@@ -74,8 +71,7 @@ export class LeaveApplicationComponent implements OnInit {
 
   createForm(){
     this.leaveApplicationForm = this.formBuilder.group({
-      leaveType: ['',Validators.required],
-      duration: [`${this.startDate}-${this.endDate}`]
+      leaveType: ['',Validators.required]
     });
   }
 
@@ -124,16 +120,16 @@ export class LeaveApplicationComponent implements OnInit {
           this.fromDate = this.minDate;
           this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
           this.endDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
-          this.leaveApplicationForm.get('duration').setValue(`${this.startDate} - ${this.endDate}`);
         });
       this.maxDate = null;
       this.toDate = null;
     } else { 
       // If is Medical Leave
+      let daysOfPrevMon = this.daysInMonth((month-1),year);
       this.minDate = {
         year: year,
-        month: month,
-        day: 1
+        month: month - 1,
+        day: daysOfPrevMon - 6
       };
       let maxDay= this.daysInMonth(month,year);
       this.maxDate = {
@@ -143,7 +139,6 @@ export class LeaveApplicationComponent implements OnInit {
       };
       this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
       this.endDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
-      this.leaveApplicationForm.get('duration').setValue(`${this.startDate} - ${this.endDate}`);
     }
     this.showDateInput = true;
   }
@@ -168,12 +163,22 @@ export class LeaveApplicationComponent implements OnInit {
       this.endDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
     }
     this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
-    this.leaveApplicationForm.get('duration').setValue(`${this.startDate} - ${this.endDate}`);
-    let total = this.daysDiff(this.fromDate,this.toDate);
+    let numDays = this.daysDiff(this.fromDate,this.toDate);
+    let total = 0;
+    for (let i=0;i<numDays;i++){
+      let isWeekend = this.isWeekends({
+        day: this.fromDate.day + i,
+        month: this.fromDate.month,
+        year: this.fromDate.year
+      });
+      if (!isWeekend){
+        total++;
+      }
+    }
     if (total > this.remainingLeaves)
-      this.leaveApplicationForm.controls['duration'].setErrors({'exceeded':true});
+      this.isExceeded = true;
     else 
-      this.leaveApplicationForm.controls['duration'].setErrors(null);
+      this.isExceeded = false;
   }
 
   daysDiff(startDay,endDay){
