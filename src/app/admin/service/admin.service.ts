@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { Employee } from 'src/app/model/Employee.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +12,12 @@ export class AdminService {
   private _userToEdit: BehaviorSubject<Employee>;
 
   constructor(
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private _snackBar: MatSnackBar
   ) {
     this._userToEdit = new BehaviorSubject(new Employee());
     this._userToEdit.next(new Employee());
   }
-
 
   set userToEdit(user) {
     this._userToEdit.next(user);
@@ -47,10 +48,24 @@ export class AdminService {
   }
 
   public createHoliday(holidayDates){
-    return this.httpClient.post(`${this.REST_API_SERVER}/holiday/saveHoliday`,holidayDates);
+    this.httpClient.post(`${this.REST_API_SERVER}/holiday/saveHoliday`,holidayDates).subscribe(
+      data =>{
+        let holidayArray:any = data;
+        holidayArray.forEach(element => {
+          if (element !== null)
+            this.displayMessage('Holiday Created Successfully','success');
+        });
+      });
   }
 
   public viewHolidays(){
     return this.httpClient.get(`${this.REST_API_SERVER}/holiday/viewAllHoliday`);
+  }
+
+  public displayMessage(message:string,status:string){
+    this._snackBar.open(message,'Close',{
+      duration: 5000,
+      panelClass: `notif-${status}`
+    });
   }
 }

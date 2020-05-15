@@ -29,7 +29,11 @@ export class MaintenanceService {
   }
 
   public editHoliday(editedHoliday){
-    return this.httpClient.patch(`${this.REST_API_SERVER}/holiday/updateHoliday`,editedHoliday);
+    this.httpClient.patch(`${this.REST_API_SERVER}/holiday/updateHoliday`,editedHoliday)
+    .subscribe( result =>{
+      if (result !== null)
+        this.displayMessage(`Holiday \'${result['holiday_name']}\'Edited Successfully`,'success');
+    });;
   }
 
   public deleteHoliday(holidayId){
