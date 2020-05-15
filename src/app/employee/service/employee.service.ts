@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Employee } from 'src/app/model/Employee.model';
 import { BehaviorSubject } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class EmployeeService {
     return this.currUserSubj.asObservable();
   }
   constructor(
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private _snackBar: MatSnackBar
   ) {
     this.currUserSubj = new BehaviorSubject(this.currUserObj);
     this.currUserSubj.next(this.currUserObj);
@@ -109,8 +111,8 @@ export class EmployeeService {
     return this.httpClient.post(`${this.REST_API_SERVER}/leave/applyLeave`,leaveDuration);
   }
 
-  public sendLeaveRequestEmail(leaveDuration){
-    return this.httpClient.post(`${this.REST_API_SERVER}/leave/sendEmail`,leaveDuration);
+  public sendLeaveRequestEmail(leaveDetail){
+    return this.httpClient.post(`${this.REST_API_SERVER}/leave/sendEmail`,leaveDetail);
   }
 
   public getMinDate(domainId){
@@ -127,5 +129,12 @@ export class EmployeeService {
 
   public getExisitingLeavesDates(domainId){
     return this.httpClient.get(`${this.REST_API_SERVER}/leave/getApprovedOrPendingLeaveDates/${domainId}`);
+  }
+
+  public displayMessage(message:string,status:string){
+    this._snackBar.open(message,'Close',{
+      duration: 5000,
+      panelClass: `notif-${status}`
+    });
   }
 }

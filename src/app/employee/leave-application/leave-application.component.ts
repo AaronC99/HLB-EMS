@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
 import { EmployeeService } from '../service/employee.service';
 import { LeaveApproval } from 'src/app/model/LeaveApproval.model';
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { Employee } from 'src/app/model/Employee.model';
+import { AdminService } from 'src/app/admin/service/admin.service';
 
 @Component({
   selector: 'app-leave-application',
@@ -31,7 +31,6 @@ export class LeaveApplicationComponent implements OnInit {
   maxDate:any;
   date = new Date();
   localTime = new DatePipe('en-US');
-  currentDay = this.localTime.transform(this.date,'d');
   currentMonth = this.localTime.transform(this.date,'M');
   currentYear = this.localTime.transform(this.date,'yyyy');
   showCalendar:boolean = false;
@@ -39,16 +38,18 @@ export class LeaveApplicationComponent implements OnInit {
   currentUser:AuthModel;
   currentUserSupervisor:Employee;
   remainingLeaves:number;
-  disabledDates:any = [];
+  existingLeaves:any = [];
+  holidays:any = [];
   isDisabled:any;
   isExceeded: boolean;
+  getDate = string => (([day,month]) => ({day,month}))(string.split('-'));
 
   constructor(
     private calendar: NgbCalendar,
     private formBuilder:FormBuilder,
     public formatter: NgbDateParserFormatter,
     private employeeService: EmployeeService,
-    private _snackBar: MatSnackBar
+    private adminService: AdminService
     ) { 
       this.fromDate = this.calendar.getToday();
       this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 0);
@@ -59,13 +60,11 @@ export class LeaveApplicationComponent implements OnInit {
         .subscribe(data=>{
           this.currentUserSupervisor = data['department']['department_head'];
         });
-      this.disableDays();
-      this.isDisabled = (date:NgbDateStruct,current: {month:number,year:number}) =>{
-        return this.disabledDates.find(x=>NgbDate.from(x).equals(date))?true:false;
-      }
   }
 
   ngOnInit(): void {
+    this.getPendingLeaves();
+    this.getHolidays();
     this.createForm();
   }
 
@@ -80,23 +79,58 @@ export class LeaveApplicationComponent implements OnInit {
     return d.getDay() === 0 || d.getDay() === 6;
   }
 
-  disableDays(){
-      this.employeeService.getExisitingLeavesDates(this.currentUser.username)
-      .subscribe( data => {
-        let exisitngDates:any = data;
-        let getDate = string => (([day,month]) => ({day,month}))(string.split('-'));
-        exisitngDates.forEach(element => {
-          let day = parseInt(getDate(element.date).day);
-          let month = parseInt(getDate(element.date).month);
-          let year = parseInt(element.year);
-          let disabledDate = {
-            year: year,
-            month:month,
-            day:day
-          }
-          this.disabledDates.push(disabledDate);
-        });
-      });
+  public disableDates(dates){
+    this.isDisabled = (date:NgbDateStruct,current: {month:number,year:number}) =>{
+      return dates.find(x=>NgbDate.from(x).equals(date))?true:false;
+    }
+  }
+
+  public getPendingLeaves(){
+    this.employeeService.getExisitingLeavesDates(this.currentUser.username)
+    .subscribe( data => {
+      let existingDates:any = data;
+      existingDates = this.converttedDateStruct(existingDates);
+      this.mergeInvalidDates(existingDates,'leave');
+    });
+  }
+
+  public getHolidays(){
+    this.adminService.viewHolidays()
+    .subscribe(data=> {
+      let existingHolidays:any = data;
+      existingHolidays = this.converttedDateStruct(existingHolidays);
+      this.mergeInvalidDates(existingHolidays,'holiday');
+    });
+  }
+
+  public mergeInvalidDates(dates,type){
+    if (type === 'leave')
+      this.existingLeaves = dates;
+    else if (type === 'holiday')
+      this.holidays = dates;
+
+    if(this.existingLeaves.length !== 0 && this.holidays.length !==0){
+      let allInvalidDates = [].concat(this.existingLeaves,this.holidays);
+      this.disableDates(allInvalidDates);
+    }
+  }
+
+  public converttedDateStruct(dates){
+    let getDate = string => (([day,month]) => ({day,month}))(string.split('-'));
+    let datesArray = dates;
+    let converttedArray = [];
+    datesArray.forEach(element => {
+      let day = parseInt(getDate(element.date).day);
+        let month = parseInt(getDate(element.date).month);
+        let year = parseInt(element.year);
+        let fullDate = {
+          year: year,
+          month:month,
+          day:day
+        }
+        converttedArray.push(fullDate);
+    });
+    return converttedArray;
   }
 
   setMinMaxDate(leaveType){
@@ -166,12 +200,14 @@ export class LeaveApplicationComponent implements OnInit {
     let numDays = this.daysDiff(this.fromDate,this.toDate);
     let total = 0;
     for (let i=0;i<numDays;i++){
-      let isWeekend = this.isWeekends({
+      let fullDate = {
         day: this.fromDate.day + i,
         month: this.fromDate.month,
         year: this.fromDate.year
-      });
-      if (!isWeekend){
+      };
+      let isWeekends = this.isWeekends(fullDate);
+      let isHoliday = this.isDisabled(fullDate);
+      if (!isWeekends && !isHoliday){
         total++;
       }
     }
@@ -221,12 +257,14 @@ export class LeaveApplicationComponent implements OnInit {
         date: date,
         year: year
       };
-      let isWeekend = this.isWeekends({
+      let _dateObj = {
         year: parseInt(year),
         month: parseInt(i.format("MM")),
         day: parseInt(i.format("DD"))
-      });
-      if (isWeekend !== true)
+      }
+      let isWeekend = this.isWeekends(_dateObj);
+      let isHoliday = this.isDisabled(_dateObj);
+      if (!isWeekend && !isHoliday)
         this.leaveDuration.push(this.leave);
       else 
         continue;
@@ -235,14 +273,12 @@ export class LeaveApplicationComponent implements OnInit {
       .subscribe(data => {
         let info:any = data;
         let dateSubmitted = data[0]['date_submitted'];
-        if (info.lenth !== 0) {
-          this.displayMessage('Leave Applied Successful');
+        if (info.length !== 0) {
+          this.employeeService.displayMessage('Leave Applied Successful','success');
           this.sendEmail(dateSubmitted);
         }
-        else 
-          this.displayMessage('Selected Dates Have Existing');
     },err => {
-      this.displayMessage('Leave Applied Unsuccessful. Please try again.')
+      this.employeeService.displayMessage('Leave Applied Unsuccessful. Please try again.','failure')
     });
     this.leaveApplicationForm.reset();
   }
@@ -258,15 +294,9 @@ export class LeaveApplicationComponent implements OnInit {
     this.employeeService.sendLeaveRequestEmail(leaveRequestDetails)
       .subscribe(data => {
         if (data !== null)
-          this.displayMessage('Leave Request Email Successful Sent')
+          this.employeeService.displayMessage('Leave Request Email Successful Sent','success');
       },err =>{
-        this.displayMessage('Unable to Send Email. Please try again.')
+        this.employeeService.displayMessage('Unable to Send Email. Please try again.','failure');
       });
-  }
-  
-  public displayMessage(message:string){
-    this._snackBar.open(message,'Close',{
-      duration: 3000
-    });
   }
 }
