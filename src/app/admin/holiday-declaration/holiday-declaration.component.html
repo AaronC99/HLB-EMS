@@ -56,7 +56,7 @@
                                 Please Select a Holiday Type
                             </mat-error>
                         </mat-form-field>
-                        <button mat-raised-button color="primary" type="submit" [disabled]="newRecord || createHolidayForm.invalid || isDuplicate">
+                        <button mat-raised-button color="primary" type="submit" [disabled]="createHolidayForm.invalid || isDuplicate">
                             {{ getButtonType() }}
                         </button>
                     </form>

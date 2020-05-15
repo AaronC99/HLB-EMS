@@ -30,7 +30,6 @@ export class HolidayDeclarationComponent implements OnInit,AfterViewInit {
   isDuplicate:boolean;
   newRecord:boolean = true;
   holidayId:string;
-  returnUrl: '/home/all-holidays';
 
   constructor(
     private calendar: NgbCalendar,
@@ -177,14 +176,16 @@ export class HolidayDeclarationComponent implements OnInit,AfterViewInit {
           });
         }
       );
-      this.router.navigateByUrl(this.returnUrl);
     } else {
       this.setHoliday(this.fromDate,this.toDate,this.holidayId);
       // Update edited holiday
-      console.log(this.holiday);
-      //this.maintainService.editHoliday(this.holiday).subscribe();
+      this.maintainService.editHoliday(this.holiday).subscribe( result =>{
+        if (result !== null)
+          this.displayMessage(`Holiday \'${this.holiday.holiday_name}\'Edited Successfully`,'success');
+      });
     }
     this.createHolidayForm.reset();
+    this.router.navigateByUrl('/home/all-holiday');
   }
 
   public setHoliday(fromDate,toDate,id){
@@ -204,6 +205,9 @@ export class HolidayDeclarationComponent implements OnInit,AfterViewInit {
         year: year
       }
       this.holidayDuration.push(this.holiday);
+      // Save only the first date
+      if(id !== null)
+        break;
     }
   }
 
@@ -243,7 +247,7 @@ export class HolidayDeclarationComponent implements OnInit,AfterViewInit {
           holidayType: this.holiday.holiday_type
         });
       } else
-        this.router.navigateByUrl(this.returnUrl);
+        this.router.navigateByUrl('/home/all-holiday');
     })
   }
 
