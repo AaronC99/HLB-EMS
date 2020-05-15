@@ -247,7 +247,7 @@ export class HolidayDeclarationComponent implements OnInit,AfterViewInit {
           holidayType: this.holiday.holiday_type
         });
       } else
-        this.router.navigateByUrl('/home/all-holiday');
+        this.router.navigateByUrl('/home/holiday-declaration');
     })
   }
 
