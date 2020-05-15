@@ -1,10 +1,10 @@
 .row{
     margin: 50px;
 }
-mat-card ,h2{
+mat-card ,h2,button{
     border-radius: 20px;
 }
-mat-card-title,h1{
+mat-card-title,h1,button{
     font-family: 'Ubuntu',sans-serif;
 }
 mat-card-title,mat-card-content{
@@ -31,6 +31,17 @@ h2
 }
 button{
     width: 100%;
-    border-radius: 20px;
     margin-top: 10px;
+    font-size: larger;
+    padding: 5px 0px;
+}
+.edit-btn:hover{
+    color:#3f51b5;
+    background-color: white;
+    border: 2px solid #3f51b5;
+}
+.del-btn:hover{
+    color:#f44336;
+    background-color: white;
+    border: 2px solid #f44336;
 }

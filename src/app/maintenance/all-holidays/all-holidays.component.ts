@@ -22,8 +22,9 @@ export class AllHolidaysComponent implements OnInit {
   holidayDetails:any = [];
   minDate:any;
   holidayObj:Holiday;
-  showDetails:boolean = false;
+  showDetails = null;
   editable:boolean;
+  selectedDate:string;
   
   constructor(
     private adminService: AdminService,
@@ -65,7 +66,7 @@ export class AllHolidaysComponent implements OnInit {
       });
   }
 
-  public myClass(date:NgbDateStruct){
+  public existingDates(date:NgbDateStruct){
     this.isSelected = this.existingHolidays
       .find( d=>d.year==date.year && d.month==date.month && d.day==date.day)
       return this.isSelected ? 'classSelected' : 'classNormal';
@@ -81,29 +82,31 @@ export class AllHolidaysComponent implements OnInit {
     let day = this.transformDayMonth(date.day);
     let month = this.transformDayMonth(date.month);
     let day_month = `${day}-${month}`;
-    let selectedDate = `${year}-${month}-${day}`;
+    this.selectedDate = `${year}-${month}-${day}`;
     let startingDate = `${this.minDate.year}-${this.transformDayMonth(this.minDate.month)}-${this.transformDayMonth(this.minDate.day)}`;
 
     // Disable edit button if selected holiday is before minimum date
-    if(moment(selectedDate).isAfter(startingDate))
+    if(moment(this.selectedDate).isSameOrAfter(startingDate))
       this.editable = true;
     else
       this.editable = false;
 
     // Display Holiday Info 
-    this.showDetails = false;
-    this.holidayDetails.forEach(element =>{
-      if(element.date === day_month && element.year === year){
+    for(let i=0;i<this.holidayDetails.length;i++){
+      if(this.holidayDetails[i].date === day_month && this.holidayDetails[i].year === year){
         this.holidayObj = {
-          _id: element._id,
-          holiday_name:element.holiday_name,
-          holiday_type:element.holiday_type,
-          date:element.date,
-          year: element.year
+          _id: this.holidayDetails[i]._id,
+          holiday_name:this.holidayDetails[i].holiday_name,
+          holiday_type:this.holidayDetails[i].holiday_type,
+          date:this.holidayDetails[i].date,
+          year: this.holidayDetails[i].year
         };
         this.showDetails = true;
-      }
-    });
+        break;
+       }else{
+         this.showDetails = false;
+       }
+    }
   }
 
   public editHoliday(){
@@ -111,4 +114,15 @@ export class AllHolidaysComponent implements OnInit {
     this.router.navigateByUrl(`/home/edit-holiday/${this.holidayObj._id}`);
   }
 
+  public deleteHoliday(){
+    let message = `${this.holidayObj.holiday_name} on  ${this.holidayObj.date}-${this.holidayObj.year} is Deleted Successfully`;
+    this.maintainService.deleteHoliday(this.holidayObj._id).subscribe(res => {
+      console.log(res);
+      if (res !== null){
+        this.maintainService.displayMessage(message,'success');
+        this.showDetails = null;
+        this.getAllHolidays();
+      }
+    });
+  }
 }

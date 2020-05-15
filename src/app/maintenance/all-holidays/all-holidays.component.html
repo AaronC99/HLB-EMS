@@ -6,6 +6,9 @@
             </mat-card-title>
             <mat-card-content>
                 <div class="row justify-content-center">
+                    <div class="col-3">
+                        <h2>Select Date To View Details</h2>
+                    </div>
                     <div class="col-12">
                         <div class="d-flex align-content-stretch flex-wrap">
                             <ngb-datepicker #dp
@@ -18,7 +21,7 @@
                                 let-date  
                                 let-focused="focused">
                                 <span class="custom-day"
-                                    [ngClass]="myClass(date)"
+                                    [ngClass]="existingDates(date)"
                                     [class.focused]="focused"
                                     (click)="onDateSelect(date)">
                                     {{ date.day }}
@@ -50,16 +53,21 @@
                             </div>
                             <div class="w-100"></div>
                             <div class="col col-lg-3">
-                                <button mat-raised-button color="primary" [disabled]="!editable" (click)="editHoliday()">
+                                <button mat-raised-button class="edit-btn" color="primary" [disabled]="!editable" (click)="editHoliday()">
                                     Edit
                                 </button>
                             </div>
                             <div class="w-100"></div>
                             <div class="col col-lg-3">
-                                <button mat-raised-button color="warn" [disabled]="!editable">Deactivate</button>
+                                <button mat-raised-button class="del-btn" color="warn" [disabled]="!editable" (click)="deleteHoliday()">
+                                    Deactivate
+                                </button>
                             </div>
                         </div>
                     </div>
+                    <div class="col-12" *ngIf="showDetails !== null && showDetails === false">
+                        <h1>{{ selectedDate }} Has No Holiday</h1>
+                    </div> 
                 </div>
 
             </mat-card-content>

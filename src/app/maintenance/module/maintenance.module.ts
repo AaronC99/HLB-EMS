@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MaintenanceService } from '../service/maintenance.service';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { MaintenanceService } from '../service/maintenance.service';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    NgbModule
+    NgbModule,
+    MatSnackBarModule
   ]
 })
 export class MaintenanceModule { 
