@@ -80,13 +80,15 @@ export class EmployeeService {
   }
 
   public sendEmail(domainId:string,period:string,year:string,status:string){
-    return this.httpClient.post(`${this.REST_API_SERVER}/timesheet/sendEmail`
-    ,{
-      "domain_id":domainId,
-      "period":period,
-      "year":year,
-      "type":status
-    });
+    this.httpClient.post(`${this.REST_API_SERVER}/timesheet/sendEmail`
+    ,{"domain_id":domainId,"period":period,"year":year,"type":status})
+    .subscribe(status => {
+      if(status !== null)
+        this.displayMessage('Request successfully sent to Department Head','success');  
+    },
+    err =>{
+      this.displayMessage('Error sending request. Please try again','failure');
+    });;
   }
 
   public updateTimesheetStatus(domainId:string,period:string,year:string,status:string){ 
@@ -97,7 +99,7 @@ export class EmployeeService {
   }
 
   public allowTimesheetEdit(recordsForEdit){
-    return this.httpClient.patch(`${this.REST_API_SERVER}/timesheet/setEditableTimesheet` ,recordsForEdit);
+    this.httpClient.patch(`${this.REST_API_SERVER}/timesheet/setEditableTimesheet` ,recordsForEdit).subscribe();
   }
 
   public editTimesheet(editedArray){

@@ -144,6 +144,28 @@
                         <ng-template #showText>{{ element.remarks }}</ng-template>
                         </td>
                       </ng-container>
+
+                      <ng-container matColumnDef="leave">
+                        <th mat-header-cell *matHeaderCellDef>Leave</th>
+                        <td mat-cell *matCellDef="let element"
+                        [ngStyle]="{'background-color': element.remarks === 'Weekend' ? '#DBDBDB' :
+                          element.edit_status === 'Edited' ? '#A5FECB' : ''}"> 
+                          <mat-form-field *ngIf="displayLeaveSelection(element) else showText">
+                            <mat-select placeholder="Select Leave Type">
+                              <mat-option value="" selected>
+                                -None-
+                              </mat-option>
+                              <mat-option *ngFor="let leave of leaveTypes" [value]="leave.value" 
+                                (click)="setLeaveType(leave.value,element)">
+                                {{ leave.value }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          <ng-template #showText>
+                            {{ element.leave }}
+                          </ng-template>
+                        </td>
+                      </ng-container>
     
                       <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true;"></tr>
                       <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>

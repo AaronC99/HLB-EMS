@@ -1,4 +1,4 @@
 export class AuthModel {
-    public username: String;
-    public role: String;
+    public username: string;
+    public role: string;
 }

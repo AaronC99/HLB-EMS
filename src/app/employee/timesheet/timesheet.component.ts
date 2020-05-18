@@ -78,31 +78,21 @@ export class TimesheetComponent implements OnInit{
       this.TIMESHEET_DATA = data;
       this.dataSource = this.TIMESHEET_DATA;
     });
-    if(currentMonth.approval_status === 'Approved' || this.currentUser.role === 'Manager')
+    if(currentMonth.approval_status === 'Approved' || this.currentUser.role === 'Manager'){
       this.canDownload = true;
-    else 
+      this.needRequest = false;
+    }
+    else {
       this.needRequest = true;
+      this.canDownload = false;
+    }
   }
 
   requestApproval(){
     let period =  this.userInput.selectedDate.value.period_number - 1;
     let year = this.userInput.selectedDate.value.year;
     let statusType = 'Approval';
-    this.employeeService.sendEmail(this.currUserDomainId,period.toString(),year,statusType)
-      .subscribe(status => {
-        if(status !== null)
-          this.displayMessage('Request successfully sent to Department Head');  
-      },
-      err =>{
-        if (err !== null)
-          this.displayMessage('Error sending request. Please try again');
-      });
-  }
-
-  displayMessage(message:string){
-    this._snackBar.open(message,'Close',{
-      duration: 3000
-    });
+    this.employeeService.sendEmail(this.currUserDomainId,period.toString(),year,statusType);
   }
 
   downloadTimesheet(){ 
