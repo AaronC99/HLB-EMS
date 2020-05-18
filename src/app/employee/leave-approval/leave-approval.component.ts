@@ -92,14 +92,14 @@ export class LeaveApprovalComponent implements OnInit {
     this.status = 'Approved';
     this.setLeaveApprovalDetails(this.status);
     this.employeeService.updateLeaveStatus(this.leaveApprovalArray,this.employee.name,this.status);
-    this.getLeaveDetails();
+    this.canExit = true;
   }
 
   public rejectLeave(){
     this.status = 'Rejected';
     this.setLeaveApprovalDetails(this.status);
     this.employeeService.updateLeaveStatus(this.leaveApprovalArray,this.employee.name,this.status);
-    this.getLeaveDetails();
+    this.canExit = true;
   }
 
   public exit(){
