@@ -13,7 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class LeaveApprovalComponent implements OnInit {
   validUser:boolean;
-  currentUser:string;
+  currentUserId:string;
   employee:any;
   dateSubmitted:string;
   returnUrl = '';
@@ -32,11 +32,14 @@ export class LeaveApprovalComponent implements OnInit {
     private authService: AuthenticationService,
     private _snackBar: MatSnackBar
     ) { 
-      this.currentUser = this.route.snapshot.paramMap.get('domainId');
+      this.currentUserId = this.route.snapshot.paramMap.get('domainId');
       this.dateSubmitted = this.route.snapshot.paramMap.get('date_submitted');
-      this.authService.userAuthDetails.subscribe(data=>{
-        this.manager = data;
-      })
+      this.manager = JSON.parse(localStorage.getItem('currentUser'));
+      let url = this.router.url;
+      if(localStorage.getItem('currentUser') === null){
+        this.router.navigateByUrl(this.returnUrl);
+        localStorage.setItem('temproraryUrl',JSON.stringify(url));
+      }
     }
 
   ngOnInit(): void {
@@ -44,7 +47,7 @@ export class LeaveApprovalComponent implements OnInit {
   }
 
   public getCurrentUserInfo(){
-    this.employeeService.getProfile(this.currentUser).subscribe(data =>{
+    this.employeeService.getProfile(this.currentUserId).subscribe(data =>{
       this.employee = data;
       if (this.manager.username === this.employee.department.department_head.domain_id){
         this.validUser = true;
@@ -57,7 +60,7 @@ export class LeaveApprovalComponent implements OnInit {
   }
 
   public getLeaveDetails(){
-    this.employeeService.viewLeaveDetails(this.currentUser,this.dateSubmitted)
+    this.employeeService.viewLeaveDetails(this.currentUserId,this.dateSubmitted)
     .subscribe(data =>{
       this.leaveDetails = data;
       if(this.leaveDetails.length === 0){
@@ -90,60 +93,21 @@ export class LeaveApprovalComponent implements OnInit {
   }
 
   public approveLeave(){
-    this.leaveApprovalArray.splice(0,this.leaveApprovalArray.length);
-    this.status = 'Approved'
+    this.status = 'Approved';
     this.setLeaveApprovalDetails(this.status);
-    this.employeeService.updateLeaveStatus(this.leaveApprovalArray)
-      .subscribe(data => {
-        let record:any = data;
-        if(record.length !== 0){
-          this.displayMessage('Leave Request Approved Successful');
-          this.sendEmail('Approve');
-        }   
-      },err => {
-        this.displayMessage('Approved Failed. Please Try Again.');
-      });
+    this.employeeService.updateLeaveStatus(this.leaveApprovalArray,this.employee.name,this.status);
+    this.getLeaveDetails();
   }
 
   public rejectLeave(){
-    this.leaveApprovalArray.splice(0,this.leaveApprovalArray.length);
     this.status = 'Rejected';
     this.setLeaveApprovalDetails(this.status);
-    console.log(this.leaveApprovalArray);
-    this.employeeService.updateLeaveStatus(this.leaveApprovalArray)
-      .subscribe(data => {
-        console.log(data);
-        let record:any = data;
-        if(record.length !== 0){
-          this.displayMessage('Leave Request Rejected Successful');
-          this.sendEmail('Reject');
-        }
-      },err => {
-        this.displayMessage('Reject Failed. Please Try Again.');
-      });
+    this.employeeService.updateLeaveStatus(this.leaveApprovalArray,this.employee.name,this.status);
+    this.getLeaveDetails();
   }
 
-  public sendEmail(statusType){
-    let leaveRequestDetails = {
-      domain_id: this.currentUser,
-      type: statusType,
-      date: this.leaveApprovalDetails.date,
-      year: this.leaveApprovalDetails.year, 
-      date_submitted: this.dateSubmitted
-    };
-    this.employeeService.sendLeaveRequestEmail(leaveRequestDetails).subscribe(data => {
-      if(data !== null){
-        this.displayMessage(`Email Successfully Sent to ${this.employee.name}`);
-        this.canExit = true;
-      }
-    });
-  }
-  public displayMessage(message:string){
-    this._snackBar.open(message,'Close',{
-      duration: 3000
-    });
-  }
   public exit(){
+    localStorage.removeItem('temproraryUrl');
     this.router.navigateByUrl(this.returnUrl);
   }
 }

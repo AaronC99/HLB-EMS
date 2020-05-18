@@ -70,6 +70,7 @@ export class EmployeeService {
     return this.httpClient.get(`${this.REST_API_SERVER}/clock/checkClockInStatus/${domainId}`);
   }
 
+  //Timesheet Services 
   public getTimesheet(domainId:string,month:string,year:string){
     return this.httpClient.get(`${this.REST_API_SERVER}/timesheet/viewTimesheet/${domainId}/${month}/${year}`);
   }
@@ -88,7 +89,6 @@ export class EmployeeService {
     });
   }
 
-  //Pass back Approved/Rejected status
   public updateTimesheetStatus(domainId:string,period:string,year:string,status:string){ 
     return this.httpClient.patch(`${this.REST_API_SERVER}/timesheet/updateTimesheetStatus/${domainId}/${period}/${year}`
     ,{
@@ -103,16 +103,46 @@ export class EmployeeService {
   public editTimesheet(editedArray){
     return this.httpClient.patch(`${this.REST_API_SERVER}/timesheet/editTimesheet`,editedArray);
   }
+
+  // Leave Services
   public checkAvailableLeaves(domainID,year,leaveType){
     return this.httpClient.get(`${this.REST_API_SERVER}/leave/checkAvailableLeaves/${domainID}/${year}/${leaveType}`)
   }
 
-  public applyLeave(leaveDuration){
-    return this.httpClient.post(`${this.REST_API_SERVER}/leave/applyLeave`,leaveDuration);
+  public applyLeave(leaveDuration,supervisor){
+    this.httpClient.post(`${this.REST_API_SERVER}/leave/applyLeave`,leaveDuration)
+      .subscribe(res=> {
+        let appliedLeaves:any = res;
+        if (appliedLeaves.length !== 0){
+          this.displayMessage('Leave Applied Successful','success');
+          let leaveRequestDetail = {
+            domain_id: appliedLeaves[0]['employee_id'],
+            type: 'Approval',
+            date: appliedLeaves[0]['date'],
+            year: appliedLeaves[0]['year'], 
+            date_submitted: appliedLeaves[0]['date_submitted']
+          };
+          this.sendLeaveRequestEmail(leaveRequestDetail,supervisor,leaveRequestDetail.type);
+        } else
+          this.displayMessage('Leave Applied Unsuccessful','failure');
+    },err => {
+      this.displayMessage('Leave Applied Unsuccessful. Please try again.','failure')
+    });
   }
 
-  public sendLeaveRequestEmail(leaveDetail){
-    return this.httpClient.post(`${this.REST_API_SERVER}/leave/sendEmail`,leaveDetail);
+  public sendLeaveRequestEmail(leaveDetail,receiver,statusType){
+    this.httpClient.post(`${this.REST_API_SERVER}/leave/sendEmail`,leaveDetail)
+    .subscribe(data => {
+      if (data !== null){
+        if (statusType === 'Approval')
+          this.displayMessage(`Leave Request Email Successfully Sent to ${receiver} for ${statusType}`,'success');
+        else
+          this.displayMessage(`${statusType} Leave Email Successfully Sent to ${receiver}`,'success');
+      }else 
+        this.displayMessage('Email Sent Unsuccessful','failure');
+    },err =>{
+      this.displayMessage('Unable to Send Email. Please try again.','failure');
+    });
   }
 
   public getMinDate(domainId){
@@ -123,8 +153,30 @@ export class EmployeeService {
     return this.httpClient.get(`${this.REST_API_SERVER}/leave/viewLeave/${domainId}/${dateSubmitted}`);
   }
 
-  public updateLeaveStatus(leaveApprovalDetails){
-    return this.httpClient.patch(`${this.REST_API_SERVER}/leave/updateLeaveStatus`,leaveApprovalDetails);
+  public updateLeaveStatus(leaveApprovalDetails,employeeName,status){
+    this.httpClient.patch(`${this.REST_API_SERVER}/leave/updateLeaveStatus`,leaveApprovalDetails)
+    .subscribe(data => {
+      let details:any = data;
+      let actionStatus = '';
+      if(details.length !== 0){
+        this.displayMessage(`Leave Request ${status} Successful`,'success');
+        if (status === 'Approved'){
+          actionStatus = 'Approve';
+        } else if(status === 'Rejected') {
+          actionStatus = 'Reject';
+        }
+        let leaveDetails = {
+          domain_id: details[0].employee_id,
+          type: actionStatus,
+          date: details[0].date,
+          year: details[0].year, 
+          date_submitted: details[0].date_submitted
+        };
+        this.sendLeaveRequestEmail(leaveDetails,employeeName,status);
+      }   
+    },err => {
+      this.displayMessage(`${status} Failed. Please Try Again.`,'failure');
+    });
   }
 
   public getExisitingLeavesDates(domainId){

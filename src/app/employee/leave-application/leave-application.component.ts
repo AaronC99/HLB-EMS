@@ -33,16 +33,14 @@ export class LeaveApplicationComponent implements OnInit {
   localTime = new DatePipe('en-US');
   currentMonth = this.localTime.transform(this.date,'M');
   currentYear = this.localTime.transform(this.date,'yyyy');
-  showCalendar:boolean = false;
-  showDateInput:boolean = false;
   currentUser:AuthModel;
   currentUserSupervisor:Employee;
+  currentUserName: string;
   remainingLeaves:number;
   existingLeaves:any = [];
   holidays:any = [];
   isDisabled:any;
   isExceeded: boolean;
-  getDate = string => (([day,month]) => ({day,month}))(string.split('-'));
 
   constructor(
     private calendar: NgbCalendar,
@@ -58,6 +56,8 @@ export class LeaveApplicationComponent implements OnInit {
       this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
       this.employeeService.getProfile(this.currentUser.username)
         .subscribe(data=>{
+          this.currentUserName = data['name'];
+          console.log(this.currentUserName);
           this.currentUserSupervisor = data['department']['department_head'];
         });
   }
@@ -136,6 +136,8 @@ export class LeaveApplicationComponent implements OnInit {
   setMinMaxDate(leaveType){
     let month = parseInt(this.currentMonth);
     let year = parseInt(this.currentYear);
+
+    // Get Number of Remaining Leaves
     this.employeeService.checkAvailableLeaves(this.currentUser.username,this.currentYear,leaveType.value)
       .subscribe (data => {
         this.remainingLeaves = data['remaining_leaves'];
@@ -165,16 +167,15 @@ export class LeaveApplicationComponent implements OnInit {
         month: month - 1,
         day: daysOfPrevMon - 6
       };
-      let maxDay= this.daysInMonth(month,year);
+      let maxDays = this.daysInMonth(month,year);
       this.maxDate = {
         year: year,
         month: month,
-        day: maxDay
+        day: maxDays
       };
       this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
       this.endDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
     }
-    this.showDateInput = true;
   }
 
   public daysInMonth(month,year){
@@ -263,40 +264,13 @@ export class LeaveApplicationComponent implements OnInit {
         day: parseInt(i.format("DD"))
       }
       let isWeekend = this.isWeekends(_dateObj);
-      let isHoliday = this.isDisabled(_dateObj);
-      if (!isWeekend && !isHoliday)
+      let isInvalidDates = this.isDisabled(_dateObj);
+      if (!isWeekend && !isInvalidDates)
         this.leaveDuration.push(this.leave);
       else 
         continue;
     }
-    this.employeeService.applyLeave(this.leaveDuration)
-      .subscribe(data => {
-        let info:any = data;
-        let dateSubmitted = data[0]['date_submitted'];
-        if (info.length !== 0) {
-          this.employeeService.displayMessage('Leave Applied Successful','success');
-          this.sendEmail(dateSubmitted);
-        }
-    },err => {
-      this.employeeService.displayMessage('Leave Applied Unsuccessful. Please try again.','failure')
-    });
+    this.employeeService.applyLeave(this.leaveDuration,this.currentUserSupervisor.name);
     this.leaveApplicationForm.reset();
-  }
-
-  public sendEmail(dateSubmitted){
-    let leaveRequestDetails = {
-      domain_id: this.currentUser.username,
-      type: 'Approval',
-      date: `${this.formatNumber(this.fromDate.day)}-${this.formatNumber(this.fromDate.month)}`,
-      year: this.fromDate.year.toString(), 
-      date_submitted: dateSubmitted
-    };
-    this.employeeService.sendLeaveRequestEmail(leaveRequestDetails)
-      .subscribe(data => {
-        if (data !== null)
-          this.employeeService.displayMessage('Leave Request Email Successful Sent','success');
-      },err =>{
-        this.employeeService.displayMessage('Unable to Send Email. Please try again.','failure');
-      });
   }
 }
