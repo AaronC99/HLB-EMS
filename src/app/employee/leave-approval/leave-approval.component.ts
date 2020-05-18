@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EmployeeService } from '../service/employee.service';
 import * as moment from 'moment';
-import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { AuthModel } from 'src/app/model/Authentication.model';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-leave-approval',
@@ -28,9 +26,7 @@ export class LeaveApprovalComponent implements OnInit {
   constructor(
     private router:Router,
     private route:ActivatedRoute,
-    private employeeService: EmployeeService,
-    private authService: AuthenticationService,
-    private _snackBar: MatSnackBar
+    private employeeService: EmployeeService
     ) { 
       this.currentUserId = this.route.snapshot.paramMap.get('domainId');
       this.dateSubmitted = this.route.snapshot.paramMap.get('date_submitted');
