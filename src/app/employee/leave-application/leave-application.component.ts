@@ -57,7 +57,6 @@ export class LeaveApplicationComponent implements OnInit {
       this.employeeService.getProfile(this.currentUser.username)
         .subscribe(data=>{
           this.currentUserName = data['name'];
-          console.log(this.currentUserName);
           this.currentUserSupervisor = data['department']['department_head'];
         });
   }
@@ -109,7 +108,7 @@ export class LeaveApplicationComponent implements OnInit {
     else if (type === 'holiday')
       this.holidays = dates;
 
-    if(this.existingLeaves.length !== 0 && this.holidays.length !==0){
+    if(this.existingLeaves.length !== 0 || this.holidays.length !==0){
       let allInvalidDates = [].concat(this.existingLeaves,this.holidays);
       this.disableDates(allInvalidDates);
     }
