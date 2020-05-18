@@ -31,7 +31,11 @@
                 Date In
               </th>
               <td mat-cell *matCellDef="let element" 
-                [ngStyle]="{'background-color': element.date_in === dateIn ? '#00fdcb' : '' }"> 
+                [ngClass]="{
+                  'weekend': getDayName(element.date_in,element.year) === 'Saturday' || 
+                    getDayName(element.date_in,element.year) ==='Sunday',
+                  'today': element.date_in === dateIn 
+                }"> 
                   {{ element.date_in }} 
               </td>
             </ng-container>
@@ -41,7 +45,11 @@
                 Day
               </th>
               <td mat-cell *matCellDef="let element" 
-                [ngStyle]="{'background-color': element.date_in === dateIn ? '#00fdcb' : '' }"> 
+              [ngClass]="{
+                'weekend': getDayName(element.date_in,element.year) === 'Saturday' || 
+                  getDayName(element.date_in,element.year) ==='Sunday',
+                'today': element.date_in === dateIn 
+              }"> 
                   {{ getDayName(element.date_in,element.year) }}
               </td>
             </ng-container>
@@ -51,7 +59,11 @@
                 Time In 
               </th>
               <td mat-cell *matCellDef="let element" 
-                [ngStyle]="{'background-color': element.date_in === dateIn ? '#00fdcb' : '' }"> 
+              [ngClass]="{
+                'weekend': getDayName(element.date_in,element.year) === 'Saturday' || 
+                  getDayName(element.date_in,element.year) ==='Sunday',
+                'today': element.date_in === dateIn 
+              }"> 
                   {{ element.time_in }} 
               </td>
             </ng-container>
@@ -61,7 +73,11 @@
                 Time Out 
               </th>
               <td mat-cell *matCellDef="let element" 
-                [ngStyle]="{'background-color': element.date_in === dateIn ? '#00fdcb' : '' }"> 
+              [ngClass]="{
+                'weekend': getDayName(element.date_in,element.year) === 'Saturday' || 
+                  getDayName(element.date_in,element.year) ==='Sunday',
+                'today': element.date_in === dateIn 
+              }"> 
                   {{ element.time_out }} 
               </td>
             </ng-container>
@@ -71,7 +87,11 @@
                 Date Out 
               </th>
               <td mat-cell *matCellDef="let element" 
-                [ngStyle]="{'background-color': element.date_in === dateIn ? '#00fdcb' : '' }"> 
+              [ngClass]="{
+                'weekend': getDayName(element.date_in,element.year) === 'Saturday' || 
+                  getDayName(element.date_in,element.year) ==='Sunday',
+                'today': element.date_in === dateIn 
+              }"> 
                   {{ element.date_out }} 
               </td>
             </ng-container>

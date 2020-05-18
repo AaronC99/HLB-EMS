@@ -35,8 +35,11 @@ mat-card-actions{
   padding-top:10px;
   padding-bottom: 10px;
 }
-.clock-in-out-button{
+.clock-in-out-button,.today{
   background-color: #00fdcb;
+}
+.weekend{
+  background-color:#DBDBDB;
 }
 .clock-out-button{
   background-color: #f44336;
