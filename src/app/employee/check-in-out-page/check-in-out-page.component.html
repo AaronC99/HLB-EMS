@@ -35,6 +35,16 @@
                   {{ element.date_in }} 
               </td>
             </ng-container>
+
+            <ng-container matColumnDef="day">
+              <th mat-header-cell *matHeaderCellDef>
+                Day
+              </th>
+              <td mat-cell *matCellDef="let element" 
+                [ngStyle]="{'background-color': element.date_in === dateIn ? '#00fdcb' : '' }"> 
+                  {{ getDayName(element.date_in,element.year) }}
+              </td>
+            </ng-container>
           
             <ng-container matColumnDef="timeIn" >
               <th mat-header-cell *matHeaderCellDef> 

@@ -25,7 +25,7 @@ export class CheckInOutPageComponent implements OnInit {
   dateOut = this.localTime.transform(this.date,'dd-MM');
   currentYear = this.localTime.transform(this.date,'y');
   timeOut = moment().format('HHmm');
-  displayedColumns: string[] = ['dateIn','timeIn','timeOut','dateOut'];
+  displayedColumns: string[] = ['dateIn','day','timeIn','timeOut','dateOut'];
   CLOCK_IN_OUT_DATA:any = [];
   dataSource:any = new MatTableDataSource<any>();
   currUserId:any;
@@ -88,6 +88,11 @@ export class CheckInOutPageComponent implements OnInit {
         this.clockInOutValidation(this.CLOCK_IN_OUT_DATA);
         this.dataSource = this.CLOCK_IN_OUT_DATA;
       });
+  }
+
+  public getDayName(date,year){
+    let fullDate = moment(`${date}-${year}`,'DD-MM-YYYY');
+    return fullDate.format('dddd');
   }
 
   public updateTable(status:number){
