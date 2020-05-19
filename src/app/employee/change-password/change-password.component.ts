@@ -18,7 +18,7 @@ export class ChangePasswordComponent implements OnInit {
   newPwdForm:FormGroup;
   errorMatcher = new CrossFieldErrorMatcher();
   constructor(
-    private fomrBuilder: FormBuilder
+    private formBuilder: FormBuilder
   ) {
 
    }
@@ -32,7 +32,7 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   createForm(){
-    this.newPwdForm = this.fomrBuilder.group({
+    this.newPwdForm = this.formBuilder.group({
       oldPwd : ['',[Validators.required,Validators.minLength(6)]],
       newPwd : ['',[Validators.required,Validators.minLength(6)]],
       confirmPwd : ['',[Validators.required,Validators.minLength(6)]]
@@ -43,13 +43,10 @@ export class ChangePasswordComponent implements OnInit {
 
   passwordValidator(form: FormGroup) {
     if (form.get('newPwd').value !== form.get('confirmPwd').value && form.get('oldPwd').value !== form.get('newPwd').value){
-      console.log('1: ' + form.hasError('passwordsDoNotMatch'))
-      return { passwordsDoNotMatch: true}
+      return { passwordsDoNotMatch: true };
     } else if(form.get('oldPwd').value === form.get('newPwd').value){
-      console.log('2: ' + form.hasError('passwordsMatch'))
-      return { passwordsMatch: true}
-    }
-    else {
+      return { passwordsMatch: true };
+    } else {
       return null;
     }
   }
