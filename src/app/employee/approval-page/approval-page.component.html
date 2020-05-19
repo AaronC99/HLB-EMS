@@ -2,7 +2,7 @@
   <div class="col-12">
       <mat-card>
           <mat-card-title>
-              <div *ngIf="user.role === 'Manager'">Timesheet approval request</div>
+              <div *ngIf="user.role === 'Manager'">Timesheet Approval Request</div>
               <div *ngIf="user.role === 'Staff'">Timesheet Editor</div>
               <br>
               <h2 class="title">Name :</h2> 
@@ -12,7 +12,7 @@
               <h2 class="info">{{ currUserDomainId }}</h2>
               <br>
               <h2 class="title">Date : </h2>
-              <h2 class="info">{{ monthName }}-{{ year }}</h2>
+              <h2 class="info">{{ monthName }} {{ year }}</h2>
           </mat-card-title>
           <mat-card-content>
             <div class="requested-message" *ngIf="allowExit">

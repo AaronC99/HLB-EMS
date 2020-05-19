@@ -139,37 +139,31 @@ export class ApprovalPageComponent implements OnInit {
 
   public approveLeaves(status){
      // Call Apply leave api
-     this.employeeService.applyLeave(this.editedLeaves,this.user.username);
-    
-     // Call update leave status api
-     this.editedLeaves.forEach(element => {
-       let leaveApprovalDetail = {
-         domain_id: element.domain_id,
-         date:element.date,
-         year:element.year,
-         approval_status: status
-       };
-       this.selectedLeaves.push(leaveApprovalDetail);
-     });
-     this.employeeService.updateLeaveStatus(this.selectedLeaves,this.currentUser.name,status);
+     this.employeeService.applyLeave(this.editedLeaves,null);
 
      // Edit Timesheet
     this.employeeService.editTimesheet(this.editedTimesheet)
     .subscribe(data =>{
-      if (data !== null)
-        this.employeeService.displayMessage('Timesheet Updated Successfully','success');
-      else 
-        this.employeeService.displayMessage('Timesheet Updated Unsuccessfully','failure');
+      let editedRows:any = data;
+      for (let i=0;i < editedRows.length;i++){
+        if(editedRows[i] === null){
+          this.employeeService.displayMessage('Timesheet Updated Unsuccessfully','failure');
+          break;
+        }else {
+          this.employeeService.displayMessage('Timesheet Updated Successfully','success');
+          break;
+        }
+      }
     });
   }
 
   public approveTimesheet(){
     this.statusType = 'Approved';
     
-    // Approve Leave 
+    // Check whether there is changed leave in record
     this.approveLeaves(this.statusType);
 
-    // Approve Timesheet Status
+    //Approve Timesheet Status
     this.employeeService.updateTimesheetStatus(this.currUserDomainId,this.period,this.year,this.statusType)
     .subscribe( data => {
       if(data['approval_status'] === 'Approved'){
@@ -219,9 +213,7 @@ export class ApprovalPageComponent implements OnInit {
 
   public displayLeaveSelection(element){
     if (this.user.role === 'Manager' && element.remarks !== 'Weekend'){
-      if(element.leave === null)
-        return true;
-      else if (element.leave === undefined)
+      if(element.leave === null || element.leave === undefined)
         return true;
       else 
         return false;

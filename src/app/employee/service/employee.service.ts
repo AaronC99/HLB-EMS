@@ -124,7 +124,23 @@ export class EmployeeService {
             year: appliedLeaves[0]['year'], 
             date_submitted: appliedLeaves[0]['date_submitted']
           };
-          this.sendLeaveRequestEmail(leaveRequestDetail,supervisor,leaveRequestDetail.type);
+          if (supervisor !== null){
+            this.sendLeaveRequestEmail(leaveRequestDetail,supervisor,leaveRequestDetail.type);
+          }
+          else {
+            // Automatically Approve Leave 
+            let leaveApprovalArray = [];
+            leaveDuration.forEach(element => {
+              let leaveApprovalDetail = {
+                domain_id: element.domain_id,
+                date:element.date,
+                year:element.year,
+                approval_status: status
+              };
+              leaveApprovalArray.push(leaveApprovalDetail);
+            });
+            this.updateLeaveStatus(leaveApprovalArray,null,status);
+          }
         } else
           this.displayMessage('Leave Applied Unsuccessful','failure');
     },err => {
@@ -174,7 +190,8 @@ export class EmployeeService {
           year: details[0].year, 
           date_submitted: details[0].date_submitted
         };
-        this.sendLeaveRequestEmail(leaveDetails,employeeName,status);
+        if (employeeName !== null)
+          this.sendLeaveRequestEmail(leaveDetails,employeeName,status);
       }   
     },err => {
       this.displayMessage(`${status} Failed. Please Try Again.`,'failure');
