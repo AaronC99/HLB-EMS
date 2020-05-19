@@ -3,7 +3,7 @@ import { EmployeeService } from '../service/employee.service';
 import { Employee } from 'src/app/model/Employee.model';
 import { Schedule } from 'src/app/model/Schedule.model';
 import { Department } from 'src/app/model/Department.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-account',
@@ -16,7 +16,8 @@ export class AccountComponent implements OnInit {
   currUserDepartment: Department;
   constructor(
     private employeeService: EmployeeService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.employeeService.currUserDetails.subscribe((details)=>{
       this.currUser = details;
@@ -30,5 +31,8 @@ export class AccountComponent implements OnInit {
     this.employeeService.getProfileDetails(this.currUser.domain_id);
   }
 
+  changePwdPage(){
+    this.router.navigateByUrl('new-password-page')
+  }
 
 }
