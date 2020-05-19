@@ -20,7 +20,7 @@ export class ChangePasswordComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder
   ) {
-
+    
    }
 
   ngOnInit(): void {

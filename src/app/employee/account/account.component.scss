@@ -1,22 +1,24 @@
 .row{
     margin: 50px;
 }
-mat-card{
-    border-radius: 20px;
+mat-card{  
     color: white;
+}
+mat-card,button{
+    border-radius: 20px;
 }
 mat-card-title{
     text-align: center;
     font-family: 'Ubuntu', sans-serif;
     text-transform: uppercase;
 }
-mat-card-content{
+mat-card-content,.change-password {
     margin-top: 20px;
 }
 h2{
     font-family: 'Sen', sans-serif;
 }
-.profile{
+.profile,.change-password{
     background-image: linear-gradient( #c06c84, #6c5b7b, #355C7D);
 }
 .schedule, .department{
