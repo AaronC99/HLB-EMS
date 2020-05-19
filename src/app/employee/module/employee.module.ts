@@ -25,6 +25,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { LeaveApplicationComponent } from '../leave-application/leave-application.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LeaveApprovalComponent } from '../leave-approval/leave-approval.component';
+import { ChangePasswordComponent } from '../change-password/change-password.component';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { LeaveApprovalComponent } from '../leave-approval/leave-approval.compone
     EmployeeListComponent,
     ApprovalPageComponent,
     LeaveApplicationComponent,
-    LeaveApprovalComponent
+    LeaveApprovalComponent,
+    ChangePasswordComponent
   ],
   imports: [
     CommonModule,

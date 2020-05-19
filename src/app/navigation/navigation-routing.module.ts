@@ -10,6 +10,7 @@ import { AllEmployeeListComponent } from '../admin/all-employee-list/all-employe
 import { HolidayDeclarationComponent } from '../admin/holiday-declaration/holiday-declaration.component';
 import { LeaveApplicationComponent } from '../employee/leave-application/leave-application.component';
 import { AllHolidaysComponent } from '../maintenance/all-holidays/all-holidays.component';
+import { ChangePasswordComponent } from '../employee/change-password/change-password.component';
 
 const routes: Routes = [
   { 
@@ -64,6 +65,10 @@ const routes: Routes = [
       {
         path: 'edit-holiday/:holidayId',
         component: HolidayDeclarationComponent
+      },
+      {
+        path: 'change-password-page',
+        component: ChangePasswordComponent
       }
     ]}
 ];
