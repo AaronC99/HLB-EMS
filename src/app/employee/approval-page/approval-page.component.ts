@@ -160,8 +160,9 @@ export class ApprovalPageComponent implements OnInit {
   public approveTimesheet(){
     this.statusType = 'Approved';
     
-    // Check whether there is changed leave in record
-    this.approveLeaves(this.statusType);
+    // Check whether there is changed leave in timesheet
+    if (this.editedTimesheet.length !== 0)
+      this.approveLeaves(this.statusType);
 
     //Approve Timesheet Status
     this.employeeService.updateTimesheetStatus(this.currUserDomainId,this.period,this.year,this.statusType)
@@ -176,8 +177,9 @@ export class ApprovalPageComponent implements OnInit {
   }
 
   public rejectTimesheet(){
-    //Approve Leave
-    this.approveLeaves('Approved');
+    //Check whether there is changed leave in timesheet
+    if (this.editedTimesheet.length !== 0)
+      this.approveLeaves('Approved');
 
     // Reject Timesheet
     this.statusType = 'Rejected';
