@@ -12,6 +12,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MaintenanceService } from '../service/maintenance.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AllDepartmentsComponent } from '../all-departments/all-departments.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 
 @NgModule({
@@ -25,7 +26,10 @@ import { AllDepartmentsComponent } from '../all-departments/all-departments.comp
     MatButtonModule,
     MatIconModule,
     NgbModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTableModule,
+    MatSlideToggleModule,
+    MatSortModule
   ]
 })
 export class MaintenanceModule { 
