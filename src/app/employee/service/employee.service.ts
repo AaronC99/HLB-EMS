@@ -24,6 +24,7 @@ export class EmployeeService {
     this.currUserSubj.next(this.currUserObj);
    }
 
+  // Employee Services API
   public getProfileDetails(ProfileID:String){
     this.httpClient.get(this.REST_API_SERVER+'/profile/'+ProfileID)
       .subscribe((data) => {
@@ -52,6 +53,14 @@ export class EmployeeService {
     return this.httpClient.get(this.REST_API_SERVER+'/employee/allEmployees/'+DomainID);
   }
 
+  public setNewPassword(newPassword){
+    this.httpClient.patch(`${this.REST_API_SERVER}/employee/changePassword`,newPassword)
+      .subscribe( result => {
+        console.log(result);
+      });
+  }
+
+  // Clock In/Out API
   public clockIn(domainId:string){
     return this.httpClient.patch(`${this.REST_API_SERVER}/clock/clockIn`
       ,{
@@ -70,7 +79,7 @@ export class EmployeeService {
     return this.httpClient.get(`${this.REST_API_SERVER}/clock/checkClockInStatus/${domainId}`);
   }
 
-  //Timesheet Services 
+  //Timesheet API
   public getTimesheet(domainId:string,month:string,year:string){
     return this.httpClient.get(`${this.REST_API_SERVER}/timesheet/viewTimesheet/${domainId}/${month}/${year}`);
   }
@@ -106,7 +115,7 @@ export class EmployeeService {
     return this.httpClient.patch(`${this.REST_API_SERVER}/timesheet/editTimesheet`,editedArray);
   }
 
-  // Leave Services
+  // Leave API
   public checkAvailableLeaves(domainID,year,leaveType){
     return this.httpClient.get(`${this.REST_API_SERVER}/leave/checkAvailableLeaves/${domainID}/${year}/${leaveType}`)
   }
