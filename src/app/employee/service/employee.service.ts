@@ -54,10 +54,7 @@ export class EmployeeService {
   }
 
   public setNewPassword(newPassword){
-    this.httpClient.patch(`${this.REST_API_SERVER}/employee/changePassword`,newPassword)
-      .subscribe( result => {
-        console.log(result);
-      });
+    return this.httpClient.patch(`${this.REST_API_SERVER}/employee/changePassword`,newPassword)
   }
 
   // Clock In/Out API

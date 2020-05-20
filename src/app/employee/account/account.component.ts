@@ -32,7 +32,7 @@ export class AccountComponent implements OnInit {
   }
 
   changePwdPage(){
-    this.router.navigateByUrl('new-password-page')
+    this.router.navigateByUrl('/home/new-password-page')
   }
 
 }

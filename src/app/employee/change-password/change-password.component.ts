@@ -3,7 +3,8 @@ import { FormGroup, FormControl, FormGroupDirective, NgForm, FormBuilder, Valida
 import { ErrorStateMatcher } from '@angular/material/core';
 import { EmployeeService } from '../service/employee.service';
 import { AuthModel } from 'src/app/model/Authentication.model';
-import { Md5 } from 'ts-md5/dist/md5';
+import { Router } from '@angular/router';
+import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -23,19 +24,16 @@ export class ChangePasswordComponent implements OnInit {
   currentUser: AuthModel;
   newPwdForm:FormGroup;
   errorMatcher = new MyErrorStateMatcher();
-  md5 = new Md5();
-  incorrectPwd:boolean;
-  isValid:boolean = false;
   hide = true;
+  passwordError = null;
 
   constructor(
     private formBuilder: FormBuilder,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private router: Router,
+    private authService: AuthenticationService
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.employeeService.getProfile(this.currentUser.username).subscribe(data =>{
-      this.currentPassword = data['password'];
-    });
    }
 
   ngOnInit(): void {
@@ -56,21 +54,13 @@ export class ChangePasswordComponent implements OnInit {
 
   createForm(){
     this.newPwdForm = this.formBuilder.group({
-      oldPwd : ['',[Validators.required,Validators.minLength(6),Validators.maxLength(20)]],
-      newPwd : ['',[Validators.required,Validators.minLength(6),Validators.maxLength(20)]],
+      oldPwd : ['',Validators.required],
+      newPwd : ['',[Validators.required,Validators.minLength(8),Validators.maxLength(20)]],
       confirmPwd : ['']
     },{
       validators: this.passwordValidator
     });
   }
-
-  // public incorrectPwd(control: AbstractControl){
-  //   return this.employeeService.getProfile(this.currentUser.username).pipe(map(res=>{
-  //     this.currentPassword = res['password'];
-  //     console.log(control.value)
-  //     let hashedPwd = this.md5.appendStr(control.value).end();
-  //   }));
-  // }
 
   public passwordValidator(form: FormGroup) {
      if (form.get('newPwd').value === form.get('oldPwd').value){
@@ -85,27 +75,31 @@ export class ChangePasswordComponent implements OnInit {
   public getErrorMessage(){
     if (this.oldPassword.errors?.required || this.newPassword.errors?.required)
       return 'Password Required'; 
-    else if (this.oldPassword.errors?.minlength || this.newPassword.errors?.minlength)
-      return 'Password Too Short. Must be at least 6 characters.';
-    else if (this.oldPassword.errors?.maxlength || this.newPassword.errors?.maxlength)
+    else if (this.newPassword.errors?.minlength)
+      return 'Password Too Short. Must be at least 8 characters.';
+    else if (this.newPassword.errors?.maxlength)
       return 'Password Too Long. Cannot Exceed 20 characters.';
   }
 
   onSubmit(){
-    let hashedPwd = this.md5.appendStr(this.oldPassword.value).end();
- 
-    // Check if current password is correct
-    if (hashedPwd === this.currentPassword){
-      let newhashedPwd = this.md5.appendStr(this.confirmPassword.value).end();
-      let newPassword = {
-        domain_id: this.currentUser.username,
-        password: newhashedPwd
-      }; 
-      console.log(newPassword);
-    } else {
-      this.incorrectPwd = true;
-    }
-    
-    
+    let newPassword = {
+      domain_id: this.currentUser.username,
+      password: this.oldPassword.value,
+      newpass: this.newPassword.value,
+      connewpass: this.confirmPassword.value
+    }; 
+    this.employeeService.setNewPassword(newPassword).subscribe (res => {
+      let success = res['success'];
+      let error = res['error'];
+      if (success !== undefined){
+        this.employeeService.displayMessage(success,'success');
+        this.authService.logout();
+        this.router.navigateByUrl('login-page');
+        this.passwordError = null;
+      } else if (error !== undefined){
+        this.passwordError = error;
+      }
+    });
+    this.newPwdForm.reset();
   }
 }
