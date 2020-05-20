@@ -12,6 +12,7 @@ import { LeaveApplicationComponent } from '../employee/leave-application/leave-a
 import { AllHolidaysComponent } from '../maintenance/all-holidays/all-holidays.component';
 import { ChangePasswordComponent } from '../employee/change-password/change-password.component';
 import { AllDepartmentsComponent } from '../maintenance/all-departments/all-departments.component';
+import { CreateDepartmentComponent } from '../maintenance/create-department/create-department.component';
 
 const routes: Routes = [
   { 
@@ -74,6 +75,10 @@ const routes: Routes = [
       {
         path: 'all-departments',
         component: AllDepartmentsComponent
+      },
+      {
+        path:'new-department',
+        component: CreateDepartmentComponent
       }
     ]}
 ];

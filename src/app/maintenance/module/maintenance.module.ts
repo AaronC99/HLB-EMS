@@ -13,12 +13,14 @@ import { MaintenanceService } from '../service/maintenance.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AllDepartmentsComponent } from '../all-departments/all-departments.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { CreateDepartmentComponent } from '../create-department/create-department.component';
 
 
 @NgModule({
   declarations: [
     AllHolidaysComponent,
-    AllDepartmentsComponent
+    AllDepartmentsComponent,
+    CreateDepartmentComponent
   ],
   imports: [
     CommonModule,
