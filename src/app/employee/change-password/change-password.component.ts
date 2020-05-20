@@ -24,16 +24,18 @@ export class ChangePasswordComponent implements OnInit {
   newPwdForm:FormGroup;
   errorMatcher = new MyErrorStateMatcher();
   md5 = new Md5();
-  incorrectPwd:boolean = true;
+  incorrectPwd:boolean;
+  isValid:boolean = false;
+  hide = true;
 
   constructor(
     private formBuilder: FormBuilder,
     private employeeService: EmployeeService
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    // this.employeeService.getProfile(this.currentUser.username).subscribe(data =>{
-    //   this.currentPassword = data['password'];
-    // });
+    this.employeeService.getProfile(this.currentUser.username).subscribe(data =>{
+      this.currentPassword = data['password'];
+    });
    }
 
   ngOnInit(): void {
@@ -54,8 +56,8 @@ export class ChangePasswordComponent implements OnInit {
 
   createForm(){
     this.newPwdForm = this.formBuilder.group({
-      oldPwd : ['',[Validators.required,Validators.minLength(6)]],
-      newPwd : ['',[Validators.required,Validators.minLength(6)]],
+      oldPwd : ['',[Validators.required,Validators.minLength(6),Validators.maxLength(20)]],
+      newPwd : ['',[Validators.required,Validators.minLength(6),Validators.maxLength(20)]],
       confirmPwd : ['']
     },{
       validators: this.passwordValidator
@@ -81,21 +83,24 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   public getErrorMessage(){
-    if (this.oldPassword.errors?.required)
+    if (this.oldPassword.errors?.required || this.newPassword.errors?.required)
       return 'Password Required'; 
     else if (this.oldPassword.errors?.minlength || this.newPassword.errors?.minlength)
       return 'Password Too Short. Must be at least 6 characters.';
-    else if (this.newPassword.errors?.required) 
-      return 'New Password Required';
+    else if (this.oldPassword.errors?.maxlength || this.newPassword.errors?.maxlength)
+      return 'Password Too Long. Cannot Exceed 20 characters.';
   }
 
   onSubmit(){
-    let hashedPwd = this.md5.appendStr(this.confirmPassword.value).end();
+    let hashedPwd = this.md5.appendStr(this.oldPassword.value).end();
+ 
+    // Check if current password is correct
     if (hashedPwd === this.currentPassword){
+      let newhashedPwd = this.md5.appendStr(this.confirmPassword.value).end();
       let newPassword = {
         domain_id: this.currentUser.username,
-        password: this.confirmPassword
-      } 
+        password: newhashedPwd
+      }; 
       console.log(newPassword);
     } else {
       this.incorrectPwd = true;
