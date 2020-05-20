@@ -11,6 +11,7 @@ import { HolidayDeclarationComponent } from '../admin/holiday-declaration/holida
 import { LeaveApplicationComponent } from '../employee/leave-application/leave-application.component';
 import { AllHolidaysComponent } from '../maintenance/all-holidays/all-holidays.component';
 import { ChangePasswordComponent } from '../employee/change-password/change-password.component';
+import { AllDepartmentsComponent } from '../maintenance/all-departments/all-departments.component';
 
 const routes: Routes = [
   { 
@@ -69,6 +70,10 @@ const routes: Routes = [
       {
         path: 'new-password-page',
         component: ChangePasswordComponent
+      },
+      {
+        path: 'all-departments',
+        component: AllDepartmentsComponent
       }
     ]}
 ];

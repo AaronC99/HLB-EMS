@@ -11,11 +11,13 @@ import { MatSortModule } from '@angular/material/sort';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MaintenanceService } from '../service/maintenance.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { AllDepartmentsComponent } from '../all-departments/all-departments.component';
 
 
 @NgModule({
   declarations: [
-    AllHolidaysComponent
+    AllHolidaysComponent,
+    AllDepartmentsComponent
   ],
   imports: [
     CommonModule,
