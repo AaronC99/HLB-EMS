@@ -14,6 +14,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AllDepartmentsComponent } from '../all-departments/all-departments.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CreateDepartmentComponent } from '../create-department/create-department.component';
+import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 
 @NgModule({
@@ -31,7 +34,12 @@ import { CreateDepartmentComponent } from '../create-department/create-departmen
     MatSnackBarModule,
     MatTableModule,
     MatSlideToggleModule,
-    MatSortModule
+    MatSortModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatOptionModule
   ]
 })
 export class MaintenanceModule { 

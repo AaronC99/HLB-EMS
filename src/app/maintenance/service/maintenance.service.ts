@@ -28,6 +28,7 @@ export class MaintenanceService {
     return this._holidayToEdit.asObservable();
   }
 
+  // Holiday API
   public editHoliday(editedHoliday){
     this.httpClient.patch(`${this.REST_API_SERVER}/holiday/updateHoliday`,editedHoliday)
     .subscribe( result =>{
@@ -38,6 +39,11 @@ export class MaintenanceService {
 
   public deleteHoliday(holidayId){
     return this.httpClient.delete(`${this.REST_API_SERVER}/holiday/deleteHoliday/${holidayId}`);
+  }
+
+  //Department API 
+  public createDepartment(department){
+    return this.httpClient.post(`${this.REST_API_SERVER}/department/createDepartment`,department);
   }
 
   public displayMessage(message:string,status:string){
