@@ -68,10 +68,17 @@ export class MaintenanceService {
   public editDepartment(editedDept){
    this.httpClient.patch(`${this.REST_API_SERVER}/department/editDepartment`,editedDept)
     .subscribe((res:Department) => {
+      console.log(res);
       if (res !== null)
         this.displayMessage(`${res.department_name} Edited Successfully`,'success');
       else 
         this.displayMessage(`${res.department_name} Edited Unsuccessful`,'failure');
+
+      if (res['activated'])
+        this.displayMessage(`${res.department_name} Reactivated Successfully`,'success');
+      else  
+        this.displayMessage(`${res.department_name} Deactivated Successfully`,'success');
+      
     },err => {
       this.displayMessage('Fail to Edit Department','failure');
     });

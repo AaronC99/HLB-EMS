@@ -14,7 +14,6 @@ import { Router } from '@angular/router';
 })
 export class AllDepartmentsComponent implements OnInit {
   displayedColumns = ['no','deptName','deptHead','level','edit','status'];
-  //_departmentObj:Department;
   activeDept:Department[];
   allDept:Department[];
   dataSource:any = new MatTableDataSource<any>();
@@ -38,6 +37,7 @@ export class AllDepartmentsComponent implements OnInit {
         // Show All
         this.dataSource = new MatTableDataSource<any>(this.allDept);
       } else {
+        // Show Only Active 
         this.activeDept = this.allDept.filter(dept => dept['activated'] === true);
         this.dataSource = new MatTableDataSource<any>(this.activeDept);
       }
@@ -45,8 +45,26 @@ export class AllDepartmentsComponent implements OnInit {
     })
   }
 
-  deactivateDept(dept){
-    console.log('Deactivate' + dept.department_name);
+  public updateDeptStatus(dept){
+    if (dept.activated){
+      if (confirm("Confirmation Message: \nDo you want to deactivate "+ dept.department_name + " ? ")){
+        let deactivateDept = {
+          _id: dept._id,
+          activated: false
+        };
+        this.maintainService.editDepartment(deactivateDept);
+        this.displayAllDept();
+      }
+    } else {
+      if (confirm("Confirmation Message: \nDo you want to reactivate "+ dept.department_name +" ? ")){
+        let reactivateDept = {
+          _id: dept._id,
+          activated: true
+        };
+        this.maintainService.editDepartment(reactivateDept);
+        this.displayAllDept();
+      } 
+    }
   }
 
   public showAll($event: MatSlideToggleChange){

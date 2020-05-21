@@ -132,5 +132,4 @@ export class CreateDepartmentComponent implements OnInit,AfterViewInit {
       }
     });
   }
-
 }
