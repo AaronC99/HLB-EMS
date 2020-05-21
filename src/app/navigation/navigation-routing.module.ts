@@ -79,6 +79,10 @@ const routes: Routes = [
       {
         path:'new-department',
         component: CreateDepartmentComponent
+      },
+      {
+        path: 'edit-department/:deptId&:deptName',
+        component: CreateDepartmentComponent
       }
     ]}
 ];

@@ -1,20 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Employee } from 'src/app/model/Employee.model';
 import { MaintenanceService } from '../service/maintenance.service';
 import { AdminService } from 'src/app/admin/service/admin.service';
 import { EmployeeService } from 'src/app/employee/service/employee.service';
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { Department } from 'src/app/model/Department.model';
-import { map } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { Router} from '@angular/router';
 
 @Component({
   selector: 'app-create-department',
   templateUrl: './create-department.component.html',
   styleUrls: ['./create-department.component.scss']
 })
-export class CreateDepartmentComponent implements OnInit {
+export class CreateDepartmentComponent implements OnInit,AfterViewInit {
   newDeptForm: FormGroup;
   maxLength = 3;
   allManagers: Employee[] = [];
@@ -22,6 +21,7 @@ export class CreateDepartmentComponent implements OnInit {
   currentUser:AuthModel;
   _deptObj:Department;
   manager: Employee;
+  newDept = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -39,6 +39,10 @@ export class CreateDepartmentComponent implements OnInit {
     this.getAllManagers();
   }
 
+  ngAfterViewInit(){
+    this.checkDeptForEdit();
+  }
+
   public createForm(){
     this.newDeptForm = this.formBuilder.group({
       deptName: ['',Validators.required],
@@ -51,7 +55,6 @@ export class CreateDepartmentComponent implements OnInit {
     this.employeeService.getAllEmployees(this.currentUser.username).subscribe((data:Employee[]) => {
       let employees:any = data;
       this.allManagers = employees.filter( user => user.role === 'Manager');
-      console.log(this.allManagers);
     });
   }
 
@@ -83,12 +86,22 @@ export class CreateDepartmentComponent implements OnInit {
   }
 
   public onSubmit(){
-    let deptObj = {
-      department_name: this.deptName.value,
-      department_head: this.deptHead.value,
-      level: this.level.value
-    };
-    //this.maintainService.createDepartment(deptObj);
+    if (this.newDept){
+      let newDeptObj = {
+        department_name: this.deptName.value,
+        department_head: this.deptHead.value,
+        level: this.level.value
+      };
+      this.maintainService.createDepartment(newDeptObj);
+    } else {
+      let editedObj:Department = {
+        _id: this._deptObj._id,
+        department_name: this.deptName.value,
+        department_head: this.deptHead.value,
+        level: this.level.value
+      };
+      this.maintainService.editDepartment(editedObj);
+    }
     this.router.navigateByUrl('/home/all-departments');
     this.newDeptForm.reset();
   }
@@ -100,6 +113,24 @@ export class CreateDepartmentComponent implements OnInit {
       return 'Department Already Exist'
     else 
       return 'Field Is Required';
+  }
+
+  public checkDeptForEdit(){
+    this.maintainService.getDeptForEdit().subscribe((dept:Department) => {
+      if (dept.department_name !== undefined){
+        this._deptObj = dept;
+        this.newDept = false
+        this.newDeptForm.patchValue({
+          deptName: dept.department_name,
+          deptHead: dept.department_head['_id'],
+          level: dept.level
+        });
+      } else {
+        this.newDept = true;
+        this.maintainService.setDeptToEdit(null);
+        this.router.navigateByUrl('/home/new-department');
+      }
+    });
   }
 
 }

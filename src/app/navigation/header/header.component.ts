@@ -38,6 +38,10 @@ export class HeaderComponent{
     this.maintenanceService.setHolidayToEdit = null;
   }
 
+  newDeptPage(){
+    this.maintenanceService.setDeptToEdit(null);
+  }
+
   onLogOut(){
     this.authService.logout();
     this.router.navigateByUrl('login-page');

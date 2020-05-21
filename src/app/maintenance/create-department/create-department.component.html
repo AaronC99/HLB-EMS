@@ -1,6 +1,6 @@
 <mat-card class="card">
     <mat-card-title>
-        Create New Department
+        {{ newDept ? 'Create Department' : 'Edit Department'}}
     </mat-card-title>
     <form [formGroup]="newDeptForm" (ngSubmit)="onSubmit()">
         <mat-card-content>
@@ -41,7 +41,7 @@
         </mat-card-content>
         <mat-card-actions>
             <button class="submit-btn" mat-raised-button [disabled]="newDeptForm.invalid">
-                Create Department
+                {{ newDept ? 'Create Department' : 'Edit Department'}}
             </button>
         </mat-card-actions>
     </form>

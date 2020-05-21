@@ -4,6 +4,8 @@ import { Department } from 'src/app/model/Department.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatSort } from '@angular/material/sort';
+import { MaintenanceService } from '../service/maintenance.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-all-departments',
@@ -20,7 +22,9 @@ export class AllDepartmentsComponent implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   
   constructor(
-    private adminService:AdminService
+    private adminService:AdminService,
+    private maintainService: MaintenanceService,
+    private router:Router
   ) { }
 
   ngOnInit(): void {
@@ -42,7 +46,7 @@ export class AllDepartmentsComponent implements OnInit {
   }
 
   deactivateDept(dept){
-    console.log(dept);
+    console.log('Deactivate' + dept.department_name);
   }
 
   public showAll($event: MatSlideToggleChange){
@@ -51,7 +55,10 @@ export class AllDepartmentsComponent implements OnInit {
   }
   
   public editDeptDetails(dept){
-    console.log(dept);
+    let deptId = dept._id;
+    let deptName = dept.department_name;
+    this.maintainService.setDeptToEdit(dept);
+    this.router.navigateByUrl(`/home/edit-department/${deptId}&${deptName}`);
   }
 
 }

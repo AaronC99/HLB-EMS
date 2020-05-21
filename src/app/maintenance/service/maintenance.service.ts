@@ -65,6 +65,18 @@ export class MaintenanceService {
     });
   }
 
+  public editDepartment(editedDept){
+   this.httpClient.patch(`${this.REST_API_SERVER}/department/editDepartment`,editedDept)
+    .subscribe((res:Department) => {
+      if (res !== null)
+        this.displayMessage(`${res.department_name} Edited Successfully`,'success');
+      else 
+        this.displayMessage(`${res.department_name} Edited Unsuccessful`,'failure');
+    },err => {
+      this.displayMessage('Fail to Edit Department','failure');
+    });
+  }
+
   public displayMessage(message:string,status:string){
     this._snackBar.open(message,'Close',{
       duration: 5000,
