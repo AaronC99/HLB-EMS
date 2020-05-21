@@ -19,7 +19,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AllScheduleComponent } from '../all-schedule/all-schedule.component';
 import { CreateScheduleComponent } from '../create-schedule/create-schedule.component';
-
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,9 @@ import { CreateScheduleComponent } from '../create-schedule/create-schedule.comp
     ReactiveFormsModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    MatCheckboxModule,
+    MatListModule
   ]
 })
 export class MaintenanceModule { 

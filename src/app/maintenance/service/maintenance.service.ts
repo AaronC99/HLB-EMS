@@ -4,6 +4,7 @@ import { Holiday } from 'src/app/model/Holiday.model';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Department } from 'src/app/model/Department.model';
+import { Schedule } from 'src/app/model/Schedule.model';
 
 @Injectable({
   providedIn: 'root'
@@ -81,6 +82,17 @@ export class MaintenanceService {
       
     },err => {
       this.displayMessage('Fail to Edit Department','failure');
+    });
+  }
+
+  // Schedule API
+  public createSchedule(newSchedule){
+    this.httpClient.post(`${this.REST_API_SERVER}/schedule/createSchedule`,newSchedule)
+    .subscribe((res:Schedule) => {
+      if (res !== null)
+        this.displayMessage(`${res.schedule_name} Created Successfully`,'success');
+    },err => {
+      this.displayMessage('Fail to Create Schedule','failure');
     });
   }
 
