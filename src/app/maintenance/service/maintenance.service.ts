@@ -13,6 +13,7 @@ export class MaintenanceService {
   private REST_API_SERVER = "http://localhost:3000";
   private _holidayToEdit: BehaviorSubject<Holiday>;
   private _deptToEdit: BehaviorSubject<Department>;
+  private _skdToEdit: BehaviorSubject<Schedule>;
 
   constructor(
     private httpClient:HttpClient,
@@ -23,6 +24,8 @@ export class MaintenanceService {
     this._holidayToEdit.next(new Holiday());
     this._deptToEdit = new BehaviorSubject(new Department());
     this._deptToEdit.next(new Department());
+    this._skdToEdit = new BehaviorSubject(new Schedule());
+    this._skdToEdit.next(new Schedule());
   }
 
   set setHolidayToEdit(holiday){
@@ -38,6 +41,14 @@ export class MaintenanceService {
   }
 
   public getDeptForEdit(){
+    return this._deptToEdit.asObservable();
+  }
+
+  public setSkdToEdit(schedule){
+    this._skdToEdit.next(schedule);
+  }
+
+  public getSkdForEdit(){
     return this._deptToEdit.asObservable();
   }
 

@@ -4,6 +4,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { AdminService } from 'src/app/admin/service/admin.service';
 import { Schedule } from 'src/app/model/Schedule.model';
+import { MaintenanceService } from '../service/maintenance.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-all-schedule',
@@ -19,7 +21,9 @@ export class AllScheduleComponent implements OnInit {
   activeSchedules: Schedule[] = [];
 
   constructor(
-    private adminService: AdminService
+    private adminService: AdminService,
+    private maintainService: MaintenanceService,
+    private router: Router
   ) {
    }
 
@@ -35,7 +39,6 @@ export class AllScheduleComponent implements OnInit {
   public displayAllSkd(){
     this.adminService.getAllSchedules().subscribe((data:Schedule[]) => {
       this.allSchedules = data;
-      console.log(this.allSchedules);
       if(this.checked){
         // Show All
         this.dataSource = new MatTableDataSource<any>(this.allSchedules);
@@ -53,6 +56,10 @@ export class AllScheduleComponent implements OnInit {
   }
 
   public updateSkdStatus(schedule){
+    let skdId = schedule._id;
+    let skdName = schedule.schedule_name;
+    this.maintainService.setSkdToEdit(schedule);
+    this.router.navigateByUrl(`/home/edit-schedule/${skdId}&${skdName}`);
     console.log(schedule);
   }
 

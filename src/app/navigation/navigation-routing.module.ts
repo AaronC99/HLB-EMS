@@ -93,6 +93,10 @@ const routes: Routes = [
       {
         path: 'new-schedule',
         component: CreateScheduleComponent
+      },
+      {
+        path: 'edit-schedule/:skdId&:skdName',
+        component: CreateScheduleComponent
       }
     ]}
 ];
