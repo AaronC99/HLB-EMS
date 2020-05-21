@@ -7,6 +7,7 @@ import { EmployeeService } from 'src/app/employee/service/employee.service';
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { Department } from 'src/app/model/Department.model';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-department',
@@ -16,16 +17,18 @@ import { map } from 'rxjs/operators';
 export class CreateDepartmentComponent implements OnInit {
   newDeptForm: FormGroup;
   maxLength = 3;
-  allManagers:Employee[] = [];
+  allManagers: Employee[] = [];
   allDept: Department[] = [];
   currentUser:AuthModel;
   _deptObj:Department;
+  manager: Employee;
 
   constructor(
     private formBuilder: FormBuilder,
     private maintainService: MaintenanceService,
     private adminService: AdminService,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private router:Router
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
    }
@@ -48,13 +51,13 @@ export class CreateDepartmentComponent implements OnInit {
     this.employeeService.getAllEmployees(this.currentUser.username).subscribe((data:Employee[]) => {
       let employees:any = data;
       this.allManagers = employees.filter( user => user.role === 'Manager');
+      console.log(this.allManagers);
     });
   }
 
   public getAllDepartments(){
     this.adminService.getAllDepartments().subscribe ((data:Department[]) =>{
       this.allDept = data;
-      console.log(this.allDept);
     });
   }
 
@@ -85,9 +88,9 @@ export class CreateDepartmentComponent implements OnInit {
       department_head: this.deptHead.value,
       level: this.level.value
     };
-    this.maintainService.createDepartment(deptObj).subscribe(res => {
-      console.log(res);
-    });
+    //this.maintainService.createDepartment(deptObj);
+    this.router.navigateByUrl('/home/all-departments');
+    this.newDeptForm.reset();
   }
 
   public getErrorMessage(){

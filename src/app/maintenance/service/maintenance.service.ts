@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Holiday } from 'src/app/model/Holiday.model';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Department } from 'src/app/model/Department.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class MaintenanceService {
   private REST_API_SERVER = "http://localhost:3000";
   private _holidayToEdit: BehaviorSubject<Holiday>;
+  private _deptToEdit: BehaviorSubject<Department>;
 
   constructor(
     private httpClient:HttpClient,
@@ -18,6 +20,8 @@ export class MaintenanceService {
   {
     this._holidayToEdit = new BehaviorSubject(new Holiday());
     this._holidayToEdit.next(new Holiday());
+    this._deptToEdit = new BehaviorSubject(new Department());
+    this._deptToEdit.next(new Department());
   }
 
   set setHolidayToEdit(holiday){
@@ -26,6 +30,14 @@ export class MaintenanceService {
 
   public getHolidayForEdit(){
     return this._holidayToEdit.asObservable();
+  }
+
+  public setDeptToEdit(department){
+    this._deptToEdit.next(department);
+  }
+
+  public getDeptForEdit(){
+    return this._deptToEdit.asObservable();
   }
 
   // Holiday API
@@ -43,7 +55,14 @@ export class MaintenanceService {
 
   //Department API 
   public createDepartment(department){
-    return this.httpClient.post(`${this.REST_API_SERVER}/department/createDepartment`,department);
+    this.httpClient.post(`${this.REST_API_SERVER}/department/createDepartment`,department)
+    .subscribe(res => {
+      let dept:any = res;
+      if(res !== null)
+        this.displayMessage(`${dept.department_name} Department Created Successfully`,'success');
+    },err => {
+        this.displayMessage(`Failed to Create Department`,'failure');
+    });
   }
 
   public displayMessage(message:string,status:string){
