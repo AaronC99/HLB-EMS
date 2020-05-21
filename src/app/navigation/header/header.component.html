@@ -37,7 +37,7 @@
               <mat-icon>supervised_user_circle</mat-icon>
               <span>All Department</span>
             </button>
-            <button mat-menu-item>
+            <button mat-menu-item routerLink="all-schedules">
               <mat-icon>schedule</mat-icon>
               <span>All Schedule</span>
             </button>
@@ -46,11 +46,11 @@
               <span>All Holidays</span>
             </button>
           </mat-menu>
-          <button mat-button [matMenuTriggerFor]="menu" *ngIf="_authDetails.role==='Admin'">
+          <button mat-button [matMenuTriggerFor]="createMenu" *ngIf="_authDetails.role==='Admin'">
             <mat-icon>add_circle</mat-icon>
             Create
           </button>
-          <mat-menu #menu="matMenu">
+          <mat-menu #createMenu="matMenu">
             <button mat-menu-item routerLink="new-employee" (click)="newEmployeePage()">
               <mat-icon>person_add</mat-icon>
               <span>New Employee</span>

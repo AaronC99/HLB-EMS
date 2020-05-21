@@ -17,13 +17,15 @@ import { CreateDepartmentComponent } from '../create-department/create-departmen
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { AllScheduleComponent } from '../all-schedule/all-schedule.component';
 
 
 @NgModule({
   declarations: [
     AllHolidaysComponent,
     AllDepartmentsComponent,
-    CreateDepartmentComponent
+    CreateDepartmentComponent,
+    AllScheduleComponent
   ],
   imports: [
     CommonModule,

@@ -13,6 +13,7 @@ import { AllHolidaysComponent } from '../maintenance/all-holidays/all-holidays.c
 import { ChangePasswordComponent } from '../employee/change-password/change-password.component';
 import { AllDepartmentsComponent } from '../maintenance/all-departments/all-departments.component';
 import { CreateDepartmentComponent } from '../maintenance/create-department/create-department.component';
+import { AllScheduleComponent } from '../maintenance/all-schedule/all-schedule.component';
 
 const routes: Routes = [
   { 
@@ -83,6 +84,10 @@ const routes: Routes = [
       {
         path: 'edit-department/:deptId&:deptName',
         component: CreateDepartmentComponent
+      },
+      {
+        path: 'all-schedules',
+        component: AllScheduleComponent
       }
     ]}
 ];
