@@ -18,6 +18,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AllScheduleComponent } from '../all-schedule/all-schedule.component';
+import { CreateScheduleComponent } from '../create-schedule/create-schedule.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { AllScheduleComponent } from '../all-schedule/all-schedule.component';
     AllHolidaysComponent,
     AllDepartmentsComponent,
     CreateDepartmentComponent,
-    AllScheduleComponent
+    AllScheduleComponent,
+    CreateScheduleComponent
   ],
   imports: [
     CommonModule,

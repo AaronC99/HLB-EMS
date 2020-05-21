@@ -14,6 +14,7 @@ import { ChangePasswordComponent } from '../employee/change-password/change-pass
 import { AllDepartmentsComponent } from '../maintenance/all-departments/all-departments.component';
 import { CreateDepartmentComponent } from '../maintenance/create-department/create-department.component';
 import { AllScheduleComponent } from '../maintenance/all-schedule/all-schedule.component';
+import { CreateScheduleComponent } from '../maintenance/create-schedule/create-schedule.component';
 
 const routes: Routes = [
   { 
@@ -88,6 +89,10 @@ const routes: Routes = [
       {
         path: 'all-schedules',
         component: AllScheduleComponent
+      },
+      {
+        path: 'new-schedule',
+        component: CreateScheduleComponent
       }
     ]}
 ];
