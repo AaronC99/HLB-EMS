@@ -6,6 +6,7 @@ import { AdminService } from '../service/admin.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Router } from '@angular/router';
 import { AuthModel } from 'src/app/model/Authentication.model';
+import { Employee } from 'src/app/model/Employee.model';
 
 @Component({
   selector: 'app-all-employee-list',
@@ -34,7 +35,7 @@ export class AllEmployeeListComponent implements OnInit{
   }
 
   public getAllEmployeeDetails(){
-    this.employeeService.getAllEmployees(this.currentUser.username).subscribe( data => {
+    this.employeeService.getAllEmployees(this.currentUser.username).subscribe((data:Employee[]) => {
       this.ALL_DATA = data;
       if (this.checked){
         this.dataSource = new MatTableDataSource<any>(this.ALL_DATA);
@@ -55,8 +56,8 @@ export class AllEmployeeListComponent implements OnInit{
     this.dataSource.filter = filterValue.trim().toLocaleLowerCase();
   }
 
-  public deactivateAccount(currUser:any){
-    if(currUser.activated){
+  public updateAccStatus(currUser:Employee){
+    if(currUser['activated']){
       if (confirm("Confirmation Message: \nDo you want to deactivate "+ currUser.domain_id+" ? ")){
         this.adminService.updateEmployee(currUser.domain_id,{activated:false});
         this.getAllEmployeeDetails();
@@ -78,5 +79,4 @@ export class AllEmployeeListComponent implements OnInit{
     this.checked = $event.checked;
     this.getAllEmployeeDetails();
   }
-
 }

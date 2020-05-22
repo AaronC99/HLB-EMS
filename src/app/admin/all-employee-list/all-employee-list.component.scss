@@ -4,7 +4,6 @@
 .employee-list-card{
     border-radius: 20px;
 }
-
 mat-card{
     background-color: rgba(255, 255, 255, 0.7);
 }
@@ -24,4 +23,11 @@ table,.filter-textbox{
 }
 button{
     border-radius: 20px;
+}
+.active{
+    background-color: #84fab0;
+}
+.inactive{
+    color: white;
+    background-color: #f43b47;
 }
