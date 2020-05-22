@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { AdminService } from 'src/app/admin/service/admin.service';
 import { Schedule } from 'src/app/model/Schedule.model';
@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./create-schedule.component.scss']
 })
 
-export class CreateScheduleComponent implements OnInit {
+export class CreateScheduleComponent implements OnInit,AfterViewInit {
   newSchedule = true;
   newSkdForm:FormGroup;
   schedule:Schedule;
@@ -27,6 +27,10 @@ export class CreateScheduleComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm();
+  }
+
+  ngAfterViewInit(){
+    this.checkSkdForEdit();
   }
 
   public createForm(){
@@ -61,14 +65,25 @@ export class CreateScheduleComponent implements OnInit {
       this.selectedDays = false;
     }else {
       this.selectedDays = true;
-      this.schedule = {
-        _id:null,
-        schedule_name: this.scheduleName.value,
-        days_of_work: this.daysOfWork.value,
-        start_time: this.startTime.value,
-        end_time: this.endTime.value
+      if (this.newSchedule){
+        this.schedule = {
+          _id:null,
+          schedule_name: this.scheduleName.value,
+          days_of_work: this.daysOfWork.value,
+          start_time: this.startTime.value,
+          end_time: this.endTime.value
+        }
+        this.maintainService.createSchedule(this.schedule);
+      } else {
+        let editedSkd:Schedule = {
+          _id: this.schedule._id,
+          schedule_name: this.scheduleName.value,
+          days_of_work: this.daysOfWork.value,
+          start_time: this.startTime.value,
+          end_time: this.endTime.value
+        };
+        this.maintainService.editSchedule(editedSkd);
       }
-      this.maintainService.createSchedule(this.schedule);
       this.router.navigateByUrl('/home/all-schedules');
     }
   }
@@ -93,5 +108,25 @@ export class CreateScheduleComponent implements OnInit {
       return 'Schedule Already Exist'
     else 
       return 'Field Is Required';
+  }
+
+  public checkSkdForEdit(){
+    this.maintainService.getSkdForEdit().subscribe((data:Schedule) => {
+      console.log(data);
+      if (Object.keys(data).length === 0){
+        this.newSchedule = true;
+        this.maintainService.setSkdToEdit(null);
+        this.router.navigateByUrl('/home/new-schedule');
+      }else {
+        this.schedule = data;
+        this.newSchedule = false;
+        this.newSkdForm.patchValue({
+          skdName: this.schedule.schedule_name,
+          daysOfWork: this.schedule.days_of_work,
+          startTime: this.schedule.start_time,
+          endTime: this.schedule.end_time
+        });
+      }
+    });
   }
 }

@@ -49,7 +49,7 @@ export class MaintenanceService {
   }
 
   public getSkdForEdit(){
-    return this._deptToEdit.asObservable();
+    return this._skdToEdit.asObservable();
   }
 
   // Holiday API
@@ -104,6 +104,18 @@ export class MaintenanceService {
         this.displayMessage(`${res.schedule_name} Created Successfully`,'success');
     },err => {
       this.displayMessage('Fail to Create Schedule','failure');
+    });
+  }
+
+  public editSchedule(editedSchedule){
+    this.httpClient.patch(`${this.REST_API_SERVER}/schedule/editSchedule`,editedSchedule)
+    .subscribe((res:Schedule) =>{
+      if (res !== null)
+        this.displayMessage(`${res.schedule_name} Updated Successfully`,'success');
+      else 
+        this.displayMessage('Schedule Updated Unsuccessful','failure');
+    },err => {
+      this.displayMessage('Failed to Update Schedule','failure');
     });
   }
 

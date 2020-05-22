@@ -53,13 +53,14 @@ export class AllScheduleComponent implements OnInit {
 
   public editSkdDetails(schedule){
     console.log(schedule);
-  }
-
-  public updateSkdStatus(schedule){
     let skdId = schedule._id;
     let skdName = schedule.schedule_name;
     this.maintainService.setSkdToEdit(schedule);
     this.router.navigateByUrl(`/home/edit-schedule/${skdId}&${skdName}`);
+  }
+
+  public updateSkdStatus(schedule){
+    
     console.log(schedule);
   }
 
