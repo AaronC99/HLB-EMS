@@ -112,7 +112,6 @@ export class CreateScheduleComponent implements OnInit,AfterViewInit {
 
   public checkSkdForEdit(){
     this.maintainService.getSkdForEdit().subscribe((data:Schedule) => {
-      console.log(data);
       if (Object.keys(data).length === 0){
         this.newSchedule = true;
         this.maintainService.setSkdToEdit(null);

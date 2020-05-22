@@ -52,7 +52,6 @@ export class AllScheduleComponent implements OnInit {
   }
 
   public editSkdDetails(schedule){
-    console.log(schedule);
     let skdId = schedule._id;
     let skdName = schedule.schedule_name;
     this.maintainService.setSkdToEdit(schedule);
@@ -60,8 +59,25 @@ export class AllScheduleComponent implements OnInit {
   }
 
   public updateSkdStatus(schedule){
-    
-    console.log(schedule);
+    if (schedule.activated){
+      if (confirm("Confirmation Message: \nDo you want to deactivate "+ schedule.schedule_name+ " ? ")){
+        let deactivateSkd = {
+          _id: schedule._id,
+          activated: false
+        };
+        this.maintainService.editSchedule(deactivateSkd);
+        this.displayAllSkd();
+      }
+    } else {
+      if (confirm("Confirmation Message: \nDo you want to reactivate "+ schedule.schedule_name +" ? ")){
+        let reactivateSkd = {
+          _id: schedule._id,
+          activated: true
+        };
+        this.maintainService.editSchedule(reactivateSkd);
+        this.displayAllSkd();
+      } 
+    }
   }
 
 }

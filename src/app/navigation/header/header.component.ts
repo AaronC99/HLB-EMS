@@ -42,6 +42,10 @@ export class HeaderComponent{
     this.maintenanceService.setDeptToEdit(null);
   }
 
+  newSchedulePage(){
+    this.maintenanceService.setSkdToEdit(null);
+  }
+
   onLogOut(){
     this.authService.logout();
     this.router.navigateByUrl('login-page');

@@ -68,10 +68,9 @@ export class MaintenanceService {
   //Department API 
   public createDepartment(department){
     this.httpClient.post(`${this.REST_API_SERVER}/department/createDepartment`,department)
-    .subscribe(res => {
-      let dept:any = res;
+    .subscribe((res:Department) => {
       if(res !== null)
-        this.displayMessage(`${dept.department_name} Department Created Successfully`,'success');
+        this.displayMessage(`${res.department_name} Department Created Successfully`,'success');
     },err => {
         this.displayMessage(`Failed to Create Department`,'failure');
     });
@@ -80,7 +79,6 @@ export class MaintenanceService {
   public editDepartment(editedDept){
    this.httpClient.patch(`${this.REST_API_SERVER}/department/editDepartment`,editedDept)
     .subscribe((res:Department) => {
-      console.log(res);
       if (res !== null)
         this.displayMessage(`${res.department_name} Edited Successfully`,'success');
       else 
@@ -114,6 +112,11 @@ export class MaintenanceService {
         this.displayMessage(`${res.schedule_name} Updated Successfully`,'success');
       else 
         this.displayMessage('Schedule Updated Unsuccessful','failure');
+
+      if (res['activated'])
+        this.displayMessage(`${res.schedule_name} Reactivated Successfully`,'success');
+      else  
+        this.displayMessage(`${res.schedule_name} Deactivated Successfully`,'success');
     },err => {
       this.displayMessage('Failed to Update Schedule','failure');
     });
