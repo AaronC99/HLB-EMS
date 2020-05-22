@@ -55,9 +55,9 @@ export class LeaveApplicationComponent implements OnInit {
       this.endDate = `${this.toDate.day}/${this.toDate.month}/${this.toDate.year}`;
       this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
       this.employeeService.getProfile(this.currentUser.username)
-        .subscribe(data=>{
-          this.currentUserName = data['name'];
-          this.currentUserSupervisor = data['department']['department_head'];
+        .subscribe((data:Employee)=>{
+          this.currentUserName = data.name;
+          this.currentUserSupervisor = data.department.department_head;
         });
   }
 
@@ -87,9 +87,9 @@ export class LeaveApplicationComponent implements OnInit {
   public getPendingLeaves(){
     this.employeeService.getExisitingLeavesDates(this.currentUser.username)
     .subscribe( data => {
-      let existingDates:any = data;
-      existingDates = this.converttedDateStruct(existingDates);
-      this.mergeInvalidDates(existingDates,'leave');
+      let existingLeaves:any = data;
+      existingLeaves = this.converttedDateStruct(existingLeaves);
+      this.mergeInvalidDates(existingLeaves,'leave');
     });
   }
 

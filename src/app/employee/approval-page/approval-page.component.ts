@@ -5,6 +5,8 @@ import * as moment from 'moment';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { LeaveApproval } from 'src/app/model/LeaveApproval.model';
+import { Employee } from 'src/app/model/Employee.model';
+import { Timesheet } from 'src/app/model/Timesheet.model';
 
 @Component({
   selector: 'app-approval-page',
@@ -12,13 +14,13 @@ import { LeaveApproval } from 'src/app/model/LeaveApproval.model';
   styleUrls: ['./approval-page.component.scss']
 })
 export class ApprovalPageComponent implements OnInit {
-  employee:any
+  employee:Employee;
   currUserDomainId:string;
   period: string;
   month:number;
   monthName:string;
   year:string;
-  TIMESHEET:any;
+  TIMESHEET:Timesheet[];
   leaveTypes = [
     {id:1, value:'Annual'},
     {id:2, value:'Medical'}
@@ -30,7 +32,7 @@ export class ApprovalPageComponent implements OnInit {
   allowExit:boolean = false;
   invalidInput:boolean = false;
   updateError:boolean = false;
-  currentUser:any;
+  currentUser:Employee;
   user:AuthModel;
   validUser:boolean;
   errorMessage = '';
@@ -63,14 +65,15 @@ export class ApprovalPageComponent implements OnInit {
   ngOnInit(): void {
     this.userValidation();
     this.displayTimesheet();
-    this.getEmpoyeeDetails();
+    this.getEmployeeDetails();
     if (this.user.role === 'Manager')
       this.approvalValidation();
   }
 
   public userValidation(){
+    // Validate If User is the Manager
     this.employeeService.getProfile(this.currUserDomainId)
-      .subscribe (userInfo => {
+      .subscribe ((userInfo:Employee) => {
         this.currentUser = userInfo;
         if (this.user.username === this.currentUser.department.department_head.domain_id || 
           this.user.username === this.currentUser.domain_id)
@@ -80,14 +83,16 @@ export class ApprovalPageComponent implements OnInit {
       });
   }
 
-  public getEmpoyeeDetails(){
+  public getEmployeeDetails(){
+    // Get Employee 
     this.employeeService.getProfile(this.currUserDomainId)
-    .subscribe (userInfo => {
+    .subscribe ((userInfo:Employee) => {
       this.employee = userInfo;
     });
   }
 
   public approvalValidation(){
+    // Check Whether has been approved or not
     this.employeeService.getAvailableTimesheet(this.currUserDomainId)
     .subscribe( data =>{
       let validateArr:any = data;
@@ -110,6 +115,7 @@ export class ApprovalPageComponent implements OnInit {
   }
 
   public editedValidation(timesheet){
+    // Check if timesheet has been edited
     for ( let i = 0; i < timesheet.length; i++){
       if (timesheet[i].edit_status === 'Edited'){
         this.allowExit = true;
@@ -122,7 +128,8 @@ export class ApprovalPageComponent implements OnInit {
   }
 
   public displayTimesheet(){
-    this.employeeService.getTimesheet(this.currUserDomainId,this.month.toString(),this.year).subscribe( timesheet =>{
+    this.employeeService.getTimesheet(this.currUserDomainId,this.month.toString(),this.year)
+    .subscribe( (timesheet:Timesheet[]) =>{
       this.TIMESHEET = timesheet;
       this.editedValidation(this.TIMESHEET);
       this.dataSource = this.TIMESHEET;
@@ -137,7 +144,7 @@ export class ApprovalPageComponent implements OnInit {
     return tomorrowDate;
   }
 
-  public approveLeaves(status){
+  public approveLeaves(){
      // Call Apply leave api
      this.employeeService.applyLeave(this.editedLeaves,null);
 
@@ -162,7 +169,7 @@ export class ApprovalPageComponent implements OnInit {
     
     // Check whether there is changed leave in timesheet
     if (this.editedTimesheet.length !== 0)
-      this.approveLeaves(this.statusType);
+      this.approveLeaves();
 
     //Approve Timesheet Status
     this.employeeService.updateTimesheetStatus(this.currUserDomainId,this.period,this.year,this.statusType)
@@ -179,7 +186,7 @@ export class ApprovalPageComponent implements OnInit {
   public rejectTimesheet(){
     //Check whether there is changed leave in timesheet
     if (this.editedTimesheet.length !== 0)
-      this.approveLeaves('Approved');
+      this.approveLeaves();
 
     // Reject Timesheet
     this.statusType = 'Rejected';

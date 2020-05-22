@@ -8,43 +8,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   providedIn: 'root'
 })
 export class EmployeeService {
-
   private REST_API_SERVER = "http://localhost:3000";
-  private currUserObj:Employee = new Employee();
-  private currUserSubj: BehaviorSubject<Employee>;
 
-  get currUserDetails(){
-    return this.currUserSubj.asObservable();
-  }
   constructor(
     private httpClient: HttpClient,
     private _snackBar: MatSnackBar
   ) {
-    this.currUserSubj = new BehaviorSubject(this.currUserObj);
-    this.currUserSubj.next(this.currUserObj);
    }
 
   // Employee Services API
-  public getProfileDetails(ProfileID:String){
-    this.httpClient.get(this.REST_API_SERVER+'/profile/'+ProfileID)
-      .subscribe((data) => {
-        this.currUserObj = {
-          name: data['name'],
-          domain_id: data['domain_id'],
-          ic: data['ic'],
-          address: data['address'],
-          gender: data['gender'],
-          email: data['email'],
-          role: data['role'],
-          schedule: data['schedule'],
-          department: data['department'], 
-          annual_leave: data['annual_leave'],
-          medical_leave: data['medical_leave']
-        };
-        this.currUserSubj.next(this.currUserObj);
-      });
-  }
-
   public getProfile(domainId){
     return this.httpClient.get(`${this.REST_API_SERVER}/profile/${domainId}`);
   }

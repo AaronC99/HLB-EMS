@@ -4,6 +4,8 @@ import * as moment from 'moment';
 import { MatTableDataSource } from '@angular/material/table';
 import { EmployeeService } from '../service/employee.service';
 import { MatDialog } from '@angular/material/dialog';
+import { AuthModel } from 'src/app/model/Authentication.model';
+import { Timesheet } from 'src/app/model/Timesheet.model';
 
 @Component({
   selector: 'app-check-in-out-page',
@@ -26,9 +28,9 @@ export class CheckInOutPageComponent implements OnInit {
   currentYear = this.localTime.transform(this.date,'y');
   timeOut = moment().format('HHmm');
   displayedColumns: string[] = ['dateIn','day','timeIn','timeOut','dateOut'];
-  CLOCK_IN_OUT_DATA:any = [];
+  CLOCK_IN_OUT_DATA:Timesheet[] = [];
   dataSource:any = new MatTableDataSource<any>();
-  currUserId:any;
+  currentUser:AuthModel;
   yesterday = this.localTime.transform(this.date.setDate(this.date.getDate() - 1),'dd-MM');
   @ViewChild('dialogBox',{ static: true }) dialog_box: TemplateRef<any>;
 
@@ -40,8 +42,8 @@ export class CheckInOutPageComponent implements OnInit {
        this.clock = moment().format('hh:mm:ss A');
        this.currentTime = moment().format('HH:mm');
     },1000);
-    let _currUserObj:any = JSON.parse(localStorage.getItem('currentUser'));
-    this.currUserId = _currUserObj.username;
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    //this.currUserId = _currUserObj.username;
   }
 
   ngOnInit(): void {
@@ -55,8 +57,9 @@ export class CheckInOutPageComponent implements OnInit {
   }
 
   public clockInOutValidation(dataTable:any){
-    this.employeeService.getClockInOutStatus(this.currUserId)
+    this.employeeService.getClockInOutStatus(this.currentUser.username)
       .subscribe( data => {
+        console.log(data['last_clock_in']);
         dataTable.forEach(element => { 
           //If yesterday forget to colock out
           if(element.date_in === this.yesterday && element.time_in !== '0000' && 
@@ -75,14 +78,18 @@ export class CheckInOutPageComponent implements OnInit {
             element.time_out !== '0000' && data['last_clock_in'] === false){
             this.clockInButton = false;
             this.clockOutButton = false;
+          }// For Clocking Out Previous Days 
+          else if (element.time_in !== '0000' && element.time_out === '0000' && data['last_clock_in']){
+            this.clockInButton = false;
+            this.clockOutButton = true;
           }
         });
       });
   }
 
  public displayClockInOut(){
-    this.employeeService.getTimesheet(this.currUserId,this.currentMonth,this.currentYear)
-      .subscribe( data => {
+    this.employeeService.getTimesheet(this.currentUser.username,this.currentMonth,this.currentYear)
+      .subscribe((data:Timesheet[]) => {
         this.CLOCK_IN_OUT_DATA = data;
         this.filterTable(this.CLOCK_IN_OUT_DATA);
         this.clockInOutValidation(this.CLOCK_IN_OUT_DATA);
@@ -97,27 +104,21 @@ export class CheckInOutPageComponent implements OnInit {
 
   public updateTable(status:number){
     if (status === 1){
-      this.employeeService.clockIn(this.currUserId).subscribe( data =>{
+      this.employeeService.clockIn(this.currentUser.username)
+      .subscribe((data:Timesheet[]) =>{
         this.CLOCK_IN_OUT_DATA = data;
         this.filterTable(this.CLOCK_IN_OUT_DATA);
         this.clockInOutValidation(this.CLOCK_IN_OUT_DATA);
         this.dataSource = this.CLOCK_IN_OUT_DATA;
       });
     } else if (status === 2){
-        this.employeeService.clockOut(this.currUserId)
-        .subscribe ( data => {
+        this.employeeService.clockOut(this.currentUser.username)
+        .subscribe (( data:Timesheet[]) => {
           this.CLOCK_IN_OUT_DATA = data;
           this.filterTable(this.CLOCK_IN_OUT_DATA);
           this.clockInOutValidation(this.CLOCK_IN_OUT_DATA);
           this.dataSource = this.CLOCK_IN_OUT_DATA;
         });      
-    } else if (status === 3){
-      this.employeeService.clockOut(this.currUserId)
-      .subscribe ( data => {
-        this.CLOCK_IN_OUT_DATA = data;
-        this.filterTable(this.CLOCK_IN_OUT_DATA);
-        this.dataSource = this.CLOCK_IN_OUT_DATA;
-      });    
     }
   }
 
@@ -140,7 +141,7 @@ export class CheckInOutPageComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.updateTable(3);
+      this.updateTable(2);
     });
   }
 }

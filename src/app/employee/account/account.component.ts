@@ -4,6 +4,7 @@ import { Employee } from 'src/app/model/Employee.model';
 import { Schedule } from 'src/app/model/Schedule.model';
 import { Department } from 'src/app/model/Department.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthModel } from 'src/app/model/Authentication.model';
 
 @Component({
   selector: 'app-account',
@@ -11,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./account.component.scss']
 })
 export class AccountComponent implements OnInit {
+  user:AuthModel;
   currUser: Employee;
   currUserSchedule: Schedule;
   currUserDepartment: Department;
@@ -19,20 +21,19 @@ export class AccountComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router
   ) {
-    this.employeeService.currUserDetails.subscribe((details)=>{
-      this.currUser = details;
-      this.currUserSchedule = details.schedule;
-      this.currUserDepartment = details.department;
-    });
+    this.user = JSON.parse(localStorage.getItem('currentUser'));
    }
 
   ngOnInit(): void {
-    this.currUser.domain_id = this.route.snapshot.paramMap.get('domain_id');
-    this.employeeService.getProfileDetails(this.currUser.domain_id);
+    this.employeeService.getProfile(this.user.username)
+      .subscribe((employee:Employee) =>{
+        this.currUser = employee;
+        this.currUserDepartment = employee.department;
+        this.currUserSchedule = employee.schedule;
+      });
   }
 
   changePwdPage(){
     this.router.navigateByUrl('/home/new-password-page')
   }
-
 }

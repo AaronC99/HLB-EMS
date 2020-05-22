@@ -6,6 +6,8 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
+import { Employee } from 'src/app/model/Employee.model';
+import { AuthModel } from 'src/app/model/Authentication.model';
 
 @Component({
   selector: 'app-employee-list',
@@ -27,7 +29,7 @@ export class EmployeeListComponent implements OnInit {
   dateList = [];
   EMPLOYEE_DATA:any = [];
   dataSource:any = new MatTableDataSource<any>(); 
-  currentUserId:any;
+  currentUser:AuthModel;
   searchForm = new FormGroup ({
     status: new FormControl(),
     dateSelected: new FormControl()
@@ -38,8 +40,7 @@ export class EmployeeListComponent implements OnInit {
     private formBuilder:FormBuilder,
     private employeeService: EmployeeService,
     private router:Router) {
-      let _currUserObj:any = JSON.parse(localStorage.getItem('currentUser'));
-      this.currentUserId = _currUserObj.username;
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
    }
 
   ngOnInit(): void {
@@ -71,7 +72,8 @@ export class EmployeeListComponent implements OnInit {
   }
 
   public getEmployeeRecords(){
-    this.employeeService.getAllEmployees(this.currentUserId).subscribe(data =>{
+    this.employeeService.getAllEmployees(this.currentUser.username)
+    .subscribe((data) => {
       this.EMPLOYEE_DATA = data;
       let date = [this.dateList[this.dateList.length - 1]];
       let dateString = date[0].split('-',2);
@@ -110,7 +112,7 @@ export class EmployeeListComponent implements OnInit {
     let month = date[0];
     let year = date[1];
     let period = parseInt(moment().month(month).format("M")) - 1;
-    this.employeeService.getAllEmployees(this.currentUserId)
+    this.employeeService.getAllEmployees(this.currentUser.username)
       .subscribe( data =>{
         this.EMPLOYEE_DATA = data;
         // If timesheet status is Pending
