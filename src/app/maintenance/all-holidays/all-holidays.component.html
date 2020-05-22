@@ -7,27 +7,25 @@
             <mat-card-content>
                 <div class="row justify-content-center">
                     <div class="col-3">
-                        <h2>Select Date To View Details</h2>
+                        <h2 class="title">Select Date To View Details</h2>
                     </div>
                     <div class="col-12">
-                        <div class="d-flex align-content-stretch flex-wrap">
-                            <ngb-datepicker #dp
+                        <ngb-datepicker #dp
                                 [displayMonths]="6" 
                                 [dayTemplate]="t" 
                                 outsideDays="hidden">
-                            </ngb-datepicker>
+                        </ngb-datepicker>
 
-                            <ng-template #t 
-                                let-date  
-                                let-focused="focused">
-                                <span class="custom-day"
-                                    [ngClass]="existingDates(date)"
-                                    [class.focused]="focused"
-                                    (click)="onDateSelect(date)">
-                                    {{ date.day }}
-                                </span>
-                            </ng-template>
-                        </div>
+                        <ng-template #t 
+                            let-date  
+                            let-focused="focused">
+                            <span class="custom-day"
+                                [ngClass]="existingDates(date)"
+                                [class.focused]="focused"
+                                (click)="onDateSelect(date)">
+                                {{ date.day }}
+                            </span>
+                        </ng-template>
                     </div>
                     <div class="col-12" *ngIf="showDetails">
                         <div class="row justify-content-md-center">
