@@ -19,7 +19,6 @@ button{
 }
 mat-card-title{
     text-align: center;
-    font-family: 'Ubuntu', sans-serif;
     text-transform: uppercase;
 }
 mat-card{
@@ -28,4 +27,14 @@ mat-card{
 }
 mat-card-content{
     padding: 20px;
+}
+th,mat-card-title{
+    font-family: 'Ubuntu', sans-serif;
+}
+th{
+    font-size: larger;
+    color: black;
+}
+td{
+    font-family: 'Sen',sans-serif;
 }
