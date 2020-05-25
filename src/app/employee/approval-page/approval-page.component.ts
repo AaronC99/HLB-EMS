@@ -190,6 +190,7 @@ export class ApprovalPageComponent implements OnInit {
 
     // Reject Timesheet
     this.statusType = 'Rejected';
+    this.employeeService.allowTimesheetEdit(this.selectedRows.selected);
     this.employeeService.updateTimesheetStatus(this.currUserDomainId,this.period,this.year,this.statusType)
       .subscribe(data => {
         if (data['approval_status'] === 'Rejected'){
@@ -197,8 +198,7 @@ export class ApprovalPageComponent implements OnInit {
           this.allowExit = true;
         }
       });
-    this.employeeService.allowTimesheetEdit(this.selectedRows.selected);
-    this.employeeService.sendEmail(this.currUserDomainId,this.period,this.year,status);
+    this.employeeService.sendEmail(this.currUserDomainId,this.period,this.year,this.statusType);
   }
 
   public isAllSelected() {

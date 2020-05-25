@@ -60,9 +60,14 @@ export class EmployeeService {
   public sendEmail(domainId:string,period:string,year:string,status:string){
     this.httpClient.post(`${this.REST_API_SERVER}/timesheet/sendEmail`
     ,{"domain_id":domainId,"period":period,"year":year,"type":status})
-    .subscribe(status => {
-      if(status !== null)
-        this.displayMessage('Request successfully sent to Department Head','success');  
+    .subscribe(res => {
+      console.log(res);
+      if(status === 'Reapproval')
+        this.displayMessage('Request successfully sent to Department Head','success'); 
+      else if (status === 'Approved' || status === 'Rejected')
+        this.displayMessage('Email has been sent to employee','success');
+      else
+        this.displayMessage('Email Not Found.','failure');
     },
     err =>{
       this.displayMessage('Error sending request. Please try again','failure');
@@ -77,7 +82,10 @@ export class EmployeeService {
   }
 
   public allowTimesheetEdit(recordsForEdit){
-    this.httpClient.patch(`${this.REST_API_SERVER}/timesheet/setEditableTimesheet` ,recordsForEdit).subscribe();
+    this.httpClient.patch(`${this.REST_API_SERVER}/timesheet/setEditableTimesheet` ,recordsForEdit)
+      .subscribe(res => {
+        console.log(res);
+      });
   }
 
   public editTimesheet(editedArray){
