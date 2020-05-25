@@ -117,7 +117,6 @@ export class AllHolidaysComponent implements OnInit {
   public deleteHoliday(){
     let message = `${this.holidayObj.holiday_name} on  ${this.holidayObj.date}-${this.holidayObj.year} is Deleted Successfully`;
     this.maintainService.deleteHoliday(this.holidayObj._id).subscribe(res => {
-      console.log(res);
       if (res !== null){
         this.maintainService.displayMessage(message,'success');
         this.showDetails = null;

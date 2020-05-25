@@ -162,7 +162,6 @@ export class LeaveApplicationComponent implements OnInit {
       // If is Medical Leave
       let daysOfPrevMon = this.daysInMonth((month-1),year);
       let today = parseInt(this.localTime.transform(this.date,'dd'));
-      console.log(today);
       this.minDate = {
         year: year,
         month: month - 1,
