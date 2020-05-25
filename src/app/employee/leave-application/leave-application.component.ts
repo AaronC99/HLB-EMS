@@ -161,16 +161,17 @@ export class LeaveApplicationComponent implements OnInit {
     } else { 
       // If is Medical Leave
       let daysOfPrevMon = this.daysInMonth((month-1),year);
+      let today = parseInt(this.localTime.transform(this.date,'dd'));
+      console.log(today);
       this.minDate = {
         year: year,
         month: month - 1,
         day: daysOfPrevMon - 6
       };
-      let maxDays = this.daysInMonth(month,year);
       this.maxDate = {
         year: year,
         month: month,
-        day: maxDays
+        day: today
       };
       this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
       this.endDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
