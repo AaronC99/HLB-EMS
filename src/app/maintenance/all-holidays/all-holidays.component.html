@@ -27,7 +27,7 @@
                             </span>
                         </ng-template>
                     </div>
-                    <div class="col-12" *ngIf="showDetails">
+                    <div class="col-12 details" *ngIf="showDetails">
                         <div class="row justify-content-md-center">
                             <div class="col col-lg-2">
                                 <h1>Holiday Name</h1>
@@ -63,7 +63,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12" *ngIf="showDetails !== null && showDetails === false">
+                    <div class="col-12 details" *ngIf="showDetails !== null && showDetails === false">
                         <h1>{{ selectedDate }} Has No Holiday</h1>
                     </div> 
                 </div>
