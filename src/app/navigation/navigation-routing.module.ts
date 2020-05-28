@@ -15,6 +15,7 @@ import { AllDepartmentsComponent } from '../maintenance/all-departments/all-depa
 import { CreateDepartmentComponent } from '../maintenance/create-department/create-department.component';
 import { AllScheduleComponent } from '../maintenance/all-schedule/all-schedule.component';
 import { CreateScheduleComponent } from '../maintenance/create-schedule/create-schedule.component';
+import { ManagerDashboardComponent } from '../employee/manager-dashboard/manager-dashboard.component';
 
 const routes: Routes = [
   { 
@@ -97,6 +98,10 @@ const routes: Routes = [
       {
         path: 'edit-schedule/:skdId&:skdName',
         component: CreateScheduleComponent
+      },
+      {
+        path: 'manager-dashboard',
+        component: ManagerDashboardComponent
       }
     ]}
 ];

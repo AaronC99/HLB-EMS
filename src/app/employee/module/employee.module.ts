@@ -26,6 +26,7 @@ import { LeaveApplicationComponent } from '../leave-application/leave-applicatio
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LeaveApprovalComponent } from '../leave-approval/leave-approval.component';
 import { ChangePasswordComponent } from '../change-password/change-password.component';
+import { ManagerDashboardComponent } from '../manager-dashboard/manager-dashboard.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { ChangePasswordComponent } from '../change-password/change-password.comp
     ApprovalPageComponent,
     LeaveApplicationComponent,
     LeaveApprovalComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    ManagerDashboardComponent
   ],
   imports: [
     CommonModule,
