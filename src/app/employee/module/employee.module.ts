@@ -27,6 +27,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LeaveApprovalComponent } from '../leave-approval/leave-approval.component';
 import { ChangePasswordComponent } from '../change-password/change-password.component';
 import { ManagerDashboardComponent } from '../manager-dashboard/manager-dashboard.component';
+import { LateReportComponent } from '../late-report/late-report.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { ManagerDashboardComponent } from '../manager-dashboard/manager-dashboar
     LeaveApplicationComponent,
     LeaveApprovalComponent,
     ChangePasswordComponent,
-    ManagerDashboardComponent
+    ManagerDashboardComponent,
+    LateReportComponent
   ],
   imports: [
     CommonModule,

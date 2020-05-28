@@ -1,0 +1,16 @@
+.outside{
+    margin:20px;
+}
+mat-card{
+    border-radius: 20px;
+    text-align: center;
+}
+form{
+    display: flex;
+}
+mat-form-field,form{
+    width: 100%;
+}
+::ng-deep .mat-form-field-wrapper{
+    padding-bottom: 0em;
+}

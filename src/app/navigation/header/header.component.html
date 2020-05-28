@@ -4,34 +4,51 @@
         <span class="title">{{ title }}</span>
         <span class="spacer"></span>
         <div fxShow="true">
-          <a routerLink="manager-dashboard" mat-button *ngIf="_authDetails.role==='Manager'">
-            <mat-icon>dashboard</mat-icon>
-            Dashboard
-          </a> 
+          <button mat-button [matMenuTriggerFor]="viewReport" *ngIf="_authDetails.role==='Manager'">
+            <mat-icon>view_list</mat-icon>
+            View Dashboards
+          </button>
+          <mat-menu #viewReport="matMenu">
+            <button mat-menu-item routerLink="manager-dashboard">
+              <mat-icon>dashboard</mat-icon>
+              <span>Main Dashboard</span>
+            </button>
+            <button mat-menu-item routerLink="late-report">
+              <mat-icon>dashboard</mat-icon>
+              <span>Late Report</span>
+            </button>
+          </mat-menu>
+
           <a routerLink="check-in-out" mat-button *ngIf="_authDetails.role==='Manager' || _authDetails.role==='Staff'">
             <mat-icon>input</mat-icon>
             {{ clockIn_Out }}
           </a> 
+
           <a routerLink="timesheet" mat-button *ngIf="_authDetails.role==='Manager' || _authDetails.role==='Staff'">
             <mat-icon>calendar_today</mat-icon>
             {{ timesheet }}
           </a>
+
           <a routerLink="employee-list" mat-button *ngIf="_authDetails.role==='Manager'">
             <mat-icon>supervised_user_circle</mat-icon>
             {{ employeeList }}
           </a>
+
           <a routerLink="leave-application" mat-button *ngIf="_authDetails.role==='Staff'">
             <mat-icon>work_off</mat-icon>
             Apply Leave
           </a>
+
           <a routerLink="my-account/{{_authDetails.username}}" mat-button *ngIf="_authDetails.role==='Manager' || _authDetails.role==='Staff'">
             <mat-icon>account_circle</mat-icon>
             {{ account }}
           </a>
+
           <button mat-button [matMenuTriggerFor]="view" *ngIf="_authDetails.role==='Admin'">
             <mat-icon>view_list</mat-icon>
             View
           </button>
+
           <mat-menu #view="matMenu">
             <button mat-menu-item routerLink="all-employee">
               <mat-icon>person</mat-icon>
@@ -50,10 +67,12 @@
               <span>All Holidays</span>
             </button>
           </mat-menu>
+
           <button mat-button [matMenuTriggerFor]="createMenu" *ngIf="_authDetails.role==='Admin'">
             <mat-icon>add_circle</mat-icon>
             Create
           </button>
+
           <mat-menu #createMenu="matMenu">
             <button mat-menu-item routerLink="new-employee" (click)="newEmployeePage()">
               <mat-icon>person_add</mat-icon>
@@ -72,9 +91,11 @@
               <span>New Holiday</span>
             </button>
           </mat-menu>
+
           <a mat-raised-button color="warn" class="log-out" (click)="onLogOut()">
             {{ logout }}
           </a>
+
         </div>
       </mat-toolbar-row>
     </mat-toolbar>

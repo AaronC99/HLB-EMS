@@ -1,0 +1,39 @@
+<div class="row justify-content-center">
+    <div class="col-12">
+        <div class="row outside">
+            <div class="col-12">
+                <mat-card>
+                    <div class="row justify-content-around">
+                        <form [formGroup]="searchForm">
+                            <div class="col-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Search Employee Name</mat-label>
+                                    <input matInput placeholder="Ex: Jane Doe..." formControlName="employeeName">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Filter By...</mat-label>
+                                    <mat-select formControlName="filterBy">
+                                        <mat-option *ngFor="let searchValue of searchList" [value]="searchValue"> 
+                                            {{ searchValue }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </form>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+        <div class="row outside">
+            <div class="col-4">
+            <mat-card>
+                <mat-card-content>
+                <div id="pie"></div>
+                </mat-card-content>
+            </mat-card>
+            </div>
+        </div>
+    </div>
+  </div>
