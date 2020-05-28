@@ -18,23 +18,64 @@
                         </mat-form-field>
                     </div>
     
-    
+                    <div class="col-12">
+                        <h2>Select Start Time:</h2>
+                    </div>
+
                     <div class="col-6">
                         <mat-form-field appearance="fill">
-                            <mat-label>Start Time</mat-label>
-                            <input matInput placeholder="Ex: 0845, 0900,...." formControlName="startTime" 
-                                required autocomplete="off" maxlength="4">
+                            <mat-label>Start Hour</mat-label>
+                            <mat-select formControlName="startHour" required>
+                                <mat-option *ngFor ="let hrs of hours" [value]="hrs">
+                                    {{ hrs }}
+                                </mat-option>
+                            </mat-select>
                             <mat-error *ngIf="newSkdForm.invalid">
                                 {{ getErrorMessage() }}
                             </mat-error>
                         </mat-form-field>
                     </div>
+
+                    <div class="col-6">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Start Minutes</mat-label>
+                            <mat-select formControlName="startMin" required>
+                                <mat-option *ngFor ="let min of minutes" [value]="min">
+                                    {{ min }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="newSkdForm.invalid">
+                                {{ getErrorMessage() }}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-12">
+                        <h2>Select End Time:</h2>
+                    </div>
     
                     <div class="col-6">
                         <mat-form-field appearance="fill">
-                            <mat-label>End Time</mat-label>
-                            <input matInput placeholder="Ex: 1745, 1800,...." formControlName="endTime" 
-                                required autocomplete="off" maxlength="4" >
+                            <mat-label>End Hours</mat-label>
+                            <mat-select formControlName="endHour" required>
+                                <mat-option *ngFor ="let hrs of hours" [value]="hrs">
+                                    {{ hrs }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="newSkdForm.invalid">
+                                {{ getErrorMessage() }}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-6">
+                        <mat-form-field appearance="fill">
+                            <mat-label>End Minutes</mat-label>
+                            <mat-select formControlName="endMin" required>
+                                <mat-option *ngFor ="let min of minutes" [value]="min">
+                                    {{ min }}
+                                </mat-option>
+                            </mat-select>
                             <mat-error *ngIf="newSkdForm.invalid">
                                 {{ getErrorMessage() }}
                             </mat-error>

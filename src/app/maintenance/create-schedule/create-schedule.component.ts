@@ -17,6 +17,8 @@ export class CreateScheduleComponent implements OnInit,AfterViewInit {
   schedule:Schedule;
   daysInWeek = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
   selectedDays = null;
+  hours = [];
+  minutes = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -34,11 +36,21 @@ export class CreateScheduleComponent implements OnInit,AfterViewInit {
   }
 
   public createForm(){
+    for (let h = 0; h <= 23; h++){
+      let hrs = ("0" + h).slice(-2);
+      this.hours.push(hrs);
+    }
+    for (let m = 0; m < 60; m++){
+      let mins =  ("0" + m).slice(-2);
+      this.minutes.push(mins);
+    }
     this.newSkdForm = this.formBuilder.group({
       skdName: ['',Validators.required],
       daysOfWork: new FormControl([]),
-      startTime: ['',[Validators.required,Validators.maxLength(4), Validators.pattern("^[0-9]*$")]],
-      endTime: ['',[Validators.required,Validators.maxLength(4), Validators.pattern("^[0-9]*$")]],
+      startHour: ['',[Validators.required]],
+      startMin: ['',[Validators.required]],
+      endHour: ['',[Validators.required]],
+      endMin: ['',[Validators.required]]
     });
   }
 
@@ -52,11 +64,13 @@ export class CreateScheduleComponent implements OnInit,AfterViewInit {
   }
 
   get startTime(){
-    return this.newSkdForm.get('startTime');
+    let start_time = `${this.newSkdForm.get('startHour').value}${this.newSkdForm.get('startMin').value}`;
+    return start_time;
   }
 
   get endTime(){
-    return this.newSkdForm.get('endTime');
+    let end_time = `${this.newSkdForm.get('endHour').value}${this.newSkdForm.get('endMin').value}`;
+    return end_time;
   }
 
 
@@ -70,8 +84,8 @@ export class CreateScheduleComponent implements OnInit,AfterViewInit {
           _id:null,
           schedule_name: this.scheduleName.value,
           days_of_work: this.daysOfWork.value,
-          start_time: this.startTime.value,
-          end_time: this.endTime.value
+          start_time: this.startTime,
+          end_time: this.endTime
         }
         this.maintainService.createSchedule(this.schedule);
       } else {
@@ -79,8 +93,8 @@ export class CreateScheduleComponent implements OnInit,AfterViewInit {
           _id: this.schedule._id,
           schedule_name: this.scheduleName.value,
           days_of_work: this.daysOfWork.value,
-          start_time: this.startTime.value,
-          end_time: this.endTime.value
+          start_time: this.startTime,
+          end_time: this.endTime
         };
         this.maintainService.editSchedule(editedSkd);
       }
@@ -100,11 +114,7 @@ export class CreateScheduleComponent implements OnInit,AfterViewInit {
   }
 
   public getErrorMessage(){
-    if (this.startTime.errors?.maxlength || this.endTime.errors?.maxlength)
-      return 'Maximum length is 4 characters';
-    else if (this.startTime.errors?.pattern || this.endTime.errors?.pattern)
-      return 'Enter Numeric Values Only';
-    else if (this.scheduleName.hasError('isExisting'))
+    if (this.scheduleName.hasError('isExisting'))
       return 'Schedule Already Exist'
     else 
       return 'Field Is Required';
@@ -119,11 +129,17 @@ export class CreateScheduleComponent implements OnInit,AfterViewInit {
       }else {
         this.schedule = data;
         this.newSchedule = false;
+        let start_hour = this.schedule.start_time.substring(0,2);
+        let start_min = this.schedule.start_time.substring(2,4);
+        let end_hour = this.schedule.end_time.substring(0,2);
+        let end_min = this.schedule.end_time.substring(2,4);
         this.newSkdForm.patchValue({
           skdName: this.schedule.schedule_name,
           daysOfWork: this.schedule.days_of_work,
-          startTime: this.schedule.start_time,
-          endTime: this.schedule.end_time
+          startHour: start_hour,
+          startMin: start_min,
+          endHour: end_hour,
+          endMin: end_min
         });
       }
     });
