@@ -61,7 +61,6 @@ export class EmployeeService {
     this.httpClient.post(`${this.REST_API_SERVER}/timesheet/sendEmail`
     ,{"domain_id":domainId,"period":period,"year":year,"type":status})
     .subscribe(res => {
-      console.log(res);
       if(status === 'Reapproval')
         this.displayMessage('Request successfully sent to Department Head','success'); 
       else if (status === 'Approved' || status === 'Rejected')
@@ -186,6 +185,15 @@ export class EmployeeService {
 
   public getExisitingLeavesDates(domainId){
     return this.httpClient.get(`${this.REST_API_SERVER}/leave/getApprovedOrPendingLeaveDates/${domainId}`);
+  }
+
+  //Reporting
+  public getOverallLateReport(managerId){
+    return this.httpClient.get(`${this.REST_API_SERVER}/report/overallLateReport/${managerId}`);
+  }
+
+  public getEmployeeLateReport(employeeId){
+    return this.httpClient.get(`${this.REST_API_SERVER}/report/empLateReport/${employeeId}`);
   }
 
   public displayMessage(message:string,status:string){

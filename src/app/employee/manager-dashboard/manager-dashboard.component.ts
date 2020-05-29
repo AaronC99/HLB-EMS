@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import Variablepie from 'highcharts/modules/variable-pie';
+import { AuthModel } from 'src/app/model/Authentication.model';
+import { EmployeeService } from '../service/employee.service';
+import { ChartData } from 'src/app/model/ChartData.model';
 
 declare var require: any;
 let Boost = require('highcharts/modules/boost');
@@ -20,55 +23,6 @@ noData(Highcharts);
 })
 export class ManagerDashboardComponent implements OnInit {
 
-  public pieLegend:any = {
-    chart: {
-      plotBackgroundColor: null,
-      plotBorderWidth: null,
-      plotShadow: false,
-      type: 'pie'
-    },
-    title: {
-      text: 'Punctual vs Late',
-      style: {
-        fontWeight: 'bold'
-      }
-    },
-    tooltip: {
-      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-    },
-    accessibility: {
-      point: {
-        valueSuffix: '%'
-      }
-    },
-    plotOptions: {
-      pie: {
-        allowPointSelect: true,
-        cursor: 'pointer',
-        dataLabels: {
-            enabled: false
-        },
-        showInLegend: true
-      }
-    },
-    series: [{
-      name: 'Brands',
-      colorByPoint: true,
-      data: [
-        {
-          name: 'Chrome',
-          y: 60,
-          sliced: true,
-          selected: true
-        }, 
-        {
-          name: 'Internet Explorer',
-          y: 40
-        }
-      ]
-    }]
-  }
-  
   // public pieSemiCircle:any = {
   //   chart: {
   //     plotBackgroundColor: null,
@@ -159,13 +113,62 @@ export class ManagerDashboardComponent implements OnInit {
       }]
     }]
   }
+  public overallLateReport:any = {};
+  currentManager:AuthModel;
 
-  constructor() { }
+  constructor(
+    private employeeService: EmployeeService
+  ) {
+    this.currentManager = JSON.parse(localStorage.getItem('currentUser'));
+   }
 
   ngOnInit(): void {
-    Highcharts.chart('pie-legend',this.pieLegend);
+    this.displayOverallLateReport();
     //Highcharts.chart('semi-pie',this.pieSemiCircle);
     Highcharts.chart('var-radius-pie',this.varRadiusPie);
   }
 
+  public displayOverallLateReport(){
+    this.employeeService.getOverallLateReport(this.currentManager.username)
+    .subscribe((results:ChartData[]) => {
+      this.overallLateReport = {
+        chart: {
+          plotBackgroundColor: null,
+          plotBorderWidth: null,
+          plotShadow: false,
+          type: 'pie'
+        },
+        title: {
+          text: 'Punctual vs Late',
+          style: {
+            fontWeight: 'bold'
+          }
+        },
+        tooltip: {
+          pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        accessibility: {
+          point: {
+            valueSuffix: '%'
+          }
+        },
+        plotOptions: {
+          pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: false
+            },
+            showInLegend: true
+          }
+        },
+        series: [{
+          name: 'Results',
+          colorByPoint: true,
+          data: results
+        }]
+      }
+      Highcharts.chart('overall-late-report',this.overallLateReport);
+    });
+  }
 }
