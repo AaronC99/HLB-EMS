@@ -17,6 +17,7 @@ import { AllScheduleComponent } from '../maintenance/all-schedule/all-schedule.c
 import { CreateScheduleComponent } from '../maintenance/create-schedule/create-schedule.component';
 import { ManagerDashboardComponent } from '../employee/manager-dashboard/manager-dashboard.component';
 import { LateReportComponent } from '../employee/late-report/late-report.component';
+import { EmployeeDashboardComponent } from '../employee/employee-dashboard/employee-dashboard.component';
 
 const routes: Routes = [
   { 
@@ -101,12 +102,16 @@ const routes: Routes = [
         component: CreateScheduleComponent
       },
       {
-        path: 'manager-dashboard',
+        path: 'manager/dashboard',
         component: ManagerDashboardComponent
       },
       {
-        path:'late-report',
+        path:'manager/late-report',
         component: LateReportComponent
+      },
+      {
+        path: 'employee/dashboard',
+        component: EmployeeDashboardComponent
       }
     ]}
 ];

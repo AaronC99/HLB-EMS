@@ -28,6 +28,7 @@ import { LeaveApprovalComponent } from '../leave-approval/leave-approval.compone
 import { ChangePasswordComponent } from '../change-password/change-password.component';
 import { ManagerDashboardComponent } from '../manager-dashboard/manager-dashboard.component';
 import { LateReportComponent } from '../late-report/late-report.component';
+import { EmployeeDashboardComponent } from '../employee-dashboard/employee-dashboard.component';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { LateReportComponent } from '../late-report/late-report.component';
     LeaveApprovalComponent,
     ChangePasswordComponent,
     ManagerDashboardComponent,
-    LateReportComponent
+    LateReportComponent,
+    EmployeeDashboardComponent
   ],
   imports: [
     CommonModule,

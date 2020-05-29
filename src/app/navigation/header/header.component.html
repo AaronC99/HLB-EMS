@@ -6,18 +6,23 @@
         <div fxShow="true">
           <button mat-button [matMenuTriggerFor]="viewReport" *ngIf="_authDetails.role==='Manager'">
             <mat-icon>view_list</mat-icon>
-            View Dashboards
+            Dashboards
           </button>
           <mat-menu #viewReport="matMenu">
-            <button mat-menu-item routerLink="manager-dashboard">
+            <button mat-menu-item routerLink="manager/dashboard">
               <mat-icon>dashboard</mat-icon>
-              <span>Main Dashboard</span>
+              <span>Main Report</span>
             </button>
             <button mat-menu-item routerLink="late-report">
               <mat-icon>dashboard</mat-icon>
               <span>Late Report</span>
             </button>
           </mat-menu>
+
+          <a routerLink="employee/dashboard" mat-button *ngIf="_authDetails.role==='Staff'">
+            <mat-icon>dashboard</mat-icon>
+            Dashboard
+          </a>
 
           <a routerLink="check-in-out" mat-button *ngIf="_authDetails.role==='Manager' || _authDetails.role==='Staff'">
             <mat-icon>input</mat-icon>
