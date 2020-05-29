@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -29,6 +29,7 @@ import { ChangePasswordComponent } from '../change-password/change-password.comp
 import { ManagerDashboardComponent } from '../manager-dashboard/manager-dashboard.component';
 import { LateReportComponent } from '../late-report/late-report.component';
 import { EmployeeDashboardComponent } from '../employee-dashboard/employee-dashboard.component';
+import { FilterPipe } from '../late-report/filter.pipe';
 
 
 @NgModule({
@@ -43,10 +44,12 @@ import { EmployeeDashboardComponent } from '../employee-dashboard/employee-dashb
     ChangePasswordComponent,
     ManagerDashboardComponent,
     LateReportComponent,
-    EmployeeDashboardComponent
+    EmployeeDashboardComponent,
+    FilterPipe
   ],
   imports: [
     CommonModule,
+    FormsModule,
     AuthenticationModule,
     MatCardModule,
     MatButtonModule,

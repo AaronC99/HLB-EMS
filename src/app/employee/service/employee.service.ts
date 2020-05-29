@@ -196,6 +196,10 @@ export class EmployeeService {
     return this.httpClient.get(`${this.REST_API_SERVER}/report/empLateReport/${employeeId}`);
   }
 
+  public getDeptLateReport(managerId){
+    return this.httpClient.get(`${this.REST_API_SERVER}/report/deptLateReport/${managerId}`);
+  }
+
   public displayMessage(message:string,status:string){
     this._snackBar.open(message,'Close',{
       duration: 5000,
