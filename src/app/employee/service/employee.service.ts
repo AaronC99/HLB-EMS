@@ -200,6 +200,14 @@ export class EmployeeService {
     return this.httpClient.get(`${this.REST_API_SERVER}/report/deptLateReport/${managerId}`);
   }
 
+  public getOverallLeaveReport(managerId){
+    return this.httpClient.get(`${this.REST_API_SERVER}/report/overallLeaveReport/${managerId}`);
+  }
+
+  public getDeptLeaveReport(managerId){
+    return this.httpClient.get(`${this.REST_API_SERVER}/report/deptLeaveReport/${managerId}`);
+  }
+
   public displayMessage(message:string,status:string){
     this._snackBar.open(message,'Close',{
       duration: 5000,

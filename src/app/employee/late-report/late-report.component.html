@@ -12,7 +12,8 @@
                     <mat-form-field appearance="outline">
                         <mat-label>Filter By...</mat-label>
                         <mat-select>
-                            <mat-option *ngFor="let searchValue of searchList" [value]="searchValue"> 
+                            <mat-option *ngFor="let searchValue of searchList" [value]="searchValue" 
+                            (click)="filterBy(searchValue)"> 
                                 {{ searchValue }}
                             </mat-option>
                         </mat-select>
@@ -23,13 +24,13 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-4" *ngFor="let employee of deptLateReport | filter: searchText">
+    <div class="col-4" *ngFor="let employee of deptReport | filter: searchText">
         <mat-card>
             <mat-card-content>
                 <div id="report">
                     {{ employee.name }}<br>
                     <div *ngFor="let report of employee.report">
-                        {{ report.name }}:{{ report.y }}
+                        {{ report.name }}:{{ report.y }}%
                     </div>
                 </div>
             </mat-card-content>

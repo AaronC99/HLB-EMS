@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
 import * as Highcharts from 'highcharts';
 import Variablepie from 'highcharts/modules/variable-pie';
 import { EmployeeService } from '../service/employee.service';
 import { AuthModel } from 'src/app/model/Authentication.model';
+import { EmployeeReport } from 'src/app/model/EmployeeReport.model';
 
 declare var require: any;
 let Boost = require('highcharts/modules/boost');
@@ -23,31 +23,41 @@ noData(Highcharts);
 })
 export class LateReportComponent implements OnInit {
   searchList = ['Attendance','Leaves'];
-  //searchForm:FormGroup;
   currentManager:AuthModel;
-  deptLateReport:any = [];
+  deptLateReport:EmployeeReport[] = [];
+  deptLeaveReport:EmployeeReport[];
+  deptReport:EmployeeReport[];
   searchText:string;
 
   constructor(
-    private fomrBuilder:FormBuilder,
     private employeeService:EmployeeService
     ) {
       this.currentManager = JSON.parse(localStorage.getItem('currentUser'));
-      // this.searchForm = this.fomrBuilder.group({
-      //   employeeName: [''],
-      //   filterBy: [this.searchList[0]]
-      // });
    }
 
   ngOnInit(): void {
+    this.displayAllLateReport();
+  }
+
+  public displayAllLateReport(){
     this.employeeService.getDeptLateReport(this.currentManager.username)
-    .subscribe(data=>{
-      this.deptLateReport = data;
-      console.log(this.deptLateReport);
-      this.deptLateReport.forEach(element => {
-        this.getEmployeeLateReport(element);
-      });
+    .subscribe((data:EmployeeReport[])=>{
+      this.deptReport = data;
     })
+  }
+
+  public displayAllLeaveReport(){
+    this.employeeService.getDeptLeaveReport(this.currentManager.username)
+    .subscribe((report:EmployeeReport[]) => {
+      this.deptReport = report;
+    });
+  }
+
+  public filterBy(value){
+    if (value === 'Leaves')
+      this.displayAllLeaveReport();
+    else 
+      this.displayAllLateReport();
   }
 
   public getEmployeeLateReport(employee){
