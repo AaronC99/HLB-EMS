@@ -43,6 +43,10 @@ export class LateReportComponent implements OnInit {
     this.employeeService.getDeptLateReport(this.currentManager.username)
     .subscribe((data:EmployeeReport[])=>{
       this.deptReport = data;
+      this.deptReport.forEach(element => {
+        let lateReportChart = this.getEmployeeLateReport(element);
+        //Highcharts.chart(`${element.domain_id}-report`,lateReportChart);
+      });
     })
   }
 
@@ -89,13 +93,14 @@ export class LateReportComponent implements OnInit {
               }
           }
       },
-      series: [{
+      series: [
+        {
         name: 'Brands',
         colorByPoint: true,
         data: employee.report
-      }]
+        }
+      ]
     } 
-    //Highcharts.chart(`${employee.domain_id}-report`,chart);
     return chart;
   }
 }
