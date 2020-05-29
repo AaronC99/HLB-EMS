@@ -163,7 +163,7 @@ export class ManagerDashboardComponent implements OnInit {
           }
         },
         series: [{
-          name: 'Results',
+          name: 'Total',
           colorByPoint: true,
           data: results
         }]
