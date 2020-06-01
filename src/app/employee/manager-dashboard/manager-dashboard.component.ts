@@ -4,6 +4,7 @@ import Variablepie from 'highcharts/modules/variable-pie';
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { EmployeeService } from '../service/employee.service';
 import { ChartData } from 'src/app/model/ChartData.model';
+import { Router } from '@angular/router';
 
 declare var require: any;
 let Boost = require('highcharts/modules/boost');
@@ -23,9 +24,9 @@ noData(Highcharts);
 })
 export class ManagerDashboardComponent implements OnInit {
   currentManager:AuthModel;
-
   constructor(
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private router:Router
   ) {
     this.currentManager = JSON.parse(localStorage.getItem('currentUser'));
    }
@@ -49,6 +50,10 @@ export class ManagerDashboardComponent implements OnInit {
       let leave_report = this.generatePieChart('Annual vs Medical Leave',report);
       Highcharts.chart('overall-leave-report',leave_report);
     });
+  }
+
+  public viewReports(reportType){
+    this.router.navigateByUrl(`/home/manager/all-report/${reportType}`);
   }
 
   public generatePieChart(chartName,report){

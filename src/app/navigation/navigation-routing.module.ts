@@ -106,7 +106,7 @@ const routes: Routes = [
         component: ManagerDashboardComponent
       },
       {
-        path:'manager/late-report',
+        path:'manager/all-report/:reportType',
         component: LateReportComponent
       },
       {
