@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import Variablepie from 'highcharts/modules/variable-pie';
 import { EmployeeService } from '../service/employee.service';
@@ -22,7 +22,7 @@ noData(Highcharts);
   templateUrl: './late-report.component.html',
   styleUrls: ['./late-report.component.scss']
 })
-export class LateReportComponent implements OnInit{
+export class LateReportComponent implements OnInit, OnChanges{
   searchList = ['Attendance','Leave'];
   currentManager:AuthModel;
   deptLateReport:EmployeeReport[] = [];
@@ -31,7 +31,7 @@ export class LateReportComponent implements OnInit{
   searchText:string;
   reportType = '';
   currentUrl = '/home/manager/all-report';
-  
+
   constructor(
     private employeeService:EmployeeService,
     private route: ActivatedRoute,
@@ -46,6 +46,22 @@ export class LateReportComponent implements OnInit{
       this.displayAllLateReport();
     else if (this.reportType === 'Leave')
       this.displayAllLeaveReport();
+  }
+
+  ngOnChanges(changes: SimpleChanges){
+    for (const propName in changes){
+      let change = changes[propName];
+      let currVal = JSON.stringify(change.currentValue);
+      let prevVal = JSON.stringify(change.previousValue);
+      console.log(currVal);
+      console.log(prevVal);
+    }
+  }
+
+  public searchTermEmpty(){
+    if (this.searchText === ''){
+      this.ngOnInit();
+    }
   }
 
   public displayAllLateReport(){
