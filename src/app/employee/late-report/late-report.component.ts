@@ -4,6 +4,7 @@ import Variablepie from 'highcharts/modules/variable-pie';
 import { EmployeeService } from '../service/employee.service';
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { EmployeeReport } from 'src/app/model/EmployeeReport.model';
+import { ActivatedRoute, Router } from '@angular/router';
 
 declare var require: any;
 let Boost = require('highcharts/modules/boost');
@@ -21,46 +22,68 @@ noData(Highcharts);
   templateUrl: './late-report.component.html',
   styleUrls: ['./late-report.component.scss']
 })
-export class LateReportComponent implements OnInit {
-  searchList = ['Attendance','Leaves'];
+export class LateReportComponent implements OnInit{
+  searchList = ['Attendance','Leave'];
   currentManager:AuthModel;
   deptLateReport:EmployeeReport[] = [];
   deptLeaveReport:EmployeeReport[];
   deptReport:EmployeeReport[];
   searchText:string;
-
+  reportType = '';
+  currentUrl = '/home/manager/all-report';
+  
   constructor(
-    private employeeService:EmployeeService
+    private employeeService:EmployeeService,
+    private route: ActivatedRoute,
+    private router: Router
     ) {
       this.currentManager = JSON.parse(localStorage.getItem('currentUser'));
    }
 
   ngOnInit(): void {
-    this.displayAllLateReport();
+    this.reportType= this.route.snapshot.paramMap.get('reportType');
+    if (this.reportType === 'Attendance')
+      this.displayAllLateReport();
+    else if (this.reportType === 'Leave')
+      this.displayAllLeaveReport();
   }
 
   public displayAllLateReport(){
+    this.reportType = 'Attendance';
+    this.router.navigateByUrl(`${this.currentUrl}/${this.reportType}`);
     this.employeeService.getDeptLateReport(this.currentManager.username)
     .subscribe((data:EmployeeReport[])=>{
       this.deptReport = data;
-      this.deptReport.forEach(element => {
-        let lateReportChart = this.getEmployeeLateReport(element);
-        //Highcharts.chart(`${element.domain_id}-report`,lateReportChart);
-      });
-    })
+      setTimeout(() => {
+        for (let i=0;i<this.deptReport.length;i++){
+          let report = this.getEmployeeLateReport(this.deptReport[i]);
+          report.chart.renderTo = `${this.deptReport[i].domain_id}-report`;
+          Highcharts.chart(report);
+        } 
+      },1000);
+    });
   }
 
   public displayAllLeaveReport(){
+    this.reportType = 'Leave';
+    this.router.navigateByUrl(`${this.currentUrl}/${this.reportType}`);
     this.employeeService.getDeptLeaveReport(this.currentManager.username)
     .subscribe((report:EmployeeReport[]) => {
       this.deptReport = report;
+      setTimeout(() => {
+        for(let i=0;i<this.deptReport.length;i++){
+          let report = this.getEmployeeLateReport(this.deptReport[i]);
+          report.chart.renderTo = `${this.deptReport[i].domain_id}-report`;
+          Highcharts.chart(report);
+        }
+      },1000)
     });
   }
 
   public filterBy(value){
-    if (value === 'Leaves')
+    if (value === 'Leave')
       this.displayAllLeaveReport();
-    else 
+    else if (value === 'Attendance')
       this.displayAllLateReport();
   }
 
@@ -88,14 +111,14 @@ export class LateReportComponent implements OnInit {
               allowPointSelect: true,
               cursor: 'pointer',
               dataLabels: {
-                  enabled: true,
-                  format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-              }
+                  enabled: false
+              },
+              showInLegend: true
           }
       },
       series: [
         {
-        name: 'Brands',
+        name: 'Total',
         colorByPoint: true,
         data: employee.report
         }

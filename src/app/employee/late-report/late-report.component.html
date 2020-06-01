@@ -1,6 +1,9 @@
 <div class="row">
     <div class="col-12">
         <mat-card>
+            <mat-card-title>
+                {{ reportType }} Report
+            </mat-card-title>
             <div class="row justify-content-around">
                 <div class="col-6">
                     <mat-form-field appearance="outline">
@@ -26,14 +29,7 @@
 <div class="row">
     <div class="col-4" *ngFor="let employee of deptReport | filter: searchText">
         <mat-card>
-            <mat-card-content>
-                <div id="report">
-                    {{ employee.name }}<br>
-                    <div *ngFor="let report of employee.report">
-                        {{ report.name }}:{{ report.y }}%
-                    </div>
-                </div>
-            </mat-card-content>
+            <div id="{{employee.domain_id}}-report"></div>
         </mat-card>
-    </div>
+    </div> 
 </div>
