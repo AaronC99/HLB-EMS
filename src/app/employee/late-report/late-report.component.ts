@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import Variablepie from 'highcharts/modules/variable-pie';
 import { EmployeeService } from '../service/employee.service';
@@ -22,11 +22,9 @@ noData(Highcharts);
   templateUrl: './late-report.component.html',
   styleUrls: ['./late-report.component.scss']
 })
-export class LateReportComponent implements OnInit, OnChanges{
+export class LateReportComponent implements OnInit{
   searchList = ['Attendance','Leave'];
   currentManager:AuthModel;
-  deptLateReport:EmployeeReport[] = [];
-  deptLeaveReport:EmployeeReport[];
   deptReport:EmployeeReport[];
   searchText:string;
   reportType = '';
@@ -48,35 +46,13 @@ export class LateReportComponent implements OnInit, OnChanges{
       this.displayAllLeaveReport();
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    for (const propName in changes){
-      let change = changes[propName];
-      let currVal = JSON.stringify(change.currentValue);
-      let prevVal = JSON.stringify(change.previousValue);
-      console.log(currVal);
-      console.log(prevVal);
-    }
-  }
-
-  public searchTermEmpty(){
-    if (this.searchText === ''){
-      this.ngOnInit();
-    }
-  }
-
   public displayAllLateReport(){
     this.reportType = 'Attendance';
     this.router.navigateByUrl(`${this.currentUrl}/${this.reportType}`);
     this.employeeService.getDeptLateReport(this.currentManager.username)
     .subscribe((data:EmployeeReport[])=>{
       this.deptReport = data;
-      setTimeout(() => {
-        for (let i=0;i<this.deptReport.length;i++){
-          let report = this.getEmployeeLateReport(this.deptReport[i]);
-          report.chart.renderTo = `${this.deptReport[i].domain_id}-report`;
-          Highcharts.chart(report);
-        } 
-      },1000);
+      this.renderCharts(this.deptReport);
     });
   }
 
@@ -86,14 +62,18 @@ export class LateReportComponent implements OnInit, OnChanges{
     this.employeeService.getDeptLeaveReport(this.currentManager.username)
     .subscribe((report:EmployeeReport[]) => {
       this.deptReport = report;
-      setTimeout(() => {
-        for(let i=0;i<this.deptReport.length;i++){
-          let report = this.getEmployeeLateReport(this.deptReport[i]);
-          report.chart.renderTo = `${this.deptReport[i].domain_id}-report`;
-          Highcharts.chart(report);
-        }
-      },1000)
+      this.renderCharts(this.deptReport);
     });
+  }
+
+  public renderCharts(empReport){
+    setTimeout(() => {
+      for(let i=0;i<empReport.length;i++){
+        let report = this.getEmployeeLateReport(empReport[i]);
+        report.chart.renderTo = `${empReport[i].domain_id}-report`;
+        Highcharts.chart(report);
+      }
+    },1000)
   }
 
   public filterBy(value){
