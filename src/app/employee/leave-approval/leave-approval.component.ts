@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { EmployeeService } from '../service/employee.service';
 import * as moment from 'moment';
 import { AuthModel } from 'src/app/model/Authentication.model';
+import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 
 @Component({
   selector: 'app-leave-approval',
@@ -26,7 +27,8 @@ export class LeaveApprovalComponent implements OnInit {
   constructor(
     private router:Router,
     private route:ActivatedRoute,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private authService:AuthenticationService
     ) { 
       this.currentUserId = this.route.snapshot.paramMap.get('domainId');
       this.dateSubmitted = this.route.snapshot.paramMap.get('date_submitted');
@@ -36,6 +38,13 @@ export class LeaveApprovalComponent implements OnInit {
         this.router.navigateByUrl(this.returnUrl);
         localStorage.setItem('temproraryUrl',JSON.stringify(url));
       }
+
+      this.authService.verifyUserIdle();
+      this.authService.userIsIdle.subscribe(isIdle => {
+        if (isIdle){
+          this.exit();
+        }
+      });
     }
 
   ngOnInit(): void {

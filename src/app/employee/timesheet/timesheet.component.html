@@ -98,14 +98,6 @@
                     </td>
                   </ng-container>
 
-                  <ng-container matColumnDef="leave">
-                    <th mat-header-cell *matHeaderCellDef>Leave</th>
-                    <td mat-cell *matCellDef="let element"
-                    [ngStyle]="{'background-color': element.remarks === 'Weekend' ? '#DBDBDB' : ''}"> 
-                      {{ element.leave }}
-                    </td>
-                  </ng-container>
-
                   <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true;"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
                 </table> 

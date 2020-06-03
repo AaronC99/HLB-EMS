@@ -7,6 +7,7 @@ import { AuthModel } from 'src/app/model/Authentication.model';
 import { LeaveApproval } from 'src/app/model/LeaveApproval.model';
 import { Employee } from 'src/app/model/Employee.model';
 import { Timesheet } from 'src/app/model/Timesheet.model';
+import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 
 @Component({
   selector: 'app-approval-page',
@@ -46,7 +47,8 @@ export class ApprovalPageComponent implements OnInit {
   constructor(
     private route:ActivatedRoute,
     private employeeService: EmployeeService,
-    private router: Router
+    private router: Router, 
+    private authService: AuthenticationService
   ) {
     this.currUserDomainId = this.route.snapshot.paramMap.get('domainId');
     this.period = this.route.snapshot.paramMap.get('period');
@@ -60,6 +62,13 @@ export class ApprovalPageComponent implements OnInit {
       this.router.navigateByUrl(this.returnUrl);
       localStorage.setItem('temproraryUrl',JSON.stringify(url));
     }
+
+    this.authService.verifyUserIdle();
+    this.authService.userIsIdle.subscribe(isIdle => {
+      if (isIdle){
+        this.exit();
+      }
+    });
    }
 
   ngOnInit(): void {

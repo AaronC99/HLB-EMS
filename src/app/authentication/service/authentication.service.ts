@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AuthModel } from 'src/app/model/Authentication.model';
+import { BnNgIdleService } from 'bn-ng-idle';
 
 @Injectable()
 export class AuthenticationService {
@@ -11,9 +12,11 @@ export class AuthenticationService {
   private _authObj: AuthModel = new AuthModel();
   private _authSubj: BehaviorSubject<AuthModel>;
   private loginErrorSubject = new Subject<string>();
+  public isIdle = new BehaviorSubject<boolean>(false);
 
   constructor(
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private bnIdle: BnNgIdleService
   ) {
     this._authSubj = new BehaviorSubject<AuthModel>(JSON.parse(localStorage.getItem('currentUser')));
     this._authSubj = new BehaviorSubject(this._authObj);
@@ -35,6 +38,18 @@ export class AuthenticationService {
     return this._authSubj.value;
   }
 
+  get userIsIdle(){
+    return this.isIdle.asObservable();
+  }
+
+  verifyUserIdle(){
+    const idlePeriod = 600;
+    this.bnIdle.startWatching(idlePeriod).subscribe((isIdle:boolean) => {
+      if (isIdle){
+        this.isIdle.next(true);
+      }
+    });
+  }
 
   getLoginDetails = (loginID: string, pwd: string) => {
     this.httpClient.get(this.REST_API_SERVER+'/login/'+loginID+'/'+pwd)
