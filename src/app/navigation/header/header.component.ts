@@ -20,6 +20,7 @@ export class HeaderComponent{
   addEmployee = 'New Employee';
   logout = 'Log Out';
   _authDetails: AuthModel;
+  notificationList = ['Notif 1','Notif 2','Notif 3'];
 
   constructor(
     private authService: AuthenticationService,
@@ -28,6 +29,11 @@ export class HeaderComponent{
     private maintenanceService: MaintenanceService) {
     this._authDetails = JSON.parse(localStorage.getItem('currentUser'));
     this.account = this._authDetails.username;
+  }
+
+  openNotif(notif){
+    // Redirect to aprroval page if notif is timesheet request
+    console.log(notif)
   }
 
   newEmployeePage(){

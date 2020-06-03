@@ -1,26 +1,55 @@
-.spacer {
-    flex: 1 1 auto;
+.navbar{
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
 }
-.nav-bar{
-    button:focus{
-        outline: none;
-        border: 0;
+.navbar-brand{
+    margin-left: 50px;
+    font-weight: bold;
+}
+.navbar-brand,a,button{
+    font-family: 'Ubuntu', sans-serif;
+    color: white;
+}
+.navbar-brand:hover{
+    color:white !important;
+    background-color: transparent !important;
+}
+button:focus{
+    outline: none;
+    border: 0;
+}
+a{
+    text-decoration: none !important;
+}
+a,button{
+    border-radius: 50px;
+    &:hover{
+        color: black;
+        background-color: white;
     }
-    .title,a{
-        font-family: 'Ubuntu', sans-serif;
-        margin-left: 40px;
+}
+.log-out{
+    &:hover{
+        color: #f44336;
+        background-color: white;
     }
-    a,button{
-        border-radius: 50px;
-        &:hover{
-            color: #3f51b5;
-            background-color: white;
-        }
-    }
-    .log-out{
-        &:hover{
-            color: #f44336;
-            background-color: white;
-        }
-    }
+}
+::ng-deep .notif-menu.mat-menu-panel{
+    width: 30em;
+    max-width: none;
+    border-radius: 15px;
+}
+.notif-title{
+    font-family: 'Sens',sans-serif;
+    font-weight: bold;
+    font-size: larger;
+    margin: 0px 10px;
+}
+.notif-card{
+    box-shadow: none;
+}
+.notif-card:hover{
+    background-color: lightgrey;
+}
+button.mat-menu-item{
+    color: black;
 }

@@ -5,11 +5,11 @@ import { NavigationRoutingModule } from './navigation-routing.module';
 import { NavigationComponent } from './navigation.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { HeaderComponent } from './header/header.component';
 import { AuthenticationModule } from '../authentication/module/authentication.module';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatCardModule } from '@angular/material/card';
 
 
 @NgModule({
@@ -23,9 +23,9 @@ import { MatMenuModule } from '@angular/material/menu';
     NavigationRoutingModule,
     MatButtonModule,
     MatIconModule,
-    MatToolbarModule,
-    FlexLayoutModule,
-    MatMenuModule
+    MatMenuModule,
+    MatBadgeModule,
+    MatCardModule
   ],
   providers: [],
   exports: [
