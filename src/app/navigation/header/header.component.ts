@@ -4,6 +4,7 @@ import { AuthModel } from 'src/app/model/Authentication.model';
 import { Router } from '@angular/router';
 import { AdminService } from 'src/app/admin/service/admin.service';
 import { MaintenanceService } from 'src/app/maintenance/service/maintenance.service';
+import { BnNgIdleService } from 'bn-ng-idle';
 
 @Component({
   selector: 'app-header',
@@ -26,9 +27,20 @@ export class HeaderComponent{
     private authService: AuthenticationService,
     private router:Router,
     private adminService: AdminService,
-    private maintenanceService: MaintenanceService) {
-    this._authDetails = JSON.parse(localStorage.getItem('currentUser'));
-    this.account = this._authDetails.username;
+    private maintenanceService: MaintenanceService,
+    private bnIdle: BnNgIdleService) {
+      this._authDetails = JSON.parse(localStorage.getItem('currentUser'));
+      this.account = this._authDetails.username;
+      this.verifyUserIdle();
+  }
+
+  verifyUserIdle(){
+    const idlePeriod = 600;
+    this.bnIdle.startWatching(idlePeriod).subscribe((isIdle:boolean) => {
+      if (isIdle){
+        this.onLogOut();
+      }
+    });
   }
 
   openNotif(notif){
