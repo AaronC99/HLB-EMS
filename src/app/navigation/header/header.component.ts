@@ -20,7 +20,21 @@ export class HeaderComponent{
   addEmployee = 'New Employee';
   logout = 'Log Out';
   _authDetails: AuthModel;
-  notificationList = ['Notif 1','Notif 2','Notif 3'];
+  //notificationList = ['Notif 1','Notif 2','Notif 3'];
+  notificationList = [
+    {
+      body: 'Notif 1',
+      link: '',
+    },
+    {
+      body: 'Notif 2',
+      link: 'timehseet-page',
+    },
+    {
+      body: 'Notif 3',
+      link: 'approval-page',
+    }
+  ];
 
   constructor(
     private authService: AuthenticationService,
@@ -39,8 +53,18 @@ export class HeaderComponent{
   }
 
   openNotif(notif){
-    // Redirect to aprroval page if notif is timesheet request
-    console.log(notif)
+    if (notif.link !== '')
+      console.log('Url link: ' + notif.link)
+    else 
+      console.log('No url link')
+  }
+
+  removeNotif(notif){
+    const index = this.notificationList.indexOf(notif);
+    if (index !== -1)
+      this.notificationList.splice(index,1);
+
+    console.log(this.notificationList);
   }
 
   newEmployeePage(){

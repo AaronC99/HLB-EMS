@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand">
+  <a class="navbar-brand" routerLink="check-in-out">
     {{ title }}
   </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,9 +16,18 @@
         </button>
         <mat-menu #viewNotif="matMenu" class="notif-menu">
             <h3 class="notif-title">Notifications</h3>
-            <div *ngFor="let notifs of notificationList">
-              <mat-card class="notif-card" (click)="openNotif(notifs)">
-                {{ notifs }}
+            <div *ngFor="let notif of notificationList">
+              <mat-card class="notif-card">
+                <div class="row">
+                  <div class="col-10 align-self-center" (click)="openNotif(notif)">
+                    {{ notif.body }}
+                  </div>
+                  <div class="col-2 align-self-center">
+                    <button mat-icon-button class="cancel-btn" color="warn" (click)="removeNotif(notif)">
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </div>
+                </div>
               </mat-card>
             </div>
         </mat-menu>
