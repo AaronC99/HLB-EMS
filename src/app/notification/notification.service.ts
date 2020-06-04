@@ -19,4 +19,7 @@ export class NotificationService {
     this.socket.emit('newNotification',notifObj);
   }
 
+  markAsSeen(notifId){
+    this.socket.emit('seenNotification',notifId);
+  }
 }

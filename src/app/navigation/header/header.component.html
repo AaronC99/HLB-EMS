@@ -10,7 +10,7 @@
     <ul class="navbar-nav mr-auto">
       <!--Notification-->
       <li class="nav-item">
-        <button mat-icon-button matBadge="{{ notifsNum }}" 
+        <button mat-icon-button matBadge="{{ notifsNum }}"
           [matBadgeHidden]="notifsNum === 0" matBadgeColor="warn" [matMenuTriggerFor]="viewNotif">
           <mat-icon>notifications</mat-icon>
         </button>
@@ -24,7 +24,7 @@
                 <div class="row">
                   <div class="col-10 align-self-center" (click)="openNotif(notif)">
                     <h2>{{ notif.content }}</h2>
-                    <span>{{notif.time}} | {{ notif.date}}-{{notif.year}}</span>
+                    <span>{{ convertTime(notif.time) }} | {{ notif.date}}-{{notif.year}}</span>
                   </div>
                   <div class="col-2 align-self-center">
                     <button mat-icon-button class="cancel-btn" color="warn" (click)="removeNotif(notif)">

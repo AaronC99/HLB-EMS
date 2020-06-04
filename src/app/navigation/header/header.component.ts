@@ -45,25 +45,35 @@ export class HeaderComponent implements OnInit{
   ngOnInit(){
     this.notifService.getNotifs(this._authDetails.username);
     this.notificationList = this.notifService.notifications;
-    console.log(this.notificationList);
     this.notifService.notifications.subscribe((notifs:[]) => {
       this.notifsNum = notifs.length;
     });
   }
 
   openNotif(notif){
-    // if (notif.link !== '')
-    //   console.log('Url link: ' + notif.link)
-    // else 
-      console.log(notif)
+    if (notif.link !== '')
+      this.notifService.markAsSeen(notif._id);
   }
 
   removeNotif(notif){
-    // const index = this.notificationList.indexOf(notif);
-    // if (index !== -1)
-    //   this.notificationList.splice(index,1);
-
+    this.notifService.markAsSeen(notif._id);
     console.log(this.notificationList);
+  }
+
+  convertTime(time){
+    let meridien = '';
+    let newHour = '';
+    let hour:number = parseInt(time.substring(0,2));
+    let minute = time.substring(2,4);
+    if(hour > 12 ){
+      newHour = (hour - 12).toString();
+      meridien = 'PM';
+    } else if (hour < 12){
+      meridien = 'AM';
+    } else {
+      meridien = 'PM';
+    }
+    return `${newHour}:${minute} ${meridien}`;
   }
 
   newEmployeePage(){
