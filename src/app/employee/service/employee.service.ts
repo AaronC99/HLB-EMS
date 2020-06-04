@@ -12,7 +12,7 @@ export class EmployeeService {
   constructor(
     private httpClient: HttpClient,
     private _snackBar: MatSnackBar,
-    private notify: NotificationService
+    private notifService: NotificationService
   ) {
    }
 
@@ -57,16 +57,24 @@ export class EmployeeService {
     return this.httpClient.get(`${this.REST_API_SERVER}/timesheet/availableTimesheet/${domainId}`);
   }
 
-  public sendEmail(domainId:string,period:string,year:string,status:string){
+  public sendEmail(domainId:string,period:string,year:string,status:string,managerId:string){
     this.httpClient.post(`${this.REST_API_SERVER}/timesheet/sendEmail`
     ,{"domain_id":domainId,"period":period,"year":year,"type":status})
     .subscribe(res => {
-      if(status === 'Reapproval')
+      let notifContent = '';
+      let notification:any;
+      if(status === 'Reapproval' || status === 'Approval'){
         this.displayMessage('Request successfully sent to Department Head','success'); 
-      else if (status === 'Approved' || status === 'Rejected')
+        notifContent = `Employee ${domainId} requested ${parseInt(period) + 1}-${year} timesheet for ${status}`;
+        notification = this.getNotifObj(managerId,notifContent);
+      } 
+      else if (status === 'Approved' || status === 'Rejected'){
         this.displayMessage('Email has been sent to employee','success');
-      else
+      }
+      else{
         this.displayMessage('Email Not Found.','failure');
+      }
+      this.notifService.sendNotification(notification);
     },
     err =>{
       this.displayMessage('Error sending request. Please try again','failure');
@@ -180,12 +188,8 @@ export class EmployeeService {
 
         //Notify Employee
         let notifContent = `Your ${details[0]['leave_type']} Leave on ${details[0]['date']}-${details[0]['year']} has been ${status}`;
-        let notifObj = {
-          domain_id: details[0].employee_id,
-          content: notifContent,
-          link: ''
-        };
-        this.notify.sendNotification(notifObj);
+        let notification = this.getNotifObj(details[0].employee_id,notifContent);
+        this.notifService.sendNotification(notification);
       }   
     },err => {
       this.displayMessage(`${status} Failed. Please Try Again.`,'failure');
@@ -215,6 +219,15 @@ export class EmployeeService {
 
   public getDeptLeaveReport(managerId){
     return this.httpClient.get(`${this.REST_API_SERVER}/report/deptLeaveReport/${managerId}`);
+  }
+
+  public getNotifObj(domainId:string,content:string){
+    let _notifObj = {
+      domain_id: domainId,
+      content: content,
+      link:''
+    };
+    return _notifObj;
   }
 
   public displayMessage(message:string,status:string){

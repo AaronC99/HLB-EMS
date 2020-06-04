@@ -8,6 +8,7 @@ import { LeaveApproval } from 'src/app/model/LeaveApproval.model';
 import { Employee } from 'src/app/model/Employee.model';
 import { Timesheet } from 'src/app/model/Timesheet.model';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
+import { NotificationService } from 'src/app/notification/notification.service';
 
 @Component({
   selector: 'app-approval-page',
@@ -48,7 +49,8 @@ export class ApprovalPageComponent implements OnInit {
     private route:ActivatedRoute,
     private employeeService: EmployeeService,
     private router: Router, 
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private notifService: NotificationService
   ) {
     this.currUserDomainId = this.route.snapshot.paramMap.get('domainId');
     this.period = this.route.snapshot.paramMap.get('period');
@@ -186,6 +188,7 @@ export class ApprovalPageComponent implements OnInit {
       if(data['approval_status'] === 'Approved'){
         this.employeeService.displayMessage('Timesheet Approved Successfully','success');
         this.allowExit = true;
+        this.notifyEmployee();
       }
       else 
         this.employeeService.displayMessage('Unsuccessful Timesheet approval','failure');
@@ -205,9 +208,16 @@ export class ApprovalPageComponent implements OnInit {
         if (data['approval_status'] === 'Rejected'){
           this.employeeService.displayMessage('Timesheet Rejected Successfully','success');
           this.allowExit = true;
+          this.notifyEmployee();
         }
       });
-    this.employeeService.sendEmail(this.currUserDomainId,this.period,this.year,this.statusType);
+    this.employeeService.sendEmail(this.currUserDomainId,this.period,this.year,this.statusType,null);
+  }
+
+  public notifyEmployee(){
+    let notifContent = `Your Timesheet for ${parseInt(this.period)+1}-${this.year} is ${this.statusType}`;
+    let notification = this.employeeService.getNotifObj(this.employee.domain_id,notifContent);
+    this.notifService.sendNotification(notification);
   }
 
   public isAllSelected() {
@@ -253,23 +263,23 @@ export class ApprovalPageComponent implements OnInit {
         break;
       } else{
         this.updateError = false;
-          this.employeeService.sendEmail(this.currUserDomainId,this.period,this.year,status);
-          this.employeeService.editTimesheet(this.TIMESHEET)
-            .subscribe(
-              data => {
-                let editedArray:any = data;
-                for (let i = 0;i< editedArray.length;i++){
-                  if(editedArray[i].edit_status === 'Edited'){
-                    this.employeeService.displayMessage('Timesheet Updated Successfully','success');
-                    this.allowExit = true;
-                    break;
-                  } else {
-                    this.employeeService.displayMessage('Unsuccessful Timesheet Update. Please Try Again','failure');
-                    this.allowExit = false;
-                    break;
-                  }
-                }
-              });
+        this.employeeService.sendEmail(this.currUserDomainId,this.period,this.year,status,this.employee.department.department_head.domain_id);
+        this.employeeService.editTimesheet(this.TIMESHEET)
+        .subscribe(
+          data => {
+            let editedArray:any = data;
+            for (let i = 0;i< editedArray.length;i++){
+              if(editedArray[i].edit_status === 'Edited'){
+                this.employeeService.displayMessage('Timesheet Updated Successfully','success');
+                this.allowExit = true;
+                break;
+              } else {
+                this.employeeService.displayMessage('Unsuccessful Timesheet Update. Please Try Again','failure');
+                this.allowExit = false;
+                break;
+              }
+            }
+          });
         break;
       }
     }

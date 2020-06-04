@@ -1,10 +1,11 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { EmployeeService } from '../service/employee.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
+import { Employee } from 'src/app/model/Employee.model';
+import { AuthModel } from 'src/app/model/Authentication.model';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -13,7 +14,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
   styleUrls: ['./timesheet.component.scss']
 })
 export class TimesheetComponent implements OnInit{
-  currEmployee:any;
+  currEmployee:Employee;
   dateList:any;
   timesheetForm = new FormGroup ({
     selectedDate: new FormControl('')
@@ -22,7 +23,7 @@ export class TimesheetComponent implements OnInit{
   TIMESHEET_DATA:any;
   dataSource: any = [];
   needRequest:boolean;
-  currentUser:any;
+  currentUser:AuthModel;
   currUserDomainId:any;
   currUserSupervisor:any;
   canDownload:boolean;
@@ -38,8 +39,7 @@ export class TimesheetComponent implements OnInit{
 
   constructor(
     private formBuilder:FormBuilder,
-    private employeeService: EmployeeService,
-    private _snackBar: MatSnackBar
+    private employeeService: EmployeeService
     ) { 
     this.createForm();
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -55,7 +55,7 @@ export class TimesheetComponent implements OnInit{
 
   ngOnInit():void{
     this.employeeService.getProfile(this.currUserDomainId)
-    .subscribe( currUser => {
+    .subscribe((currUser:Employee) => {
       this.currEmployee = currUser;
     });
   }
@@ -92,7 +92,7 @@ export class TimesheetComponent implements OnInit{
     let period =  this.userInput.selectedDate.value.period_number - 1;
     let year = this.userInput.selectedDate.value.year;
     let statusType = 'Approval';
-    this.employeeService.sendEmail(this.currUserDomainId,period.toString(),year,statusType);
+    this.employeeService.sendEmail(this.currUserDomainId,period.toString(),year,statusType,this.currEmployee.department.department_head.domain_id);
   }
 
   downloadTimesheet(){ 

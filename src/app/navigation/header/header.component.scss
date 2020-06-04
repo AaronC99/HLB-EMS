@@ -48,11 +48,16 @@ a,button{
     padding: 0px 10px;
     width: fit-content;
 }
+.notif-button{
+    margin: 5px;
+}
 .notif-title,h2{
     font-family: 'Sens',sans-serif;
 }
 .notif-card{
     box-shadow: none;
+    margin-top: 5px;
+    border-radius: 15px;
 }
 .notif-card:hover{
     background-color: lightgrey;
