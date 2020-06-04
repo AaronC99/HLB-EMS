@@ -13,6 +13,7 @@ export class AuthenticationService {
   private _authSubj: BehaviorSubject<AuthModel>;
   private loginErrorSubject = new Subject<string>();
   public isIdle = new BehaviorSubject<boolean>(false);
+  public ipAddress = new BehaviorSubject<string>('');
 
   constructor(
     private httpClient: HttpClient,
@@ -42,12 +43,24 @@ export class AuthenticationService {
     return this.isIdle.asObservable();
   }
 
+  get userIpAdrress(){
+    this.getIpAddress();
+    return this.ipAddress.asObservable();
+  }
+
   verifyUserIdle(){
     const idlePeriod = 600;
     this.bnIdle.startWatching(idlePeriod).subscribe((isIdle:boolean) => {
       if (isIdle){
         this.isIdle.next(true);
       }
+    });
+  }
+
+  getIpAddress(){
+    this.httpClient.get("http://api.ipify.org/?format=json")
+    .subscribe((res:any)=>{
+      this.ipAddress.next(res.ip);
     });
   }
 
