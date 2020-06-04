@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Employee } from 'src/app/model/Employee.model';
-import { BehaviorSubject } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from 'src/app/notification/notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +11,8 @@ export class EmployeeService {
 
   constructor(
     private httpClient: HttpClient,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private notify: NotificationService
   ) {
    }
 
@@ -177,6 +177,15 @@ export class EmployeeService {
         };
         if (employeeName !== null)
           this.sendLeaveRequestEmail(leaveDetails,employeeName,status);
+
+        //Notify Employee
+        let notifContent = `Your ${details[0]['leave_type']} Leave on ${details[0]['date']}-${details[0]['year']} has been ${status}`;
+        let notifObj = {
+          domain_id: details[0].employee_id,
+          content: notifContent,
+          link: ''
+        };
+        this.notify.sendNotification(notifObj);
       }   
     },err => {
       this.displayMessage(`${status} Failed. Please Try Again.`,'failure');

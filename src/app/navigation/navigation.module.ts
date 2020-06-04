@@ -10,7 +10,9 @@ import { AuthenticationModule } from '../authentication/module/authentication.mo
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatCardModule } from '@angular/material/card';
+import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 
+const config: SocketIoConfig = { url: 'http://localhost:3333', options: {} };
 
 @NgModule({
   declarations: [
@@ -25,7 +27,8 @@ import { MatCardModule } from '@angular/material/card';
     MatIconModule,
     MatMenuModule,
     MatBadgeModule,
-    MatCardModule
+    MatCardModule,
+    SocketIoModule.forRoot(config)
   ],
   providers: [],
   exports: [

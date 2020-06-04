@@ -34,15 +34,22 @@ a,button{
     }
 }
 ::ng-deep .notif-menu.mat-menu-panel{
-    width: 30em;
+    width: 35em;
     max-width: none;
     border-radius: 15px;
 }
 .notif-title{
-    font-family: 'Sens',sans-serif;
+    border-radius: 20px;
+    background-color: #2c5364;
+    color: white;
     font-weight: bold;
     font-size: larger;
     margin: 0px 10px;
+    padding: 0px 10px;
+    width: fit-content;
+}
+.notif-title,h2{
+    font-family: 'Sens',sans-serif;
 }
 .notif-card{
     box-shadow: none;
