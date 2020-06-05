@@ -67,6 +67,7 @@ export class EmployeeService {
         this.displayMessage('Request successfully sent to Department Head','success'); 
         notifContent = `Employee ${domainId} requested ${parseInt(period) + 1}-${year} timesheet for ${status}`;
         notification = this.getNotifObj(managerId,notifContent);
+        notification.link = `timesheet-approval/${domainId}/${period}/${year}`;
       } 
       else if (status === 'Approved' || status === 'Rejected'){
         this.displayMessage('Email has been sent to employee','success');

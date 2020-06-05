@@ -216,7 +216,9 @@ export class ApprovalPageComponent implements OnInit {
 
   public notifyEmployee(){
     let notifContent = `Your Timesheet for ${parseInt(this.period)+1}-${this.year} is ${this.statusType}`;
-    let notification = this.employeeService.getNotifObj(this.employee.domain_id,notifContent);
+    let notification = this.employeeService.getNotifObj(this.currUserDomainId,notifContent);
+    if (this.statusType === 'Rejected')
+      notification.link = `timesheet-reject/${this.currUserDomainId}/${this.period}/${this.year}`;
     this.notifService.sendNotification(notification);
   }
 
@@ -356,5 +358,6 @@ export class ApprovalPageComponent implements OnInit {
   public exit(){
     localStorage.removeItem('temproraryUrl');
     this.router.navigateByUrl(this.returnUrl);
+    window.close();
   }
 }

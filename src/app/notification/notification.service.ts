@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,18 @@ export class NotificationService {
 
   getNotifs(domainId:string){
     this.socket.emit('getNotifications',domainId);
+  }
+
+  getAllNotifs(){
+    let observable = new Observable(observer => {
+      this.socket.on('notifications',(data) => {
+        observer.next(data);
+      });
+      return () =>{
+        this.socket.disconnect();
+      };
+    });
+    return observable;
   }
   
 

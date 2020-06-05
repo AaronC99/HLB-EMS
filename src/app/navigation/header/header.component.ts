@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { Router } from '@angular/router';
 import { AdminService } from 'src/app/admin/service/admin.service';
 import { MaintenanceService } from 'src/app/maintenance/service/maintenance.service';
 import { NotificationService } from 'src/app/notification/notification.service';
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -13,7 +13,6 @@ import { Observable } from 'rxjs';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit{
-
   title = 'Employee Management System';
   clockIn_Out = 'Clock In/Out';
   timesheet = 'Timesheet';
@@ -23,7 +22,8 @@ export class HeaderComponent implements OnInit{
   logout = 'Log Out';
   _authDetails: AuthModel;
   notifsNum:number;
-  notificationList: Observable<[]>;
+  notificationList:any = [];
+  connection:Subscription;
 
   constructor(
     private authService: AuthenticationService,
@@ -43,21 +43,45 @@ export class HeaderComponent implements OnInit{
   }
 
   ngOnInit(){
+    this.getAllNotifs();
+  }
+
+  // ngOnDestroy(){
+  //   this.connection.unsubscribe();
+  // }
+
+  getAllNotifs(){
     this.notifService.getNotifs(this._authDetails.username);
-    this.notificationList = this.notifService.notifications;
-    this.notifService.notifications.subscribe((notifs:[]) => {
-      this.notifsNum = notifs.length;
+    this.connection = this.notifService.getAllNotifs().subscribe((notifs:[]) => {
+      if (notifs.length === 0)
+        this.notifsNum = notifs.length;
+
+      for(let i=0;i<notifs.length;i++){
+        if(notifs[i]['domain_id'] === this._authDetails.username){
+          this.notifsNum = notifs.length;
+          this.notificationList = notifs;
+          break;
+        }
+      }
     });
   }
 
   openNotif(notif){
-    if (notif.link !== '')
-      this.notifService.markAsSeen(notif._id);
+    if (notif.link !== ''){
+      this.router.navigateByUrl(notif.link).then( result => {
+        window.open( notif.link, '_blank');
+      });
+    }
+    this.removeNotif(notif);
   }
 
   removeNotif(notif){
-    this.notifService.markAsSeen(notif._id);
-    console.log(this.notificationList);
+    let seenNotif = {
+      notif_id:notif._id,
+      domain_id:notif.domain_id
+    };
+    this.notifService.markAsSeen(seenNotif);
+    this.getAllNotifs();
   }
 
   convertTime(time){
@@ -69,8 +93,10 @@ export class HeaderComponent implements OnInit{
       newHour = (hour - 12).toString();
       meridien = 'PM';
     } else if (hour < 12){
+      newHour = hour.toString();
       meridien = 'AM';
     } else {
+      newHour = hour.toString();
       meridien = 'PM';
     }
     return `${newHour}:${minute} ${meridien}`;
