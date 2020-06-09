@@ -10,14 +10,14 @@
   height:900px;
 }
 h1{
-  font-size: xxx-large;
+  font-size: 4vw;
   font-family: 'Montserrat', sans-serif;
 }
 button,th{
   font-family: 'Ubuntu', sans-serif;
 }
 .date{
-  font-size: xx-large;
+  font-size: 2vw;
 }
 button{
   border-radius: 50px;
@@ -63,6 +63,6 @@ th,td{
 .dialog-box, .empty-table-message, .clock-card{
   text-align: center;
 }
-mat-card-content,.digital-clock{
+mat-card-content{
   min-width: 100%;
 }
