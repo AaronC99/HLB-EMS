@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { Router } from '@angular/router';
@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit{
   title = 'Employee Management System';
   clockIn_Out = 'Clock In/Out';
   timesheet = 'Timesheet';
@@ -48,7 +48,8 @@ export class HeaderComponent implements OnInit {
 
   getAllNotifs(){
     this.notifService.getNotifs(this._authDetails.username);
-    this.connection = this.notifService.getAllNotifs().subscribe((notifs:[]) => {
+    this.connection = this.notifService.getAllNotifs()
+    .subscribe((notifs:[]) => {
       if (notifs.length === 0)
         this.notifsNum = notifs.length;
 
