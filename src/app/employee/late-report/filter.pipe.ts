@@ -12,10 +12,13 @@ export class FilterPipe implements PipeTransform{
 
     transform(employees:EmployeeReport[],searchTerm:string): EmployeeReport[]{
         if (!employees || !searchTerm){
-            return employees;
+            employees = employees;
+        } 
+        else {
+            employees = employees.filter(employee => 
+                employee.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1);
         }
         this.reporting.renderCharts(employees);
-        return employees.filter(employee => 
-            employee.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1);
+        return employees;
     }
 }

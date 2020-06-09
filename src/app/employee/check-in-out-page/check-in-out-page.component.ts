@@ -43,7 +43,6 @@ export class CheckInOutPageComponent implements OnInit {
        this.currentTime = moment().format('HH:mm');
     },1000);
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    //this.currUserId = _currUserObj.username;
   }
 
   ngOnInit(): void {

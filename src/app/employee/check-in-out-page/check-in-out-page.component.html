@@ -12,7 +12,7 @@
       <mat-card class="clock-card">
           <mat-card-content>
             <h1>{{ clock }}</h1><br>
-            <h2>{{ currentDay }} | {{ currentDate }}</h2> 
+            <h1 class="date">{{ currentDay }} | {{ currentDate }}</h1> 
             <button mat-raised-button class="clock-in-out-button" *ngIf="clockInButton" (click)="onClockIn()">
               Clock In
             </button>
@@ -25,7 +25,7 @@
     <div class = "col col-lg-8">
       <mat-card class="clock-in-out-card">
         <div class="clock-in-out-table"> 
-          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <table mat-table [dataSource]="dataSource.reverse()" class="mat-elevation-z8">
             <ng-container matColumnDef="dateIn">
               <th mat-header-cell *matHeaderCellDef>
                 Date In
