@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit{
+export class HeaderComponent implements OnInit {
   title = 'Employee Management System';
   clockIn_Out = 'Clock In/Out';
   timesheet = 'Timesheet';
@@ -46,13 +46,9 @@ export class HeaderComponent implements OnInit{
     this.getAllNotifs();
   }
 
-  // ngOnDestroy(){
-  //   this.connection.unsubscribe();
-  // }
-
   getAllNotifs(){
     this.notifService.getNotifs(this._authDetails.username);
-    this.notifService.getAllNotifs().subscribe((notifs:[]) => {
+    this.connection = this.notifService.getAllNotifs().subscribe((notifs:[]) => {
       if (notifs.length === 0)
         this.notifsNum = notifs.length;
 
