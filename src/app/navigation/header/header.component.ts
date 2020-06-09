@@ -52,7 +52,7 @@ export class HeaderComponent implements OnInit{
 
   getAllNotifs(){
     this.notifService.getNotifs(this._authDetails.username);
-    this.connection = this.notifService.getAllNotifs().subscribe((notifs:[]) => {
+    this.notifService.getAllNotifs().subscribe((notifs:[]) => {
       if (notifs.length === 0)
         this.notifsNum = notifs.length;
 
@@ -68,7 +68,7 @@ export class HeaderComponent implements OnInit{
 
   openNotif(notif){
     if (notif.link !== ''){
-      this.router.navigateByUrl(notif.link).then( result => {
+      this.router.navigate([]).then( result => {
         window.open( notif.link, '_blank');
       });
     }
