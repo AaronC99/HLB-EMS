@@ -34,7 +34,7 @@
                 [ngClass]="{
                   'weekend': getDayName(element.date_in,element.year) === 'Saturday' || 
                     getDayName(element.date_in,element.year) ==='Sunday',
-                  'today': element.date_in === dateIn 
+                  'today': element.date_in === today 
                 }"> 
                   {{ element.date_in }} 
               </td>
@@ -48,7 +48,7 @@
               [ngClass]="{
                 'weekend': getDayName(element.date_in,element.year) === 'Saturday' || 
                   getDayName(element.date_in,element.year) ==='Sunday',
-                'today': element.date_in === dateIn 
+                'today': element.date_in === today 
               }"> 
                   {{ getDayName(element.date_in,element.year) }}
               </td>
@@ -62,7 +62,7 @@
               [ngClass]="{
                 'weekend': getDayName(element.date_in,element.year) === 'Saturday' || 
                   getDayName(element.date_in,element.year) ==='Sunday',
-                'today': element.date_in === dateIn 
+                'today': element.date_in === today 
               }"> 
                   {{ element.time_in }} 
               </td>
@@ -76,7 +76,7 @@
               [ngClass]="{
                 'weekend': getDayName(element.date_in,element.year) === 'Saturday' || 
                   getDayName(element.date_in,element.year) ==='Sunday',
-                'today': element.date_in === dateIn 
+                'today': element.date_in === today 
               }"> 
                   {{ element.time_out }} 
               </td>
@@ -90,7 +90,7 @@
               [ngClass]="{
                 'weekend': getDayName(element.date_in,element.year) === 'Saturday' || 
                   getDayName(element.date_in,element.year) ==='Sunday',
-                'today': element.date_in === dateIn 
+                'today': element.date_in === today 
               }"> 
                   {{ element.date_out }} 
               </td>

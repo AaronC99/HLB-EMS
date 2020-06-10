@@ -17,16 +17,13 @@ export class CheckInOutPageComponent implements OnInit {
   clockInButton = true;
   clockOutButton = false;
   clock:string;
-  currentTime:string;
   date:any = new Date();
   localTime = new DatePipe('en-US');
   currentDay = this.localTime.transform(this.date,'EEEE');
   currentMonth = this.localTime.transform(this.date,'MM');
   currentDate = this.localTime.transform(this.date,'dd-MM-y');
-  dateIn = this.localTime.transform(this.date,'dd-MM');
-  dateOut = this.localTime.transform(this.date,'dd-MM');
+  today = this.localTime.transform(this.date,'dd-MM');
   currentYear = this.localTime.transform(this.date,'y');
-  timeOut = moment().format('HHmm');
   displayedColumns: string[] = ['dateIn','day','timeIn','timeOut','dateOut'];
   CLOCK_IN_OUT_DATA:Timesheet[] = [];
   dataSource:any = new MatTableDataSource<any>();
@@ -40,7 +37,6 @@ export class CheckInOutPageComponent implements OnInit {
   ) { 
     setInterval(()=>{
        this.clock = moment().format('hh:mm:ss A');
-       this.currentTime = moment().format('HH:mm');
     },1000);
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
   }
@@ -51,13 +47,17 @@ export class CheckInOutPageComponent implements OnInit {
 
   public filterTable(table:any){
     this.CLOCK_IN_OUT_DATA = table.filter( data => 
-      parseInt(data.date_in) <= parseInt(this.dateIn)
+      parseInt(data.date_in) <= parseInt(this.today)
     );
   }
 
   public clockInOutValidation(dataTable:any){
     this.employeeService.getClockInOutStatus(this.currentUser.username)
       .subscribe( data => {
+        if (dataTable.length === 0 && data['last_clock_in']){
+          this.clockInButton = false;
+          this.clockOutButton = true;
+        }
         dataTable.forEach(element => { 
           //If yesterday forget to colock out
           if(element.date_in === this.yesterday && element.time_in !== '0000' && 
@@ -65,14 +65,14 @@ export class CheckInOutPageComponent implements OnInit {
             && element.remarks !== 'Weekend'){
             this.openModal(this.dialog_box);
           }// For clocking in
-          else if (element.date_in === this.dateIn && element.time_in === '0000' && data['last_clock_in'] === false){
+          else if (element.date_in === this.today && element.time_in === '0000' && data['last_clock_in'] === false){
             this.clockInButton = true;
-          }// For Clcoking out
-          else if(element.date_in === this.dateIn && element.time_in !== '0000' && data['last_clock_in'] === true){
+          }// For Clocking out
+          else if(element.date_in === this.today && element.time_in !== '0000' && data['last_clock_in'] === true){
             this.clockInButton = false;
             this.clockOutButton = true;
           }// After clock in and clock out 
-          else if (element.date_in === this.dateIn && element.time_in !== '0000' && 
+          else if (element.date_in === this.today && element.time_in !== '0000' && 
             element.time_out !== '0000' && data['last_clock_in'] === false){
             this.clockInButton = false;
             this.clockOutButton = false;

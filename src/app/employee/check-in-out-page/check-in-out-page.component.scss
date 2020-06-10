@@ -63,6 +63,9 @@ th,td{
 .dialog-box, .empty-table-message, .clock-card{
   text-align: center;
 }
+.empty-table-message{
+  border-radius: 0px;
+}
 mat-card-content{
   min-width: 100%;
 }
