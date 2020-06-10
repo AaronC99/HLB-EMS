@@ -49,7 +49,9 @@ export class AuthenticationService {
   }
 
   verifyUserIdle(){
-    const idlePeriod = 600;
+    const seconds = 60;
+    const minutes = 60;
+    const idlePeriod = minutes * seconds;
     this.bnIdle.startWatching(idlePeriod).subscribe((isIdle:boolean) => {
       if (isIdle){
         this.isIdle.next(true);

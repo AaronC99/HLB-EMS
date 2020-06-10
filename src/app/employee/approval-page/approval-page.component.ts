@@ -24,6 +24,7 @@ export class ApprovalPageComponent implements OnInit {
   year:string;
   TIMESHEET:Timesheet[];
   leaveTypes = [
+    {id:0, value:'None'},
     {id:1, value:'Annual'},
     {id:2, value:'Medical'}
   ];
@@ -43,7 +44,6 @@ export class ApprovalPageComponent implements OnInit {
   showCheckBox = false;
   selectedRows = new SelectionModel<any>(true,[]);
   _leaveObj:LeaveApproval;
-  selectedLeaves = [];
 
   constructor(
     private route:ActivatedRoute,
@@ -159,7 +159,17 @@ export class ApprovalPageComponent implements OnInit {
      // Call Apply leave api
      this.employeeService.applyLeave(this.editedLeaves,null);
 
-     // Edit Timesheet
+    // Allow Timesheet For Edit
+    this.editedTimesheet.forEach(et => {
+      this.editedLeaves.forEach(el => {
+        if (et.date_in === el.date){
+          et.leave = el.leave_type;
+        }
+      });
+    });
+    this.employeeService.allowTimesheetEdit(this.editedTimesheet);
+
+    // Edit Timesheet
     this.employeeService.editTimesheet(this.editedTimesheet)
     .subscribe(data =>{
       let editedRows:any = data;
@@ -334,25 +344,57 @@ export class ApprovalPageComponent implements OnInit {
   }
 
   public setLeaveType(leaveType,row){
-    this.dataSource.forEach(element=>{
-      if (element.date_in === row.date_in){
-        row.time_in = row.time_out = '0000';
-        row.date_out = null;
-        row.ot = row.ut = row.late = 0;
-        row.remarks = `${leaveType} Leave`;
-        row.leave = leaveType;
-        this.editedTimesheet.push(row);
-        this._leaveObj = {
-          domain_id: this.currentUser.domain_id,
-          manager_id: this.user.username,
-          leave_type: leaveType,
-          date: row.date_in,
-          year: row.year
+    if (leaveType.id !== 0){
+      this.dataSource.forEach(element=>{
+        if (element.date_in === row.date_in){
+          row.time_in = row.time_out = '0000';
+          row.date_out = null;
+          row.ot = row.ut = row.late = 0;
+          row.remarks = `${leaveType.value} Leave`;
+          this.editedTimesheet.push(row);
+          this._leaveObj = {
+            domain_id: this.currentUser.domain_id,
+            manager_id: this.user.username,
+            leave_type: leaveType.value,
+            date: row.date_in,
+            year: row.year
+          }
+          this.editedLeaves.push(this._leaveObj);
         }
-        this.editedLeaves.push(this._leaveObj);
+      });
+    } else {
+      if (this.editedTimesheet.length !== 0){
+        let selectedLeave:LeaveApproval;
+        // Change the remarks on the table
+        this.editedTimesheet.forEach(record => {
+          if (record.date_in === row.date_in){
+            row.remarks = '';
+            for (let el of this.editedLeaves){
+              if (el.date === record.date_in){
+                selectedLeave = {
+                  domain_id: el.domain_id,
+                  manager_id: el.manager_id,
+                  leave_type: el.leave_type,
+                  date: el.date,
+                  year: el.year
+                };
+                break;
+              }
+            }
+          }
+        });
+
+        // Splice Timesheet Array 
+        let indexTs = this.editedTimesheet.indexOf(row,0);
+        if (indexTs > -1)
+          this.editedTimesheet.splice(indexTs,1);
+
+        // Splice Leave Array
+        let indexLv = this.editedLeaves.findIndex(element => element.date === selectedLeave.date);
+        if (indexLv > -1)
+          this.editedLeaves.splice(indexLv,1);
       }
-    });
-    this.employeeService.allowTimesheetEdit(this.editedTimesheet);
+    }
   }
 
   public exit(){

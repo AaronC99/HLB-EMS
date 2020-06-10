@@ -152,11 +152,8 @@
                           element.edit_status === 'Edited' ? '#A5FECB' : ''}"> 
                           <mat-form-field *ngIf="displayLeaveSelection(element) else showText">
                             <mat-select placeholder="Select Leave Type">
-                              <mat-option value="" selected>
-                                -None-
-                              </mat-option>
-                              <mat-option *ngFor="let leave of leaveTypes" [value]="leave.value" 
-                                (click)="setLeaveType(leave.value,element)">
+                              <mat-option *ngFor="let leave of leaveTypes" [value]="leave.id" 
+                                (click)="setLeaveType(leave,element)">
                                 {{ leave.value }}
                               </mat-option>
                             </mat-select>
