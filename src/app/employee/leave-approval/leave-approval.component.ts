@@ -113,6 +113,6 @@ export class LeaveApprovalComponent implements OnInit {
 
   public exit(){
     localStorage.removeItem('temproraryUrl');
-    this.router.navigateByUrl(this.returnUrl);
+    window.close();
   }
 }

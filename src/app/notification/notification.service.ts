@@ -11,11 +11,8 @@ export class NotificationService {
   constructor(private socket:Socket) {
   }
 
-  getNotifs(domainId:string){
-    this.socket.emit('getNotifications',domainId);
-  }
-
   getAllNotifs(){
+    this.socket.emit('getNotifications');
     let observable = new Observable(observer => {
       this.socket.on('notifications',(data) => {
         observer.next(data);

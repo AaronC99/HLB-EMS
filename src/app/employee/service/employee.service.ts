@@ -118,8 +118,16 @@ export class EmployeeService {
             year: appliedLeaves[0]['year'], 
             date_submitted: appliedLeaves[0]['date_submitted']
           };
+          // Notify Supervisor 
           if (supervisor !== null){
+            // Send Email
             this.sendLeaveRequestEmail(leaveRequestDetail,supervisor,leaveRequestDetail.type);
+
+            // Send Notification
+            let notifContent = `Employee ${leaveRequestDetail.domain_id} requested ${leaveRequestDetail.type} for ${appliedLeaves[0]['leave_type']} leave on ${leaveRequestDetail.date}-${leaveRequestDetail.year}.`;
+            let notification = this.getNotifObj(appliedLeaves[0]['manager_id'],notifContent);
+            notification.link = `leave-approval/${leaveRequestDetail.domain_id}/${leaveRequestDetail.date_submitted}`;
+            this.notifService.sendNotification(notification);
           }
           else {
             // Automatically Approve Leave 

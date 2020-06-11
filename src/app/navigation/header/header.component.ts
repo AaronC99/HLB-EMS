@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit{
   logout = 'Log Out';
   _authDetails: AuthModel;
   notifsNum:number;
-  notificationList:any = [];
+  notificationList = [];
   connection:Subscription;
 
   constructor(
@@ -47,19 +47,10 @@ export class HeaderComponent implements OnInit{
   }
 
   getAllNotifs(){
-    this.notifService.getNotifs(this._authDetails.username);
     this.connection = this.notifService.getAllNotifs()
-    .subscribe((notifs:[]) => {
-      if (notifs.length === 0)
-        this.notifsNum = notifs.length;
-
-      for(let i=0;i<notifs.length;i++){
-        if(notifs[i]['domain_id'] === this._authDetails.username){
-          this.notifsNum = notifs.length;
-          this.notificationList = notifs;
-          break;
-        }
-      }
+    .subscribe((notifs:any[]) => {
+      this.notificationList = notifs.filter(notif => notif['domain_id'] === this._authDetails.username);
+      this.notifsNum = this.notificationList.length;
     });
   }
 
