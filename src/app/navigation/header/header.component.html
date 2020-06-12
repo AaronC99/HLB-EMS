@@ -27,7 +27,7 @@
                     <span>{{ convertTime(notif.time) }} | {{ notif.date}}-{{notif.year}}</span>
                   </div>
                   <div class="col-2 align-self-center">
-                    <button mat-icon-button class="cancel-btn" color="warn" (click)="removeNotif(notif)">
+                    <button mat-icon-button class="cancel-btn" color="warn" (click)="removeNotif(notif);$event.stopPropagation();">
                       <mat-icon>cancel</mat-icon>
                     </button>
                   </div>
