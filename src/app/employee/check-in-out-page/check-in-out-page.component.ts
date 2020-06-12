@@ -49,6 +49,7 @@ export class CheckInOutPageComponent implements OnInit {
     this.CLOCK_IN_OUT_DATA = table.filter( data => 
       parseInt(data.date_in) <= parseInt(this.today)
     );
+    this.CLOCK_IN_OUT_DATA = this.CLOCK_IN_OUT_DATA.reverse();
   }
 
   public clockInOutValidation(dataTable:any){
