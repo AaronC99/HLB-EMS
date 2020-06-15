@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { AdminService } from 'src/app/admin/service/admin.service';
 import { MaintenanceService } from 'src/app/maintenance/service/maintenance.service';
 import { NotificationService } from 'src/app/notification/notification.service';
-import { Subscription, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -58,8 +57,8 @@ export class HeaderComponent implements OnInit{
       this.router.navigate([]).then( result => {
         window.open( notif.link, '_blank');
       });
+      this.removeNotif(notif);
     }
-    this.removeNotif(notif);
   }
 
   removeNotif(notif){
