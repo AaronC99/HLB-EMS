@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { AdminService } from 'src/app/admin/service/admin.service';
 import { MaintenanceService } from 'src/app/maintenance/service/maintenance.service';
 import { NotificationService } from 'src/app/notification/notification.service';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -23,7 +23,6 @@ export class HeaderComponent implements OnInit{
   _authDetails: AuthModel;
   notifsNum:number;
   notificationList = [];
-  connection:Subscription;
 
   constructor(
     private authService: AuthenticationService,
@@ -47,11 +46,11 @@ export class HeaderComponent implements OnInit{
   }
 
   getAllNotifs(){
-    this.connection = this.notifService.getAllNotifs()
+    this.notifService.getNotifications()
     .subscribe((notifs:any[]) => {
       this.notificationList = notifs.filter(notif => notif['domain_id'] === this._authDetails.username);
       this.notifsNum = this.notificationList.length;
-    });
+    })
   }
 
   openNotif(notif){

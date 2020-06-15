@@ -6,24 +6,18 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class NotificationService {
-  notifications = this.socket.fromEvent<[]>('notifications');
 
   constructor(private socket:Socket) {
   }
 
-  getAllNotifs(){
+  getNotifications(){
     this.socket.emit('getNotifications');
-    let observable = new Observable(observer => {
-      this.socket.on('notifications',(data) => {
-        observer.next(data);
+    return new Observable((observer)=> {
+      this.socket.on('notifications',(notifs)=>{
+        observer.next(notifs);
       });
-      return () =>{
-        this.socket.disconnect();
-      };
     });
-    return observable;
   }
-  
 
   sendNotification(notifObj){
     this.socket.emit('newNotification',notifObj);
