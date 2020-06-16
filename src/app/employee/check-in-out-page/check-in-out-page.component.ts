@@ -101,6 +101,10 @@ export class CheckInOutPageComponent implements OnInit {
     return fullDate.format('dddd');
   }
 
+  public getFormattedTime(time:string){
+    return this.employeeService.formatTime(time);
+  }
+
   public updateTable(status:number){
     if (status === 1){
       this.employeeService.clockIn(this.currentUser.username)

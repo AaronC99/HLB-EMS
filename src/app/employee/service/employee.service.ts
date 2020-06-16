@@ -245,4 +245,17 @@ export class EmployeeService {
       panelClass: `notif-${status}`
     });
   }
+
+  public formatTime(time:string){
+    let hour = parseInt(time.substring(0,2));
+    let min = time.substring(2,4);
+    let meridiem = hour >= 12 ? 'PM' : 'AM';
+ 
+    if (hour> 12){
+      hour = hour - 12; 
+    }
+
+    let formattedHour = ("0" + hour).slice(-2);
+    return `${formattedHour}:${min} ${meridiem}`;
+  }
 }

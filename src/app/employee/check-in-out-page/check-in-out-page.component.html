@@ -64,7 +64,7 @@
                   getDayName(element.date_in,element.year) ==='Sunday',
                 'today': element.date_in === today 
               }"> 
-                  {{ element.time_in }} 
+                  {{ getFormattedTime(element.time_in) }} 
               </td>
             </ng-container>
           
@@ -78,7 +78,7 @@
                   getDayName(element.date_in,element.year) ==='Sunday',
                 'today': element.date_in === today 
               }"> 
-                  {{ element.time_out }} 
+                  {{ getFormattedTime(element.time_out) }} 
               </td>
             </ng-container>
 

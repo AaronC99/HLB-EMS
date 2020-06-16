@@ -3,7 +3,7 @@ import { FormGroup, FormControl, FormGroupDirective, NgForm, FormBuilder, Valida
 import { ErrorStateMatcher } from '@angular/material/core';
 import { EmployeeService } from '../service/employee.service';
 import { AuthModel } from 'src/app/model/Authentication.model';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -31,9 +31,14 @@ export class ChangePasswordComponent implements OnInit {
     private formBuilder: FormBuilder,
     private employeeService: EmployeeService,
     private router: Router,
+    private route: ActivatedRoute,
     private authService: AuthenticationService
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (this.currentUser.username !== this.route.snapshot.paramMap.get('employeeId')){
+      this.authService.logout();
+      this.router.navigateByUrl('login-page');
+    }
    }
 
   ngOnInit(): void {
