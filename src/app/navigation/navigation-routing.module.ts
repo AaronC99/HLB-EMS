@@ -74,7 +74,7 @@ const routes: Routes = [
         component: HolidayDeclarationComponent
       },
       {
-        path: 'new-password-page',
+        path: 'new-password-page/:employeeId',
         component: ChangePasswordComponent
       },
       {
