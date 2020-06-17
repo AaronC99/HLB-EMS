@@ -15,10 +15,10 @@
                                         <mat-form-field appearance="fill">
                                             <mat-label>Name</mat-label>
                                             <input matInput placeholder="Enter Full Name" formControlName="name" required> 
-                                            <mat-error *ngIf="formArray.get([0])['controls'].name.errors.required">
+                                            <mat-error *ngIf="formArray.get([0])['controls'].name.errors?.required">
                                                 {{ requiredErrorMsg() }}
                                             </mat-error>
-                                            <mat-error *ngIf="formArray.get([0])['controls'].name.errors.pattern">
+                                            <mat-error *ngIf="formArray.get([0])['controls'].name.errors?.pattern">
                                                 {{ patternErrorMsg() }}
                                             </mat-error>
                                         </mat-form-field>
@@ -27,13 +27,13 @@
                                         <mat-form-field appearance="fill">
                                             <mat-label>Domain ID</mat-label>
                                             <input matInput placeholder="Ex: tjohndoe" formControlName="domainId" required >
-                                            <mat-error *ngIf="formArray.get([0])['controls'].domainId.errors.required">
+                                            <mat-error *ngIf="formArray.get([0])['controls'].domainId.errors?.required">
                                                 {{ requiredErrorMsg() }}
                                             </mat-error>
-                                            <mat-error *ngIf="formArray.get([0])['controls'].domainId.errors.pattern">
+                                            <mat-error *ngIf="formArray.get([0])['controls'].domainId.errors?.pattern">
                                                 {{ patternErrorMsg() }}
                                             </mat-error>
-                                            <mat-error *ngIf="this.personalDetails.hasError('duplicate','domainId')">
+                                            <mat-error *ngIf="formArray.get([0]).hasError('duplicate','domainId')">
                                                 {{ duplicateErrorMsg() }}
                                             </mat-error>
                                         </mat-form-field>
@@ -42,10 +42,10 @@
                                         <mat-form-field appearance="fill">
                                             <mat-label>IC/Passport No</mat-label>
                                             <input matInput placeholder="Enter IC/Passport No" formControlName="ic_passportNo" required >
-                                            <mat-error *ngIf="formArray.get([0])['controls'].ic_passportNo.errors.required">
+                                            <mat-error *ngIf="formArray.get([0])['controls'].ic_passportNo.errors?.required">
                                                 {{ requiredErrorMsg() }}
                                             </mat-error>
-                                            <mat-error *ngIf="this.personalDetails.hasError('duplicate','ic_passportNo')">
+                                            <mat-error *ngIf="formArray.get([0]).hasError('duplicate','ic_passportNo')">
                                                 {{ duplicateErrorMsg() }}
                                             </mat-error>
                                         </mat-form-field>
@@ -54,13 +54,13 @@
                                         <mat-form-field appearance="fill">
                                             <mat-label>Email Address</mat-label>
                                             <input matInput placeholder="Ex: tjohndoe@internal.hlb" formControlName="email" required > 
-                                            <mat-error *ngIf="formArray.get([0])['controls'].email.errors.required">
+                                            <mat-error *ngIf="formArray.get([0])['controls'].email.errors?.required">
                                                 {{ requiredErrorMsg() }}
                                             </mat-error>
-                                            <mat-error *ngIf="this.personalDetails.hasError('duplicate','email')">
+                                            <mat-error *ngIf="formArray.get([0]).hasError('duplicate','email')">
                                                 {{ duplicateErrorMsg() }}
                                             </mat-error>
-                                            <mat-error *ngIf="formArray.get([0])['controls'].email.errors.email">
+                                            <mat-error *ngIf="formArray.get([0])['controls'].email.errors?.email">
                                                 {{ emailErrorMsg() }}
                                             </mat-error>
                                         </mat-form-field>
@@ -69,7 +69,7 @@
                                         <mat-form-field appearance="fill">
                                             <mat-label>Address</mat-label>
                                             <input matInput placeholder="Enter Address" formControlName="address" required> 
-                                            <mat-error *ngIf="formArray.get([0])['controls'].address.errors.required">
+                                            <mat-error *ngIf="formArray.get([0])['controls'].address.errors?.required">
                                                 {{ requiredErrorMsg() }}
                                             </mat-error>
                                         </mat-form-field>
@@ -82,7 +82,7 @@
                                                     {{ gndr }}
                                                 </mat-option>
                                             </mat-select>
-                                            <mat-error *ngIf="formArray.get([0])['controls'].gender.errors.required">
+                                            <mat-error *ngIf="formArray.get([0])['controls'].gender.errors?.required">
                                                 {{ requiredErrorMsg() }}
                                             </mat-error>
                                         </mat-form-field>
@@ -93,7 +93,7 @@
                                             <mat-select formControlName="role" required>
                                                 <mat-option *ngFor="let position of role" [value]="position">{{ position }}</mat-option>
                                             </mat-select>
-                                            <mat-error *ngIf="formArray.get([0])['controls'].role.errors.required">
+                                            <mat-error *ngIf="formArray.get([0])['controls'].role.errors?.required">
                                                 {{ requiredErrorMsg() }}
                                             </mat-error>
                                         </mat-form-field>
@@ -117,7 +117,7 @@
                                                     {{ dept.department_name }}
                                                 </mat-option>
                                             </mat-select>
-                                            <mat-error *ngIf="formArray.get([1])['controls'].department.errors.required">
+                                            <mat-error *ngIf="formArray.get([1])['controls'].department.errors?.required">
                                                 {{ requiredErrorMsg() }}
                                             </mat-error>
                                         </mat-form-field>
@@ -157,7 +157,7 @@
                                                         {{ schedule.schedule_name }}
                                                     </mat-option>
                                                 </mat-select> 
-                                                <mat-error *ngIf="formArray.get([2])['controls'].schedule.errors.required">
+                                                <mat-error *ngIf="formArray.get([2])['controls'].schedule.errors?.required">
                                                     {{ requiredErrorMsg() }}
                                                 </mat-error>
                                             </mat-form-field>
@@ -189,7 +189,7 @@
                                                     Enter Annual Leave
                                                 </mat-label>
                                                 <input matInput placeholder="Ex: 1,2,3..." formControlName="annual_leave" required type="number">
-                                                <mat-error *ngIf="formArray.get([2])['controls'].annual_leave.errors.required">
+                                                <mat-error *ngIf="formArray.get([2])['controls'].annual_leave.errors?.required">
                                                     {{ requiredErrorMsg() }}
                                                 </mat-error>
                                             </mat-form-field>
@@ -201,7 +201,7 @@
                                                     Enter Medical Leave
                                                 </mat-label>
                                                 <input matInput placeholder="Ex: 1,2,3..." formControlName="medical_leave" required type="number">
-                                                <mat-error *ngIf="formArray.get([2])['controls'].medical_leave.errors.required">
+                                                <mat-error *ngIf="formArray.get([2])['controls'].medical_leave.errors?.required">
                                                     {{ requiredErrorMsg() }}
                                                 </mat-error>
                                             </mat-form-field>

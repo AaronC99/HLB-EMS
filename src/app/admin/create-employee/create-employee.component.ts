@@ -185,7 +185,7 @@ export class CreateEmployeeComponent implements AfterContentInit,OnInit {
 
   public checkUserForEdit(){
     this.adminService.getCurrUserToEdit().subscribe((data:Employee) => {
-      if (data.domain_id === undefined){
+      if (Object.keys(data).length === 0){
         this.isEditting = false;
         this.adminService.userToEdit = null;
         this.router.navigateByUrl('/home/new-employee');
