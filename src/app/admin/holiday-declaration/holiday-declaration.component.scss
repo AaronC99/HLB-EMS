@@ -14,6 +14,14 @@ mat-card-title{
 mat-card-title,.date-picker,button,.custom-day{
     text-align: center;
 }
+ngb-datepicker{
+    width: 100%;
+}
+:host ::ng-deep .ngb-dp-day, 
+:host ::ng-deep .ngb-dp-weekday,.custom-day{
+    width: 5.5rem;
+    height: 2rem;
+}
 h2,.custom-day{
     font-family: 'Sen', sans-serif;
 }
@@ -34,8 +42,6 @@ h2,.custom-day{
 .custom-day {
     padding: 0.185rem 0.25rem;
     display: inline-block;
-    height: 2rem;
-    width: 2rem;
     font-size: 20px;
 }
 .custom-day.focused {

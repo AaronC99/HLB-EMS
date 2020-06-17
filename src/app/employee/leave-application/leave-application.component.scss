@@ -6,26 +6,32 @@ mat-card,button,.date-label{
 }
 button{
     padding: 5px 0px;
+    font-size: larger;
 }
 .custom-day,mat-card-title,.date-picker,button{
     text-align: center;
 }
 mat-card-title{
-    
     font-family: 'Ubuntu', sans-serif;
     text-transform: uppercase;
 }
-h2,.custom-day{
+h2,.custom-day,button{
     font-family: 'Sen', sans-serif;
 }
 h2,.date-picker,button{
     margin: 20px 0px;
 }
+ngb-datepicker{
+    width: 100%;
+}
+:host ::ng-deep .ngb-dp-day, 
+:host ::ng-deep .ngb-dp-weekday,.custom-day{
+    width: 5.5rem;
+    height: 2rem;
+}
 .custom-day {
     padding: 0.185rem 0.25rem;
     display: inline-block;
-    height: 2rem;
-    width: 2rem;
     font-size: 20px;
 }
 .custom-day.weekend,.custom-day.weekend.range,.custom-day.weekend:hover{
