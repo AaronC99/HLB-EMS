@@ -157,8 +157,24 @@ export class CreateEmployeeComponent implements AfterContentInit,OnInit {
     }
   }
 
-  public showErrorMessage(){
-    return 'Invalid Input';
+  public requiredErrorMsg(){
+    return 'Field is Required';
+  }
+
+  public patternErrorMsg(){
+    return 'Numeric Values Not Allowed';
+  }
+
+  public duplicateErrorMsg(){
+    return 'Already Exist!';
+  }
+
+  public emailErrorMsg(){
+    return 'Invalid Email Address'; 
+  }
+
+  get personalDetails(){
+    return this.formArray.get([0]);
   }
 
   public isDuplicate(control: AbstractControl) {
