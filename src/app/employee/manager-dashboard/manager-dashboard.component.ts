@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import Variablepie from 'highcharts/modules/variable-pie';
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { EmployeeService } from '../service/employee.service';
 import { ChartData } from 'src/app/model/ChartData.model';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 declare var require: any;
 let Boost = require('highcharts/modules/boost');
@@ -22,8 +24,10 @@ noData(Highcharts);
   templateUrl: './manager-dashboard.component.html',
   styleUrls: ['./manager-dashboard.component.scss']
 })
-export class ManagerDashboardComponent implements OnInit {
+export class ManagerDashboardComponent implements OnInit,OnDestroy {
   currentManager:AuthModel;
+  destroy$ : Subject<boolean> = new Subject<boolean>();
+
   constructor(
     private employeeService: EmployeeService,
     private router:Router
@@ -36,20 +40,27 @@ export class ManagerDashboardComponent implements OnInit {
     this.displayOverallLeaveReport();
   }
 
+  ngOnDestroy(){
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
   public displayOverallLateReport(){
     this.employeeService.getOverallLateReport(this.currentManager.username)
-    .subscribe((results:ChartData[]) => {
-      let late_report = this.generatePieChart('Punctual vs Late',results);
-      Highcharts.chart('overall-late-report',late_report);
-    });
+    .pipe(takeUntil(this.destroy$))
+      .subscribe((results:ChartData[]) => {
+        let late_report = this.generatePieChart('Punctual vs Late',results);
+        Highcharts.chart('overall-late-report',late_report);
+      });
   }
 
   public displayOverallLeaveReport(){
     this.employeeService.getOverallLeaveReport(this.currentManager.username)
-    .subscribe((report:ChartData[])=> {
-      let leave_report = this.generatePieChart('Annual vs Medical Leave',report);
-      Highcharts.chart('overall-leave-report',leave_report);
-    });
+    .pipe(takeUntil(this.destroy$))
+      .subscribe((report:ChartData[])=> {
+        let leave_report = this.generatePieChart('Annual vs Medical Leave',report);
+        Highcharts.chart('overall-leave-report',leave_report);
+      });
   }
 
   public viewReports(reportType){

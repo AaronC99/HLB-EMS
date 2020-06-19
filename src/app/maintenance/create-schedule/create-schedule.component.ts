@@ -1,9 +1,11 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { AdminService } from 'src/app/admin/service/admin.service';
 import { Schedule } from 'src/app/model/Schedule.model';
 import { MaintenanceService } from '../service/maintenance.service';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-schedule',
@@ -11,7 +13,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./create-schedule.component.scss']
 })
 
-export class CreateScheduleComponent implements OnInit,AfterViewInit {
+export class CreateScheduleComponent implements OnInit,AfterViewInit,OnDestroy {
   newSchedule = true;
   newSkdForm:FormGroup;
   schedule:Schedule;
@@ -19,6 +21,7 @@ export class CreateScheduleComponent implements OnInit,AfterViewInit {
   selectedDays = null;
   hours = [];
   minutes = [];
+  destroy$ : Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -33,6 +36,11 @@ export class CreateScheduleComponent implements OnInit,AfterViewInit {
 
   ngAfterViewInit(){
     this.checkSkdForEdit();
+  }
+
+  ngOnDestroy(){
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 
   public createForm(){
@@ -73,7 +81,6 @@ export class CreateScheduleComponent implements OnInit,AfterViewInit {
     return end_time;
   }
 
-
   public onSubmit(){
     if (this.daysOfWork.value.length === 0){
       this.selectedDays = false;
@@ -103,7 +110,9 @@ export class CreateScheduleComponent implements OnInit,AfterViewInit {
   }
 
   public validateSkd(){
-    this.adminService.getAllSchedules().subscribe((data:Schedule[]) => {
+    this.adminService.getAllSchedules()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((data:Schedule[]) => {
       for (let i=0;i<data.length;i++){
         if (this.scheduleName.value === data[i].schedule_name){
           this.scheduleName.setErrors({'isExisting' : true});
@@ -121,7 +130,9 @@ export class CreateScheduleComponent implements OnInit,AfterViewInit {
   }
 
   public checkSkdForEdit(){
-    this.maintainService.getSkdForEdit().subscribe((data:Schedule) => {
+    this.maintainService.getSkdForEdit()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((data:Schedule) => {
       if (Object.keys(data).length === 0){
         this.newSchedule = true;
         this.maintainService.setSkdToEdit(null);

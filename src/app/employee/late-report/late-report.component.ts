@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import Variablepie from 'highcharts/modules/variable-pie';
 import { EmployeeService } from '../service/employee.service';
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { EmployeeReport } from 'src/app/model/EmployeeReport.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 declare var require: any;
 let Boost = require('highcharts/modules/boost');
@@ -22,13 +24,14 @@ noData(Highcharts);
   templateUrl: './late-report.component.html',
   styleUrls: ['./late-report.component.scss']
 })
-export class LateReportComponent implements OnInit{
+export class LateReportComponent implements OnInit,OnDestroy{
   searchList = ['Attendance','Leave'];
   currentManager:AuthModel;
   deptReport:EmployeeReport[];
   searchText:string;
   reportType = '';
   currentUrl = '/home/manager/all-report';
+  destroy$ : Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private employeeService:EmployeeService,
@@ -46,24 +49,31 @@ export class LateReportComponent implements OnInit{
       this.displayAllLeaveReport();
   }
 
+  ngOnDestroy(){
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
   public displayAllLateReport(){
     this.reportType = 'Attendance';
     this.router.navigateByUrl(`${this.currentUrl}/${this.reportType}`);
     this.employeeService.getDeptLateReport(this.currentManager.username)
-    .subscribe((data:EmployeeReport[])=>{
-      this.deptReport = data;
-      this.renderCharts(this.deptReport);
-    });
+    .pipe(takeUntil(this.destroy$))
+      .subscribe((data:EmployeeReport[])=>{
+        this.deptReport = data;
+        this.renderCharts(this.deptReport);
+      });
   }
 
   public displayAllLeaveReport(){
     this.reportType = 'Leave';
     this.router.navigateByUrl(`${this.currentUrl}/${this.reportType}`);
     this.employeeService.getDeptLeaveReport(this.currentManager.username)
-    .subscribe((report:EmployeeReport[]) => {
-      this.deptReport = report;
-      this.renderCharts(this.deptReport);
-    });
+    .pipe(takeUntil(this.destroy$))
+      .subscribe((report:EmployeeReport[]) => {
+        this.deptReport = report;
+        this.renderCharts(this.deptReport);
+      });
   }
 
   public renderCharts(empReport){

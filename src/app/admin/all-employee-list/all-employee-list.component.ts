@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { EmployeeService } from 'src/app/employee/service/employee.service';
 import { MatSort } from '@angular/material/sort';
@@ -7,13 +7,15 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Router } from '@angular/router';
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { Employee } from 'src/app/model/Employee.model';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-all-employee-list',
   templateUrl: './all-employee-list.component.html',
   styleUrls: ['./all-employee-list.component.scss'],
 })
-export class AllEmployeeListComponent implements OnInit{
+export class AllEmployeeListComponent implements OnInit,OnDestroy{
   displayedColumns: string[] = ['name', 'domainId', 'email','role','schedule','department','edit','status'];
   ALL_DATA: any = [];
   ACTIVE_DATA:any = [];
@@ -21,6 +23,7 @@ export class AllEmployeeListComponent implements OnInit{
   currentUser: AuthModel;
   checked:boolean = false;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  destroy$ : Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private employeeService: EmployeeService,
@@ -34,8 +37,15 @@ export class AllEmployeeListComponent implements OnInit{
     this.getAllEmployeeDetails();
   }
 
+  ngOnDestroy(){
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
   public getAllEmployeeDetails(){
-    this.employeeService.getAllEmployees(this.currentUser.username).subscribe((data:Employee[]) => {
+    this.employeeService.getAllEmployees(this.currentUser.username)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((data:Employee[]) => {
       this.ALL_DATA = data;
       if (this.checked){
         this.dataSource = new MatTableDataSource<any>(this.ALL_DATA);

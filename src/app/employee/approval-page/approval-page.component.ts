@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService } from '../service/employee.service';
 import * as moment from 'moment';
@@ -9,13 +9,15 @@ import { Employee } from 'src/app/model/Employee.model';
 import { Timesheet } from 'src/app/model/Timesheet.model';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { NotificationService } from 'src/app/notification/notification.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-approval-page',
   templateUrl: './approval-page.component.html',
   styleUrls: ['./approval-page.component.scss']
 })
-export class ApprovalPageComponent implements OnInit {
+export class ApprovalPageComponent implements OnInit,OnDestroy {
   employee:Employee;
   currUserDomainId:string;
   period: string;
@@ -44,6 +46,7 @@ export class ApprovalPageComponent implements OnInit {
   showCheckBox = false;
   selectedRows = new SelectionModel<any>(true,[]);
   _leaveObj:LeaveApproval;
+  destroy$ : Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private route:ActivatedRoute,
@@ -66,11 +69,13 @@ export class ApprovalPageComponent implements OnInit {
     }
 
     this.authService.verifyUserIdle();
-    this.authService.userIsIdle.subscribe(isIdle => {
-      if (isIdle){
-        this.exit();
-      }
-    });
+    this.authService.userIsIdle
+    .pipe(takeUntil(this.destroy$))
+      .subscribe(isIdle => {
+        if (isIdle){
+          this.exit();
+        }
+      });
    }
 
   ngOnInit(): void {
@@ -81,9 +86,15 @@ export class ApprovalPageComponent implements OnInit {
       this.approvalValidation();
   }
 
+  ngOnDestroy(){
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
   public userValidation(){
     // Validate If User is the Manager
     this.employeeService.getProfile(this.currUserDomainId)
+    .pipe(takeUntil(this.destroy$))
       .subscribe ((userInfo:Employee) => {
         this.currentUser = userInfo;
         if (this.user.username === this.currentUser.department.department_head.domain_id || 
@@ -95,34 +106,35 @@ export class ApprovalPageComponent implements OnInit {
   }
 
   public getEmployeeDetails(){
-    // Get Employee 
     this.employeeService.getProfile(this.currUserDomainId)
-    .subscribe ((userInfo:Employee) => {
-      this.employee = userInfo;
-    });
+    .pipe(takeUntil(this.destroy$))
+      .subscribe ((userInfo:Employee) => {
+        this.employee = userInfo;
+      });
   }
 
   public approvalValidation(){
     // Check Whether has been approved or not
     this.employeeService.getAvailableTimesheet(this.currUserDomainId)
-    .subscribe( data =>{
-      let validateArr:any = data;
-      for (let i = 0;i < validateArr.length;i++){
-        if (validateArr[i].period_number === this.period && 
-          validateArr[i].year === this.year && 
-          validateArr[i].approval_status !== 'Pending'){
-            this.allowExit = true;
-            break;
-        } 
-        else if ( validateArr[i].period_number === this.period && 
-          validateArr[i].year === this.year && 
-          validateArr[i].approval_status === 'Pending'){
-            this.allowExit = false;
-            this.displayedColumns = ['editStatus','date','timeIn','timeOut','dateOut','ot','ut','lateness','remarks','leave'];
-            break;
+    .pipe(takeUntil(this.destroy$))
+      .subscribe( data =>{
+        let validateArr:any = data;
+        for (let i = 0;i < validateArr.length;i++){
+          if (validateArr[i].period_number === this.period && 
+            validateArr[i].year === this.year && 
+            validateArr[i].approval_status !== 'Pending'){
+              this.allowExit = true;
+              break;
+          } 
+          else if ( validateArr[i].period_number === this.period && 
+            validateArr[i].year === this.year && 
+            validateArr[i].approval_status === 'Pending'){
+              this.allowExit = false;
+              this.displayedColumns = ['editStatus','date','timeIn','timeOut','dateOut','ot','ut','lateness','remarks','leave'];
+              break;
+          }
         }
-      }
-    });
+      });
   }
 
   public editedValidation(timesheet){
@@ -140,11 +152,12 @@ export class ApprovalPageComponent implements OnInit {
 
   public displayTimesheet(){
     this.employeeService.getTimesheet(this.currUserDomainId,this.month.toString(),this.year)
-    .subscribe( (timesheet:Timesheet[]) =>{
-      this.TIMESHEET = timesheet;
-      this.editedValidation(this.TIMESHEET);
-      this.dataSource = this.TIMESHEET;
-    });
+    .pipe(takeUntil(this.destroy$))
+      .subscribe( (timesheet:Timesheet[]) =>{
+        this.TIMESHEET = timesheet;
+        this.editedValidation(this.TIMESHEET);
+        this.dataSource = this.TIMESHEET;
+      });
   }
 
   public tomorrow(date){

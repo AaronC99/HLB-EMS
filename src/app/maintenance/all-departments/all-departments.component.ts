@@ -6,6 +6,8 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatSort } from '@angular/material/sort';
 import { MaintenanceService } from '../service/maintenance.service';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-all-departments',
@@ -19,6 +21,7 @@ export class AllDepartmentsComponent implements OnInit {
   dataSource:any = new MatTableDataSource<any>();
   checked: boolean;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  destroy$ : Subject<boolean> = new Subject<boolean>();
   
   constructor(
     private adminService:AdminService,
@@ -30,8 +33,15 @@ export class AllDepartmentsComponent implements OnInit {
     this.displayAllDept();
   }
 
+  ngOnDestroy(){
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
   public displayAllDept(){
-    this.adminService.getAllDepartments().subscribe((data:Department[]) => {
+    this.adminService.getAllDepartments()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((data:Department[]) => {
       this.allDept = data;
       if(this.checked){
         // Show All

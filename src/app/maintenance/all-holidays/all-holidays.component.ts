@@ -1,17 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AdminService } from 'src/app/admin/service/admin.service';
 import { NgbCalendar, NgbDateStruct, NgbDate, NgbDatepicker, NgbDatepickerI18n } from '@ng-bootstrap/ng-bootstrap';
 import { Holiday } from 'src/app/model/Holiday.model';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
 import { MaintenanceService } from '../service/maintenance.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-all-holidays',
   templateUrl: './all-holidays.component.html',
   styleUrls: ['./all-holidays.component.scss']
 })
-export class AllHolidaysComponent implements OnInit {
+export class AllHolidaysComponent implements OnInit,OnDestroy {
   displayMonths = 6;
   navigation = 'none';
   showWeekNumbers = false;
@@ -25,6 +27,7 @@ export class AllHolidaysComponent implements OnInit {
   showDetails = null;
   editable:boolean;
   selectedDate:string;
+  destroy$ : Subject<boolean> = new Subject<boolean>();
   
   constructor(
     private adminService: AdminService,
@@ -32,7 +35,6 @@ export class AllHolidaysComponent implements OnInit {
     private router:Router,
     private maintainService: MaintenanceService
   ) {
-    this.getAllHolidays();
     this.minDate = {
       day: 1,
       month: this.calendar.getToday().month + 1,
@@ -41,10 +43,18 @@ export class AllHolidaysComponent implements OnInit {
    }  
 
   ngOnInit(): void {
+    this.getAllHolidays();
+  }
+
+  ngOnDestroy(){
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 
   public getAllHolidays(){
-    this.adminService.viewHolidays().subscribe(data =>{
+    this.adminService.viewHolidays()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(data =>{
       this.convertDates(data);
       this.holidayDetails = data;
     });

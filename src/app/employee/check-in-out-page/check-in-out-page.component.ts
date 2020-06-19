@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, OnDestroy } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { MatTableDataSource } from '@angular/material/table';
@@ -6,6 +6,8 @@ import { EmployeeService } from '../service/employee.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { Timesheet } from 'src/app/model/Timesheet.model';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-check-in-out-page',
@@ -13,7 +15,7 @@ import { Timesheet } from 'src/app/model/Timesheet.model';
   styleUrls: ['./check-in-out-page.component.scss']
 })
 
-export class CheckInOutPageComponent implements OnInit {
+export class CheckInOutPageComponent implements OnInit,OnDestroy {
   clockInButton = true;
   clockOutButton = false;
   clock:string;
@@ -30,6 +32,7 @@ export class CheckInOutPageComponent implements OnInit {
   currentUser:AuthModel;
   yesterday = this.localTime.transform(this.date.setDate(this.date.getDate() - 1),'dd-MM');
   @ViewChild('dialogBox',{ static: true }) dialog_box: TemplateRef<any>;
+  destroy$ : Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private employeeService: EmployeeService,
@@ -45,6 +48,11 @@ export class CheckInOutPageComponent implements OnInit {
     this.displayClockInOut();
   }
 
+  ngOnDestroy(){
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
   public filterTable(table:any){
     this.CLOCK_IN_OUT_DATA = table.filter( data => 
       parseInt(data.date_in) <= parseInt(this.today)
@@ -54,6 +62,7 @@ export class CheckInOutPageComponent implements OnInit {
 
   public clockInOutValidation(dataTable:any){
     this.employeeService.getClockInOutStatus(this.currentUser.username)
+    .pipe(takeUntil(this.destroy$))
       .subscribe( data => {
         if (dataTable.length === 0 && data['last_clock_in']){
           this.clockInButton = false;
@@ -88,6 +97,7 @@ export class CheckInOutPageComponent implements OnInit {
 
  public displayClockInOut(){
     this.employeeService.getTimesheet(this.currentUser.username,this.currentMonth,this.currentYear)
+    .pipe(takeUntil(this.destroy$))  
       .subscribe((data:Timesheet[]) => {
         this.CLOCK_IN_OUT_DATA = data;
         this.filterTable(this.CLOCK_IN_OUT_DATA);

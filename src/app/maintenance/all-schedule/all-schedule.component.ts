@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
@@ -6,19 +6,22 @@ import { AdminService } from 'src/app/admin/service/admin.service';
 import { Schedule } from 'src/app/model/Schedule.model';
 import { MaintenanceService } from '../service/maintenance.service';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-all-schedule',
   templateUrl: './all-schedule.component.html',
   styleUrls: ['./all-schedule.component.scss']
 })
-export class AllScheduleComponent implements OnInit {
+export class AllScheduleComponent implements OnInit,OnDestroy {
   displayedColumns = ['no','scheduleName','daysOfWork','startTime','endTime','edit','status'];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   dataSource:any = new MatTableDataSource<any>();
   checked: boolean;
   allSchedules: Schedule[] = [];
   activeSchedules: Schedule[] = [];
+  destroy$ : Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private adminService: AdminService,
@@ -31,13 +34,20 @@ export class AllScheduleComponent implements OnInit {
     this.displayAllSkd();
   }
 
+  ngOnDestroy(){
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
   public showAll($event: MatSlideToggleChange){
     this.checked = $event.checked;
     this.displayAllSkd();
   }
 
   public displayAllSkd(){
-    this.adminService.getAllSchedules().subscribe((data:Schedule[]) => {
+    this.adminService.getAllSchedules()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((data:Schedule[]) => {
       this.allSchedules = data;
       if(this.checked){
         // Show All
@@ -79,5 +89,4 @@ export class AllScheduleComponent implements OnInit {
       } 
     }
   }
-
 }

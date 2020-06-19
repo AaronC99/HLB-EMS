@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as moment from 'moment';
@@ -6,13 +6,15 @@ import { Holiday } from 'src/app/model/Holiday.model';
 import { AdminService } from '../service/admin.service';
 import { MaintenanceService } from 'src/app/maintenance/service/maintenance.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-holiday-declaration',
   templateUrl: './holiday-declaration.component.html',
   styleUrls: ['./holiday-declaration.component.scss']
 })
-export class HolidayDeclarationComponent implements OnInit,AfterViewInit {
+export class HolidayDeclarationComponent implements OnInit,AfterViewInit,OnDestroy {
   hoveredDate: NgbDate | null = null;
   fromDate: NgbDate;
   toDate: NgbDate | null = null;
@@ -30,6 +32,7 @@ export class HolidayDeclarationComponent implements OnInit,AfterViewInit {
   isDuplicate:boolean;
   newRecord:boolean = true;
   holidayId:string;
+  destroy$ : Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private calendar: NgbCalendar,
@@ -55,6 +58,11 @@ export class HolidayDeclarationComponent implements OnInit,AfterViewInit {
 
   ngAfterViewInit(){
     this.checkHolidayForEdit();
+  }
+
+  ngOnDestroy(){
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 
   createForm(){
@@ -113,6 +121,7 @@ export class HolidayDeclarationComponent implements OnInit,AfterViewInit {
 
   public viewAllHolidays(){
     this.adminService.viewHolidays()
+    .pipe(takeUntil(this.destroy$))
       .subscribe(data => {
         this.existing_data = data;
         let getDate = string => (([day,month]) => ({day,month}))(string.split('-'));
@@ -204,7 +213,9 @@ export class HolidayDeclarationComponent implements OnInit,AfterViewInit {
   }
 
   public checkHolidayForEdit(){
-    this.maintainService.getHolidayForEdit().subscribe(holidayInfo => {
+    this.maintainService.getHolidayForEdit()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(holidayInfo => {
       this.holiday = holidayInfo;
       if (Object.keys(this.holiday).length !== 0){
         this.newRecord = false;

@@ -1,18 +1,19 @@
-import { Component, AfterContentInit, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { Component, AfterContentInit, OnInit, OnDestroy } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { AdminService } from '../service/admin.service';
 import { Employee } from 'src/app/model/Employee.model';
-import { map } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Schedule } from 'src/app/model/Schedule.model';
 import { Department } from 'src/app/model/Department.model';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-create-employee',
   templateUrl: './create-employee.component.html',
   styleUrls: ['./create-employee.component.scss']
 })
-export class CreateEmployeeComponent implements AfterContentInit,OnInit {
+export class CreateEmployeeComponent implements AfterContentInit,OnInit,OnDestroy {
   title = 'Create New Employee';
   completeMessage = '';
   gender:string[] = ['Male','Female'];
@@ -28,6 +29,7 @@ export class CreateEmployeeComponent implements AfterContentInit,OnInit {
   scheduleDetails: Schedule[];
   departmentDetails: Department[];
   employeeFormGroup: FormGroup;
+  destroy$ : Subject<boolean> = new Subject<boolean>();
   
   get formArray(): AbstractControl | null { 
     return this.employeeFormGroup.get('formArray'); 
@@ -50,9 +52,16 @@ export class CreateEmployeeComponent implements AfterContentInit,OnInit {
     this.checkUserForEdit();
   }
 
+  ngOnDestroy(){
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
   //get department detials from API
   public getDepartments(){
-    this.adminService.getAllDepartments().subscribe((dptDetails:Department[]) => {
+    this.adminService.getAllDepartments()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((dptDetails:Department[]) => {
       this.departmentDetails = dptDetails.filter(dept => dept['activated'] === true);
     });
   }
@@ -71,7 +80,9 @@ export class CreateEmployeeComponent implements AfterContentInit,OnInit {
 
   //get schedule detials from API
   public getSchedules(){
-    this.adminService.getAllSchedules().subscribe((schDetails:Schedule[]) => {
+    this.adminService.getAllSchedules()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((schDetails:Schedule[]) => {
       this.scheduleDetails = schDetails.filter(skd => skd['activated'] === true);
     });
   }
@@ -184,7 +195,9 @@ export class CreateEmployeeComponent implements AfterContentInit,OnInit {
   }
 
   public checkUserForEdit(){
-    this.adminService.getCurrUserToEdit().subscribe((data:Employee) => {
+    this.adminService.getCurrUserToEdit()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((data:Employee) => {
       if (Object.keys(data).length === 0){
         this.isEditting = false;
         this.adminService.userToEdit = null;

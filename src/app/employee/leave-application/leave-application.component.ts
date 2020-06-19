@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as moment from 'moment';
@@ -8,13 +8,15 @@ import { LeaveApproval } from 'src/app/model/LeaveApproval.model';
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { Employee } from 'src/app/model/Employee.model';
 import { AdminService } from 'src/app/admin/service/admin.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-leave-application',
   templateUrl: './leave-application.component.html',
   styleUrls: ['./leave-application.component.scss']
 })
-export class LeaveApplicationComponent implements OnInit {
+export class LeaveApplicationComponent implements OnInit,OnDestroy {
   hoveredDate: NgbDate | null = null;
   fromDate: NgbDate;
   toDate: NgbDate | null = null;
@@ -41,6 +43,7 @@ export class LeaveApplicationComponent implements OnInit {
   holidays:any = [];
   isDisabled:any;
   isExceeded: boolean;
+  destroy$ : Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private calendar: NgbCalendar,
@@ -54,17 +57,28 @@ export class LeaveApplicationComponent implements OnInit {
       this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
       this.endDate = `${this.toDate.day}/${this.toDate.month}/${this.toDate.year}`;
       this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-      this.employeeService.getProfile(this.currentUser.username)
+      
+  }
+
+  ngOnInit(): void {
+    this.getEmployeeProfile();
+    this.getPendingLeaves();
+    this.getHolidays();
+    this.createForm();
+  }
+
+  ngOnDestroy(){
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
+  public getEmployeeProfile(){
+    this.employeeService.getProfile(this.currentUser.username)
+      .pipe(takeUntil(this.destroy$))
         .subscribe((data:Employee)=>{
           this.currentUserName = data.name;
           this.currentUserSupervisor = data.department.department_head;
         });
-  }
-
-  ngOnInit(): void {
-    this.getPendingLeaves();
-    this.getHolidays();
-    this.createForm();
   }
 
   createForm(){
@@ -86,20 +100,22 @@ export class LeaveApplicationComponent implements OnInit {
 
   public getPendingLeaves(){
     this.employeeService.getExisitingLeavesDates(this.currentUser.username)
-    .subscribe( data => {
-      let existingLeaves:any = data;
-      existingLeaves = this.converttedDateStruct(existingLeaves);
-      this.mergeInvalidDates(existingLeaves,'leave');
-    });
+    .pipe(takeUntil(this.destroy$))
+      .subscribe( data => {
+        let existingLeaves:any = data;
+        existingLeaves = this.converttedDateStruct(existingLeaves);
+        this.mergeInvalidDates(existingLeaves,'leave');
+      });
   }
 
   public getHolidays(){
     this.adminService.viewHolidays()
-    .subscribe(data=> {
-      let existingHolidays:any = data;
-      existingHolidays = this.converttedDateStruct(existingHolidays);
-      this.mergeInvalidDates(existingHolidays,'holiday');
-    });
+    .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        let existingHolidays:any = data;
+        existingHolidays = this.converttedDateStruct(existingHolidays);
+        this.mergeInvalidDates(existingHolidays,'holiday');
+      });
   }
 
   public mergeInvalidDates(dates,type){

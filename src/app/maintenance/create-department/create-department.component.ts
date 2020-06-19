@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Employee } from 'src/app/model/Employee.model';
 import { MaintenanceService } from '../service/maintenance.service';
@@ -7,13 +7,15 @@ import { EmployeeService } from 'src/app/employee/service/employee.service';
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { Department } from 'src/app/model/Department.model';
 import { Router} from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-department',
   templateUrl: './create-department.component.html',
   styleUrls: ['./create-department.component.scss']
 })
-export class CreateDepartmentComponent implements OnInit,AfterViewInit {
+export class CreateDepartmentComponent implements OnInit,AfterViewInit,OnDestroy {
   newDeptForm: FormGroup;
   maxLength = 3;
   allManagers: Employee[] = [];
@@ -22,6 +24,7 @@ export class CreateDepartmentComponent implements OnInit,AfterViewInit {
   _deptObj:Department;
   manager: Employee;
   newDept = true;
+  destroy$ : Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -43,6 +46,11 @@ export class CreateDepartmentComponent implements OnInit,AfterViewInit {
     this.checkDeptForEdit();
   }
 
+  ngOnDestroy(){
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
   public createForm(){
     this.newDeptForm = this.formBuilder.group({
       deptName: ['',Validators.required],
@@ -52,14 +60,18 @@ export class CreateDepartmentComponent implements OnInit,AfterViewInit {
   }
 
   public getAllManagers(){
-    this.employeeService.getAllEmployees(this.currentUser.username).subscribe((data:Employee[]) => {
+    this.employeeService.getAllEmployees(this.currentUser.username)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((data:Employee[]) => {
       let employees:any = data;
       this.allManagers = employees.filter( user => user.role === 'Manager');
     });
   }
 
   public getAllDepartments(){
-    this.adminService.getAllDepartments().subscribe ((data:Department[]) =>{
+    this.adminService.getAllDepartments()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe ((data:Department[]) =>{
       this.allDept = data;
     });
   }
@@ -116,7 +128,9 @@ export class CreateDepartmentComponent implements OnInit,AfterViewInit {
   }
 
   public checkDeptForEdit(){
-    this.maintainService.getDeptForEdit().subscribe((dept:Department) => {
+    this.maintainService.getDeptForEdit()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((dept:Department) => {
       if (dept.department_name !== undefined){
         this._deptObj = dept;
         this.newDept = false

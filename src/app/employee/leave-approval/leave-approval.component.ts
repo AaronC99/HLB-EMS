@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EmployeeService } from '../service/employee.service';
 import * as moment from 'moment';
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-leave-approval',
   templateUrl: './leave-approval.component.html',
   styleUrls: ['./leave-approval.component.scss']
 })
-export class LeaveApprovalComponent implements OnInit {
+export class LeaveApprovalComponent implements OnInit,OnDestroy {
   validUser:boolean;
   currentUserId:string;
   employee:any;
@@ -23,6 +25,7 @@ export class LeaveApprovalComponent implements OnInit {
   leaveApprovalArray = [];
   leaveApprovalDetails:any;
   canExit:boolean;
+  destroy$ : Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private router:Router,
@@ -40,49 +43,59 @@ export class LeaveApprovalComponent implements OnInit {
       }
 
       this.authService.verifyUserIdle();
-      this.authService.userIsIdle.subscribe(isIdle => {
-        if (isIdle){
-          this.exit();
-        }
-      });
+      this.authService.userIsIdle
+      .pipe(takeUntil(this.destroy$))
+        .subscribe(isIdle => {
+          if (isIdle){
+            this.exit();
+          }
+        });
     }
 
   ngOnInit(): void {
     this.getCurrentUserInfo();
   }
 
+  ngOnDestroy(){
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
   public getCurrentUserInfo(){
-    this.employeeService.getProfile(this.currentUserId).subscribe(data =>{
-      this.employee = data;
-      if (this.manager.username === this.employee.department.department_head.domain_id){
-        this.validUser = true;
-        this.getLeaveDetails();
-      }
-      else {
-        this.validUser = false;
-      }
-    });
+    this.employeeService.getProfile(this.currentUserId)
+    .pipe(takeUntil(this.destroy$))
+      .subscribe(data =>{
+        this.employee = data;
+        if (this.manager.username === this.employee.department.department_head.domain_id){
+          this.validUser = true;
+          this.getLeaveDetails();
+        }
+        else {
+          this.validUser = false;
+        }
+      });
   }
 
   public getLeaveDetails(){
     this.employeeService.viewLeaveDetails(this.currentUserId,this.dateSubmitted)
-    .subscribe(data =>{
-      this.leaveDetails = data;
-      if(this.leaveDetails.length === 0){
-        this.canExit = true;
-      }
-      else {
-        this.canExit = false;
-        this.leaveDetails.forEach(element => {
-          let dayName = moment(`${element.date}-${element.year}`,"DD-MM-YYYY").format('dddd');
-          let dateModel = {
-            fullDate: `${element.date}-${element.year}`,
-            day: dayName
-          }
-          this.dates.push(dateModel);
-        });
-      }
-    });
+    .pipe(takeUntil(this.destroy$))
+      .subscribe(data =>{
+        this.leaveDetails = data;
+        if(this.leaveDetails.length === 0){
+          this.canExit = true;
+        }
+        else {
+          this.canExit = false;
+          this.leaveDetails.forEach(element => {
+            let dayName = moment(`${element.date}-${element.year}`,"DD-MM-YYYY").format('dddd');
+            let dateModel = {
+              fullDate: `${element.date}-${element.year}`,
+              day: dayName
+            }
+            this.dates.push(dateModel);
+          });
+        }
+      });
   }
 
   public setLeaveApprovalDetails(status){
