@@ -47,16 +47,16 @@
                     </div>
                     <div class="w-100"></div>
                     <div class="col-6"><h2>Start Time</h2></div>
-                    <div class="col-6"><h2>: {{ currUserSchedule.start_time}}</h2></div>
+                    <div class="col-6"><h2>: {{ getTime(currUserSchedule.start_time) }}</h2></div>
                     <div class="w-100"></div>
                     <div class="col-6"><h2>End Time</h2></div>
-                    <div class="col-6"><h2>: {{ currUserSchedule.end_time}}</h2></div>
+                    <div class="col-6"><h2>: {{ getTime(currUserSchedule.end_time) }}</h2></div>
                     <div class="w-100"></div>
                     <div class="col-6"><h2>Annual Leave</h2></div>
-                    <div class="col-6"><h2>: {{ currUser.annual_leave }}</h2></div>
+                    <div class="col-6"><h2>: {{ currUser.annual_leave }} days rmng</h2></div>
                     <div class="w-100"></div>
                     <div class="col-6"><h2>Medical Leave</h2></div>
-                    <div class="col-6"><h2>: {{ currUser.medical_leave }}</h2></div>
+                    <div class="col-6"><h2>: {{ currUser.medical_leave }} days rmng</h2></div>
                 </div>
             </mat-card-content>
         </mat-card>
@@ -74,6 +74,16 @@
                     <div class="w-100"></div>
                     <div class="col-6"><h2>Supervisor</h2></div>
                     <div class="col-6"><h2>: {{ currUserDepartment.department_head.name }}</h2></div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <mat-card class="change-password">
+            <mat-card-title>New Password</mat-card-title>
+            <mat-card-content>
+                <div class="row justify-content-center">
+                    <button mat-raised-button (click)="changePwdPage()">
+                        Change Password
+                    </button>
                 </div>
             </mat-card-content>
         </mat-card>

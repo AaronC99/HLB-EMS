@@ -19,34 +19,27 @@
                                 Please Select a Leave Type
                             </mat-error>
                         </mat-form-field>
-                        <div *ngIf="showDateInput" class="date-input">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Leave Duration</mat-label>
-                                <input matInput formControlName="duration" [readonly]="true">
-                                <button mat-icon-button matSuffix type="button" class="calendar-button" (click)="showCalendar = true">
-                                    <mat-icon>calendar_today</mat-icon>
-                                </button>
-                                <mat-error *ngIf="userInput.duration.invalid">
-                                    Leave Date(s) Exceeds Limit!!
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div class="date-picker" *ngIf="showCalendar">
+                        <h2>{{ userInput.leaveType.value }} Leave Duration: 
+                            <span class="date-label">{{ startDate }} - {{ endDate }}</span>
+                            <span *ngIf="isExceeded" class="error-message">*Selected Date(s) Exceeds Limit!!</span>
+                        </h2>
+                        <div class="date-picker">
                             <ngb-datepicker #dp (dateSelect)="onDateSelection($event)" 
                                 [displayMonths]="1" 
                                 [dayTemplate]="t" 
                                 outsideDays="hidden" 
                                 [minDate]="minDate" 
                                 [maxDate]="maxDate"
-                                [markDisabled]="isWeekends">
+                                [markDisabled]="isDisabled">
                             </ngb-datepicker>
                             
-                            <ng-template #t let-date let-focused="focused">
+                            <ng-template #t let-date let-disabled="disabled" let-focused="focused">
                                 <span class="custom-day"
                                         [class.focused]="focused"
                                         [class.range]="isRange(date)"
                                         [class.faded]="isHovered(date) || isInside(date)"
                                         [class.weekend]="isWeekends(date)"
+                                        [class.disabled]="disabled"
                                         (mouseenter)="hoveredDate = date"
                                         (mouseleave)="hoveredDate = null">
                                     {{ date.day }}
@@ -54,7 +47,7 @@
                             </ng-template>
                         </div>
                         <button mat-raised-button color="primary" type="submit" 
-                            [disabled]="leaveApplicationForm.invalid">
+                            [disabled]="leaveApplicationForm.invalid || isExceeded">
                             Request Leave
                         </button>
                     </form>

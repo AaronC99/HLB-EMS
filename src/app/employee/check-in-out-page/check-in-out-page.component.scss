@@ -10,16 +10,14 @@
   height:900px;
 }
 h1{
-  font-size: 60px;
+  font-size: 4vw;
   font-family: 'Montserrat', sans-serif;
-  padding: 20px;
-  margin: 0px;
 }
-h2,button,th{
+button,th{
   font-family: 'Ubuntu', sans-serif;
 }
-h2{
-  font-size: 30px;
+.date{
+  font-size: 2vw;
 }
 button{
   border-radius: 50px;
@@ -35,8 +33,11 @@ mat-card-actions{
   padding-top:10px;
   padding-bottom: 10px;
 }
-.clock-in-out-button{
+.clock-in-out-button,.today{
   background-color: #00fdcb;
+}
+.weekend{
+  background-color:#DBDBDB;
 }
 .clock-out-button{
   background-color: #f44336;
@@ -61,4 +62,10 @@ th,td{
 }
 .dialog-box, .empty-table-message, .clock-card{
   text-align: center;
+}
+.empty-table-message{
+  border-radius: 0px;
+}
+mat-card-content{
+  min-width: 100%;
 }

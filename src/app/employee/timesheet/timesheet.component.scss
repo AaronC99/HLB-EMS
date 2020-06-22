@@ -1,5 +1,5 @@
 .row{
-    margin:30px;
+    margin:30px 20px;
 }
 .generate-form , .timesheet-card{
     border-radius: 20px;
@@ -52,7 +52,7 @@ table ,
     overflow: auto;
 }
 th,td{
-    font-size: 20px;
+    font-size: large;
     color: black;
 }
 mat-card-title , .empty-table-message 

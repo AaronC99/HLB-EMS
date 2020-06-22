@@ -1,17 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { Holiday } from 'src/app/model/Holiday.model';
 import { AdminService } from '../service/admin.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MaintenanceService } from 'src/app/maintenance/service/maintenance.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-holiday-declaration',
   templateUrl: './holiday-declaration.component.html',
   styleUrls: ['./holiday-declaration.component.scss']
 })
-export class HolidayDeclarationComponent implements OnInit {
+export class HolidayDeclarationComponent implements OnInit,AfterViewInit,OnDestroy {
   hoveredDate: NgbDate | null = null;
   fromDate: NgbDate;
   toDate: NgbDate | null = null;
@@ -22,20 +25,30 @@ export class HolidayDeclarationComponent implements OnInit {
   holidayDuration = [];
   holiday: Holiday;
   exisitingHolidays = [];
+  existing_data:any = [];
   isDisabled:any;
+  minDate:any;
+  editDate:any;
+  isDuplicate:boolean;
+  newRecord:boolean = true;
+  holidayId:string;
+  destroy$ : Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private calendar: NgbCalendar,
     private formBuilder:FormBuilder,
     private formatter: NgbDateParserFormatter,
     private adminService: AdminService,
-    private _snackBar: MatSnackBar
+    private maintainService: MaintenanceService,
+    private route: ActivatedRoute,
+    private router: Router
     ) { 
     this.fromDate = calendar.getToday();
-    this.toDate = calendar.getNext(calendar.getToday(), 'd', 4);
+    this.toDate = calendar.getNext(calendar.getToday(), 'd', 0);
+    this.setMinDate();
     this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
     this.endDate = `${this.toDate.day}/${this.toDate.month}/${this.toDate.year}`;
-    //this.admin = localStorage.getItem('currentUser');
+    this.holidayId = this.route.snapshot.paramMap.get('holidayId');
   }
 
   ngOnInit(): void {
@@ -43,12 +56,30 @@ export class HolidayDeclarationComponent implements OnInit {
     this.createForm();
   }
 
+  ngAfterViewInit(){
+    this.checkHolidayForEdit();
+  }
+
+  ngOnDestroy(){
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
   createForm(){
     this.createHolidayForm = this.formBuilder.group({
       holidayName: ['',Validators.required],
-      holidayType: ['',Validators.required],
-      duration: [`${this.startDate}-${this.endDate}`]
+      holidayType: ['',Validators.required]
     });
+  }
+
+  public setMinDate(){
+    this.minDate = {
+      year: this.fromDate.year,
+      month: this.fromDate.month + 1,
+      day: 1
+    };
+    this.fromDate = this.minDate;
+    this.toDate = this.minDate;
   }
 
   public disableDates(dates){
@@ -73,7 +104,7 @@ export class HolidayDeclarationComponent implements OnInit {
       this.endDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
     }
     this.startDate = `${this.fromDate.day}/${this.fromDate.month}/${this.fromDate.year}`;
-    this.createHolidayForm.get('duration').setValue(`${this.startDate} - ${this.endDate}`);
+    this.validateHoliday(this.fromDate,this.toDate);
   }
 
   isHovered(date: NgbDate) {
@@ -90,10 +121,11 @@ export class HolidayDeclarationComponent implements OnInit {
 
   public viewAllHolidays(){
     this.adminService.viewHolidays()
+    .pipe(takeUntil(this.destroy$))
       .subscribe(data => {
-        let holidays:any = data;
+        this.existing_data = data;
         let getDate = string => (([day,month]) => ({day,month}))(string.split('-'));
-        holidays.forEach(element => {
+        this.existing_data.forEach(element => {
           let day = getDate(element.date).day;
           let month = getDate(element.date).month;
           let year = element.year;
@@ -108,10 +140,53 @@ export class HolidayDeclarationComponent implements OnInit {
       });
   }
 
+  public validateHoliday(startDay,endDay){
+    this.isDuplicate = false;
+    let startDate = moment(this.formatter.format(startDay));
+    let endDate = moment(this.formatter.format(endDay));
+    let selectedDates = [];
+    if (endDate.format("DD-MM-YYYY") === 'Invalid date')
+      endDate = startDate;
+
+    for(let i=moment(startDate); i.isSameOrBefore(endDate);i.add(1,'days')){
+      let date = i.format("DD-MM");
+      let year = i.format("YYYY");
+      let fullDate = {
+        date: date,
+        year: year
+      }
+      selectedDates.push(fullDate);
+    }
+    for (let i=0;i<this.existing_data.length;i++){
+      for (let j=0;j<selectedDates.length;j++){
+        if (this.existing_data[i].date === selectedDates[j].date && 
+          this.existing_data[i].year === selectedDates[j].year)
+        {
+          this.isDuplicate = true;
+          break;
+        }
+      }
+    }
+  }
+
   onSubmit(){
     this.holidayDuration.splice(0,this.holidayDuration.length);
-    this.startDate = moment(this.formatter.format(this.fromDate));
-    this.endDate = moment(this.formatter.format(this.toDate));
+    if (this.newRecord){
+      // Create new holiday
+      this.setHoliday(this.fromDate,this.toDate,null);
+      this.adminService.createHoliday(this.holidayDuration);
+    } else {
+      // Update edited holiday
+      this.setHoliday(this.fromDate,this.toDate,this.holidayId);
+      this.maintainService.editHoliday(this.holiday);
+    }
+    this.createHolidayForm.reset();
+    this.router.navigateByUrl('/home/all-holiday');
+  }
+
+  public setHoliday(fromDate,toDate,id){
+    this.startDate = moment(this.formatter.format(fromDate));
+    this.endDate = moment(this.formatter.format(toDate));
     if (this.endDate.format("DD-MM-YYYY") === 'Invalid date')
       this.endDate = this.startDate;
 
@@ -119,31 +194,51 @@ export class HolidayDeclarationComponent implements OnInit {
       let date = i.format("DD-MM");
       let year = i.format("YYYY");
       this.holiday = {
+        _id: id,
         holiday_name: this.userInput.holidayName.value,
         holiday_type: this.userInput.holidayType.value,
         date: date,
         year: year
       }
       this.holidayDuration.push(this.holiday);
+      // Save only the first date
+      if(id !== null)
+        break;
     }
-    this.createHolidayForm.reset();
-    this.adminService.createHoliday(this.holidayDuration).subscribe(
-      data =>{
-        let holidayArray:any = data;
-        holidayArray.forEach(element => {
-          if (element === null)
-            this.displayMessage('This date already is a holiday');
-          else 
-            this.displayMessage('Holiday Created Successfully');
+  }
+
+  public getButtonType(){
+    let buttonType = this.newRecord === true ? 'Create Holiday' : 'Edit Holiday';
+    return buttonType;
+  }
+
+  public checkHolidayForEdit(){
+    this.maintainService.getHolidayForEdit()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(holidayInfo => {
+      this.holiday = holidayInfo;
+      if (Object.keys(this.holiday).length !== 0){
+        this.newRecord = false;
+        let getDate = string => (([day,month]) => ({day,month}))(string.split('-'));
+        let fullDate = `${getDate(this.holiday.date).day}/${getDate(this.holiday.date).month}/${this.holiday.year}`;
+        // Set label 
+        this.startDate = fullDate;
+        this.endDate = fullDate;
+        // Set date in datepicker
+        this.editDate = {
+          day: parseInt(getDate(this.holiday.date).day),
+          month: parseInt(getDate(this.holiday.date).month),
+          year: parseInt(this.holiday.year)
+        };
+        this.fromDate = this.editDate;
+        this.toDate = this.editDate;
+        // Set Value in form field 
+        this.createHolidayForm.patchValue ({
+          holidayName: this.holiday.holiday_name,
+          holidayType: this.holiday.holiday_type
         });
-      }
-    );
+      } else
+        this.router.navigateByUrl('/home/holiday-declaration');
+    })
   }
-
-  public displayMessage(message:string){
-    this._snackBar.open(message,'Close',{
-      duration: 3000
-    });
-  }
-
 }

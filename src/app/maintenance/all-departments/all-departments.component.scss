@@ -1,0 +1,40 @@
+.row{
+    margin: 50px;
+}
+table{
+    width: 100%;
+}
+.slide-toggle{
+  padding:10px 0px;
+}
+button{
+    border-radius: 20px;
+}
+.active{
+    background-color: #84fab0;
+}
+.inactive{
+    color: white;
+    background-color: #f43b47;
+}
+mat-card-title{
+    text-align: center;
+    text-transform: uppercase;
+}
+th,mat-card-title{
+    font-family: 'Ubuntu', sans-serif;
+}
+mat-card{
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 20px;
+}
+mat-card-content{
+    padding: 20px;
+}
+th,td{
+    font-size: larger;
+    color: black;
+}
+td{
+    font-family: 'Sen',sans-serif;
+}

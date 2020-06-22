@@ -1,7 +1,7 @@
 .row{
     margin: 50px;
 }
-.employee-list-card{
+.employee-list-card,.pending-btn{
     border-radius: 20px;
 }
 mat-card{
@@ -10,7 +10,7 @@ mat-card{
 mat-card-title,h2{
     text-align: center;
 }
-th,td,mat-card-title,h2{
+th,td,mat-card-title,h2,.pending-btn{
     font-family: 'Ubuntu', sans-serif;
 }
 mat-card-title{
@@ -34,12 +34,12 @@ th,td{
 .dropdown-list{
     width:50%;
 }
-button{
-    width:20%;
-}
 h2{
     color:red;
 }
 th,h2{
     font-weight: bold;
+}
+.pending-btn:hover{
+    background-color: green;
 }

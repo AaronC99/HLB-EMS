@@ -1,48 +1,35 @@
-import { Component, AfterContentInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { Component, AfterContentInit, OnInit, OnDestroy } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { AdminService } from '../service/admin.service';
 import { Employee } from 'src/app/model/Employee.model';
-import { map } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { Schedule } from 'src/app/model/Schedule.model';
+import { Department } from 'src/app/model/Department.model';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-create-employee',
   templateUrl: './create-employee.component.html',
   styleUrls: ['./create-employee.component.scss']
 })
-export class CreateEmployeeComponent implements AfterContentInit {
+export class CreateEmployeeComponent implements AfterContentInit,OnInit,OnDestroy {
   title = 'Create New Employee';
-  buttonTitle = 'Register';
   completeMessage = '';
   gender:string[] = ['Male','Female'];
   role:string[] = ['Admin','Manager','Staff'];
-  exist = true;
   isEditting = false;
   employee: Employee;
+  _scheduleObj: Schedule;
+  _deptObj: Department;
   editable: boolean = true;
   complete:boolean = false;
   showDptDetails = false;
   showSchDetails = false;
-  scheduleDetails: Object;
-  working_days: Array<string>;
-  start_time: string;
-  end_time: string;
-  departmentDetails: Object;
-  dpt_level: string;
-  dpt_head: any;
-  employeeFormGroup = new FormGroup({
-    name: new FormControl(''),
-    domainId: new FormControl(''),
-    ic_passportNo: new FormControl(''),
-    email: new FormControl(''),
-    gender: new FormControl(''),
-    role: new FormControl(''),
-    address: new FormControl(''),
-    department: new FormControl(''),
-    schedule: new FormControl(''),
-    annual_leave : new FormControl(''),
-    medical_leave: new FormControl('')
-  });
+  scheduleDetails: Schedule[];
+  departmentDetails: Department[];
+  employeeFormGroup: FormGroup;
+  destroy$ : Subject<boolean> = new Subject<boolean>();
   
   get formArray(): AbstractControl | null { 
     return this.employeeFormGroup.get('formArray'); 
@@ -53,7 +40,10 @@ export class CreateEmployeeComponent implements AfterContentInit {
     private adminService: AdminService,
     private router:Router
     ) {
-    this.employee = new Employee();
+  }
+
+  ngOnInit(){
+    this.createForm();
     this.getDepartments();
     this.getSchedules();
   }
@@ -62,32 +52,38 @@ export class CreateEmployeeComponent implements AfterContentInit {
     this.checkUserForEdit();
   }
 
+  ngOnDestroy(){
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
   //get department detials from API
   public getDepartments(){
-    this.adminService.getAllDepartments().subscribe(dptDetails => {
-      this.departmentDetails = dptDetails;
+    this.adminService.getAllDepartments()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((dptDetails:Department[]) => {
+      this.departmentDetails = dptDetails.filter(dept => dept['activated'] === true);
     });
   }
 
   //display department details when department name is selected
   public displayDptDetails(dept){
     this.showDptDetails = true;
-    this.dpt_level = dept.level;
-    this.dpt_head = dept.department_head;
+    this._deptObj = dept;
   }
 
   //display schedule details when schedule name is selected
   public displaySchDetails(schedule){
     this.showSchDetails = true;
-    this.working_days = schedule.days_of_work;
-    this.start_time = schedule.start_time;
-    this.end_time = schedule.end_time;
+    this._scheduleObj = schedule;
   }
 
   //get schedule detials from API
   public getSchedules(){
-    this.adminService.getAllSchedules().subscribe(schDetails => {
-      this.scheduleDetails = schDetails;
+    this.adminService.getAllSchedules()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((schDetails:Schedule[]) => {
+      this.scheduleDetails = schDetails.filter(skd => skd['activated'] === true);
     });
   }
 
@@ -137,6 +133,8 @@ export class CreateEmployeeComponent implements AfterContentInit {
         })
       ])
     });
+    this.displayDptDetails(this.employee.department);
+    this.displaySchDetails(this.employee.schedule);
   }
 
   public onSubmit(){
@@ -170,8 +168,24 @@ export class CreateEmployeeComponent implements AfterContentInit {
     }
   }
 
-  public showErrorMessage(){
-    return 'Invalid Input';
+  public requiredErrorMsg(){
+    return 'Field is Required';
+  }
+
+  public patternErrorMsg(){
+    return 'Numeric Values Not Allowed';
+  }
+
+  public duplicateErrorMsg(){
+    return 'Already Exist!';
+  }
+
+  public emailErrorMsg(){
+    return 'Invalid Email Address'; 
+  }
+
+  get personalDetails(){
+    return this.formArray.get([0]);
   }
 
   public isDuplicate(control: AbstractControl) {
@@ -181,17 +195,23 @@ export class CreateEmployeeComponent implements AfterContentInit {
   }
 
   public checkUserForEdit(){
-    this.adminService.getCurrUserToEdit().subscribe(data => {
-
-      if (data === null){
-        this.createForm();
+    this.adminService.getCurrUserToEdit()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((data:Employee) => {
+      if (Object.keys(data).length === 0){
+        this.isEditting = false;
+        this.adminService.userToEdit = null;
+        this.router.navigateByUrl('/home/new-employee');
       } else {
         this.isEditting = true;
         this.employee = data;
         this.title = `Edit Profile Details: ${this.employee.name}`;
-        this.buttonTitle = 'Update Details';
         this.editForm();
       }
     });
+  }
+
+  public exitPage(){
+    this.router.navigateByUrl('/home/all-employee');
   }
 }

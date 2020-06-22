@@ -1,36 +1,47 @@
 .row{
     margin: 50px;
 }
-mat-card,button,.calendar-button{
+mat-card,button,.date-label{
     border-radius: 20px;
 }
 button{
     padding: 5px 0px;
+    font-size: larger;
+}
+.custom-day,mat-card-title,.date-picker,button{
+    text-align: center;
 }
 mat-card-title{
-    text-align: center;
     font-family: 'Ubuntu', sans-serif;
     text-transform: uppercase;
 }
-.date-picker,button{
-    text-align: center;
+h2,.custom-day,button{
+    font-family: 'Sen', sans-serif;
+}
+h2,.date-picker,button{
     margin: 20px 0px;
 }
+ngb-datepicker{
+    width: 100%;
+}
+:host ::ng-deep .ngb-dp-day, 
+:host ::ng-deep .ngb-dp-weekday,.custom-day{
+    width: 5.5rem;
+    height: 2rem;
+}
 .custom-day {
-    text-align: center;
     padding: 0.185rem 0.25rem;
     display: inline-block;
-    height: 2rem;
-    width: 2rem;
+    font-size: 20px;
 }
-.custom-day.weekend{
+.custom-day.weekend,.custom-day.weekend.range,.custom-day.weekend:hover{
     background-color: indianred;
     color:white;
 }
 .custom-day.focused {
     background-color: #e6e6e6;
 }
-.custom-day.range, .custom-day:hover {
+.custom-day.range, .custom-day:hover,.date-label{
     background-color: rgb(2, 117, 216);
     color: white;
 }
@@ -46,11 +57,20 @@ mat-form-field{
 mat-hint{
     font-size: larger;
 }
-.calendar-button{
-    padding:5px;
-    color: white;
-    background: linear-gradient(to right, #0052d4, #4364f7); 
+.date-label{
+    padding: 0px 20px;
 }
-.date-input{
-    margin-top: 20px;
+.error-message{
+    color: red;
+    padding: 0px 10px;
+    font-size: smaller;
+}
+.custom-day.disabled,
+.custom-day.disabled:hover,
+.custom-day.disabled.range{
+    color: lightgray;
+}
+.custom-day.disabled:hover,
+.custom-day.disabled.range{
+    background-color: white;
 }

@@ -1,43 +1,51 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { AuthenticationService } from 'src/app/authentication/service/authentication.service';
 import { EmployeeService } from 'src/app/employee/service/employee.service';
 import { MatSort } from '@angular/material/sort';
 import { AdminService } from '../service/admin.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Router } from '@angular/router';
+import { AuthModel } from 'src/app/model/Authentication.model';
+import { Employee } from 'src/app/model/Employee.model';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-all-employee-list',
   templateUrl: './all-employee-list.component.html',
   styleUrls: ['./all-employee-list.component.scss'],
 })
-export class AllEmployeeListComponent implements OnInit{
+export class AllEmployeeListComponent implements OnInit,OnDestroy{
   displayedColumns: string[] = ['name', 'domainId', 'email','role','schedule','department','edit','status'];
   ALL_DATA: any = [];
   ACTIVE_DATA:any = [];
   dataSource:any = new MatTableDataSource<any>();
-  currentUserId: String;
+  currentUser: AuthModel;
   checked:boolean = false;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  destroy$ : Subject<boolean> = new Subject<boolean>();
 
   constructor(
-    private authService: AuthenticationService,
     private employeeService: EmployeeService,
     private adminService: AdminService,
     private router: Router
   ) {
-    this.authService.userAuthDetails.subscribe(userId => {
-      this.currentUserId = userId.username;
-    });
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
    }
   
   ngOnInit(): void {
     this.getAllEmployeeDetails();
   }
 
+  ngOnDestroy(){
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
   public getAllEmployeeDetails(){
-    this.employeeService.getAllEmployees(this.currentUserId).subscribe( data => {
+    this.employeeService.getAllEmployees(this.currentUser.username)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((data:Employee[]) => {
       this.ALL_DATA = data;
       if (this.checked){
         this.dataSource = new MatTableDataSource<any>(this.ALL_DATA);
@@ -58,8 +66,8 @@ export class AllEmployeeListComponent implements OnInit{
     this.dataSource.filter = filterValue.trim().toLocaleLowerCase();
   }
 
-  public deactivateAccount(currUser:any){
-    if(currUser.activated){
+  public updateAccStatus(currUser:Employee){
+    if(currUser['activated']){
       if (confirm("Confirmation Message: \nDo you want to deactivate "+ currUser.domain_id+" ? ")){
         this.adminService.updateEmployee(currUser.domain_id,{activated:false});
         this.getAllEmployeeDetails();
@@ -81,5 +89,4 @@ export class AllEmployeeListComponent implements OnInit{
     this.checked = $event.checked;
     this.getAllEmployeeDetails();
   }
-
 }

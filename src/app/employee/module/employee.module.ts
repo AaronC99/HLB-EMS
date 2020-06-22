@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -25,6 +25,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { LeaveApplicationComponent } from '../leave-application/leave-application.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LeaveApprovalComponent } from '../leave-approval/leave-approval.component';
+import { ChangePasswordComponent } from '../change-password/change-password.component';
+import { ManagerDashboardComponent } from '../manager-dashboard/manager-dashboard.component';
+import { LateReportComponent } from '../late-report/late-report.component';
+import { EmployeeDashboardComponent } from '../employee-dashboard/employee-dashboard.component';
+import { FilterPipe } from '../late-report/filter.pipe';
 
 
 @NgModule({
@@ -35,10 +40,16 @@ import { LeaveApprovalComponent } from '../leave-approval/leave-approval.compone
     EmployeeListComponent,
     ApprovalPageComponent,
     LeaveApplicationComponent,
-    LeaveApprovalComponent
+    LeaveApprovalComponent,
+    ChangePasswordComponent,
+    ManagerDashboardComponent,
+    LateReportComponent,
+    EmployeeDashboardComponent,
+    FilterPipe
   ],
   imports: [
     CommonModule,
+    FormsModule,
     AuthenticationModule,
     MatCardModule,
     MatButtonModule,

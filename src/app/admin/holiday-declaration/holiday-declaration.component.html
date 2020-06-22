@@ -1,36 +1,17 @@
-<div class="row">
+<div class="row justify-content-center">
     <div class="col">
         <mat-card>
             <mat-card-title>
-                Create New Leave Date
+                <div *ngIf="newRecord">
+                    Create New Holiday
+                </div>
+                <div *ngIf="!newRecord">
+                    Edit Holiday: {{ holiday.holiday_name }}
+                </div>
             </mat-card-title>
-            <div class="date-picker">
-                <ngb-datepicker #dp (dateSelect)="onDateSelection($event)" 
-                    [displayMonths]="1" 
-                    [dayTemplate]="t" 
-                    outsideDays="hidden" 
-                    [markDisabled]="isDisabled">
-                </ngb-datepicker>
-                
-                <ng-template #t let-date let-focused="focused">
-                    <span class="custom-day"
-                            [class.focused]="focused"
-                            [class.range]="isRange(date)"
-                            [class.faded]="isHovered(date) || isInside(date)"
-                            (mouseenter)="hoveredDate = date"
-                            (mouseleave)="hoveredDate = null">
-                        {{ date.day }}
-                    </span>
-                </ng-template>
-            </div> 
-            <hr>
             <div class="row justify-content-center">
                 <div class="col-6">
                     <form [formGroup]="createHolidayForm" (ngSubmit)="onSubmit()">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Holiday Duration</mat-label>
-                            <input matInput formControlName="duration" [readonly]="true">
-                        </mat-form-field>
                         <mat-form-field appearance="fill">
                             <mat-label>Holiday Name</mat-label>
                             <input matInput formControlName="holidayName" required>
@@ -49,7 +30,34 @@
                                 Please Select a Holiday Type
                             </mat-error>
                         </mat-form-field>
-                        <button mat-raised-button color="primary" type="submit" [disabled]="createHolidayForm.invalid">Create Holiday</button>
+                        <h2>Holiday Duration: 
+                            <span class="date-label">{{ startDate }} - {{ endDate }}</span>
+                            <span *ngIf="isDuplicate" class="error-message">*You selected existing holiday</span>
+                        </h2>
+                        <div class="date-picker">
+                            <ngb-datepicker #dp (dateSelect)="onDateSelection($event)" 
+                                [displayMonths]="1" 
+                                [dayTemplate]="t" 
+                                outsideDays="hidden" 
+                                [markDisabled]="isDisabled"
+                                [minDate]="minDate">
+                            </ngb-datepicker>
+                            
+                            <ng-template #t let-date let-disabled="disabled" let-focused="focused">
+                                <span class="custom-day"
+                                        [class.focused]="focused"
+                                        [class.range]="isRange(date)"
+                                        [class.faded]="isHovered(date) || isInside(date)"
+                                        [class.exist]="disabled"
+                                        (mouseenter)="hoveredDate = date"
+                                        (mouseleave)="hoveredDate = null">
+                                    {{ date.day }}
+                                </span>
+                            </ng-template>
+                        </div> 
+                        <button mat-raised-button color="primary" type="submit" [disabled]="createHolidayForm.invalid || isDuplicate">
+                            {{ getButtonType() }}
+                        </button>
                     </form>
                 </div>
             </div>

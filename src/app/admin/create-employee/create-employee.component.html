@@ -2,7 +2,9 @@
     <div class="row" id="outer-row">
         <div class="col-12">
             <mat-card class="new-emp-form">
-                <mat-card-title class="title">{{ title }}</mat-card-title>
+                <mat-card-title class="title">
+                    {{ isEditting ? 'Edit Employee Details' : 'Create New Employee' }}
+                </mat-card-title>
                 <mat-card-content>
                     <form [formGroup]="employeeFormGroup" (ngSubmit)= "onSubmit()" #thisFormGroup (keydown.enter)="$event.preventDefault()">
                         <mat-horizontal-stepper #stepper formArrayName="formArray" [linear]="true">
@@ -13,8 +15,11 @@
                                         <mat-form-field appearance="fill">
                                             <mat-label>Name</mat-label>
                                             <input matInput placeholder="Enter Full Name" formControlName="name" required> 
-                                            <mat-error *ngIf="formArray.invalid">
-                                                {{ showErrorMessage() }}
+                                            <mat-error *ngIf="formArray.get([0])['controls'].name.errors?.required">
+                                                {{ requiredErrorMsg() }}
+                                            </mat-error>
+                                            <mat-error *ngIf="formArray.get([0])['controls'].name.errors?.pattern">
+                                                {{ patternErrorMsg() }}
                                             </mat-error>
                                         </mat-form-field>
                                     </div>
@@ -22,8 +27,14 @@
                                         <mat-form-field appearance="fill">
                                             <mat-label>Domain ID</mat-label>
                                             <input matInput placeholder="Ex: tjohndoe" formControlName="domainId" required >
-                                            <mat-error *ngIf="formArray.invalid">
-                                                {{ showErrorMessage() }}
+                                            <mat-error *ngIf="formArray.get([0])['controls'].domainId.errors?.required">
+                                                {{ requiredErrorMsg() }}
+                                            </mat-error>
+                                            <mat-error *ngIf="formArray.get([0])['controls'].domainId.errors?.pattern">
+                                                {{ patternErrorMsg() }}
+                                            </mat-error>
+                                            <mat-error *ngIf="formArray.get([0]).hasError('duplicate','domainId')">
+                                                {{ duplicateErrorMsg() }}
                                             </mat-error>
                                         </mat-form-field>
                                     </div>
@@ -31,8 +42,11 @@
                                         <mat-form-field appearance="fill">
                                             <mat-label>IC/Passport No</mat-label>
                                             <input matInput placeholder="Enter IC/Passport No" formControlName="ic_passportNo" required >
-                                            <mat-error *ngIf="formArray.invalid">
-                                                {{ showErrorMessage() }}
+                                            <mat-error *ngIf="formArray.get([0])['controls'].ic_passportNo.errors?.required">
+                                                {{ requiredErrorMsg() }}
+                                            </mat-error>
+                                            <mat-error *ngIf="formArray.get([0]).hasError('duplicate','ic_passportNo')">
+                                                {{ duplicateErrorMsg() }}
                                             </mat-error>
                                         </mat-form-field>
                                     </div>
@@ -40,8 +54,14 @@
                                         <mat-form-field appearance="fill">
                                             <mat-label>Email Address</mat-label>
                                             <input matInput placeholder="Ex: tjohndoe@internal.hlb" formControlName="email" required > 
-                                            <mat-error *ngIf="formArray.invalid">
-                                                {{ showErrorMessage() }}
+                                            <mat-error *ngIf="formArray.get([0])['controls'].email.errors?.required">
+                                                {{ requiredErrorMsg() }}
+                                            </mat-error>
+                                            <mat-error *ngIf="formArray.get([0]).hasError('duplicate','email')">
+                                                {{ duplicateErrorMsg() }}
+                                            </mat-error>
+                                            <mat-error *ngIf="formArray.get([0])['controls'].email.errors?.email">
+                                                {{ emailErrorMsg() }}
                                             </mat-error>
                                         </mat-form-field>
                                     </div>
@@ -49,8 +69,8 @@
                                         <mat-form-field appearance="fill">
                                             <mat-label>Address</mat-label>
                                             <input matInput placeholder="Enter Address" formControlName="address" required> 
-                                            <mat-error *ngIf="formArray.invalid">
-                                                {{ showErrorMessage() }}
+                                            <mat-error *ngIf="formArray.get([0])['controls'].address.errors?.required">
+                                                {{ requiredErrorMsg() }}
                                             </mat-error>
                                         </mat-form-field>
                                     </div>
@@ -62,8 +82,8 @@
                                                     {{ gndr }}
                                                 </mat-option>
                                             </mat-select>
-                                            <mat-error *ngIf="formArray.invalid">
-                                                {{ showErrorMessage() }}
+                                            <mat-error *ngIf="formArray.get([0])['controls'].gender.errors?.required">
+                                                {{ requiredErrorMsg() }}
                                             </mat-error>
                                         </mat-form-field>
                                     </div>
@@ -73,8 +93,8 @@
                                             <mat-select formControlName="role" required>
                                                 <mat-option *ngFor="let position of role" [value]="position">{{ position }}</mat-option>
                                             </mat-select>
-                                            <mat-error *ngIf="formArray.invalid">
-                                                {{ showErrorMessage() }}
+                                            <mat-error *ngIf="formArray.get([0])['controls'].role.errors?.required">
+                                                {{ requiredErrorMsg() }}
                                             </mat-error>
                                         </mat-form-field>
                                     </div>
@@ -88,29 +108,34 @@
                             <mat-step formGroupName="1" [stepControl]="formArray.get([1])" [editable]="editable">
                                 <ng-template matStepLabel>Department Details</ng-template>
                                 <div class="row justify-content-center">
-                                    <div class="col-5">
+                                    <div class="col-7">
                                         <mat-form-field>
                                             <mat-label>Select Department</mat-label>
                                             <mat-select formControlName="department" required>
-                                                <mat-option *ngFor="let dpt of departmentDetails" 
-                                                    [value]="dpt._id" (click)="displayDptDetails(dpt)">
-                                                    {{ dpt.department_name }}
+                                                <mat-option *ngFor="let dept of departmentDetails" 
+                                                    [value]="dept._id" (click)="displayDptDetails(dept)">
+                                                    {{ dept.department_name }}
                                                 </mat-option>
                                             </mat-select>
-                                            <mat-error *ngIf="formArray.invalid">
-                                                {{ showErrorMessage() }}
+                                            <mat-error *ngIf="formArray.get([1])['controls'].department.errors?.required">
+                                                {{ requiredErrorMsg() }}
                                             </mat-error>
                                         </mat-form-field>
                                     </div>
                                     <div class="w-100"></div>
-                                    <div class="col-5">
+                                    <div class="col-7">
                                         <div *ngIf="showDptDetails" class="show-details">
                                             <div class="row">
-                                                <div class="col-6"><h2>Level:</h2></div>
-                                                <div class="col-6"><h3>{{ dpt_level }}</h3></div>
+                                                <div class="col-4"><h2>Level:</h2></div>
+                                                <div class="col-8"><h3>{{ _deptObj.level }}</h3></div>
                                                 <div class="w-100"></div>
-                                                <div class="col-6"><h2>Supervisor:</h2></div>
-                                                <div class="col-6"><h3>{{ dpt_head.name }}</h3></div>            
+                                                <div class="col-4"><h2>Supervisor:</h2></div>
+                                                <div class="col-8"><h3> 
+                                                    {{ _deptObj.department_head.name }}
+                                                </h3></div>       
+                                                <div class="w-100"></div>
+                                                <div class="col-4"><h2>Supervisor Email:</h2></div>
+                                                <div class="col-8"><h3> {{ _deptObj.department_head.email }}</h3></div>
                                             </div>
                                         </div>
                                     </div>
@@ -132,8 +157,8 @@
                                                         {{ schedule.schedule_name }}
                                                     </mat-option>
                                                 </mat-select> 
-                                                <mat-error *ngIf="formArray.invalid">
-                                                    {{ showErrorMessage() }}
+                                                <mat-error *ngIf="formArray.get([2])['controls'].schedule.errors?.required">
+                                                    {{ requiredErrorMsg() }}
                                                 </mat-error>
                                             </mat-form-field>
                                         </div>
@@ -144,14 +169,16 @@
                                                     <div class="col-6"><h2>Days of Work:</h2></div>
                                                     <div class="col-6">
                                                         <h3><ul>
-                                                            <li *ngFor="let days of working_days"> 
+                                                            <li *ngFor="let days of _scheduleObj.days_of_work"> 
                                                                 {{ days }}
                                                             </li>
                                                         </ul></h3>
                                                     </div>
                                                     <div class="w-100"></div>
                                                     <div class="col-6"><h2>Working Hours:</h2></div>
-                                                    <div class="col-6"><h3>{{ start_time }} - {{ end_time }}</h3></div>
+                                                    <div class="col-6"><h3>
+                                                        {{ _scheduleObj.start_time }} - {{ _scheduleObj.end_time }}
+                                                    </h3></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -162,6 +189,9 @@
                                                     Enter Annual Leave
                                                 </mat-label>
                                                 <input matInput placeholder="Ex: 1,2,3..." formControlName="annual_leave" required type="number">
+                                                <mat-error *ngIf="formArray.get([2])['controls'].annual_leave.errors?.required">
+                                                    {{ requiredErrorMsg() }}
+                                                </mat-error>
                                             </mat-form-field>
                                         </div>
                                         <div class="w-100"></div>
@@ -171,20 +201,30 @@
                                                     Enter Medical Leave
                                                 </mat-label>
                                                 <input matInput placeholder="Ex: 1,2,3..." formControlName="medical_leave" required type="number">
+                                                <mat-error *ngIf="formArray.get([2])['controls'].medical_leave.errors?.required">
+                                                    {{ requiredErrorMsg() }}
+                                                </mat-error>
                                             </mat-form-field>
                                         </div>
                                     </div>
                                     <div class="next-button">
                                         <button mat-button matStepperPrevious type="button">Back</button>
-                                        <button mat-raised-button matStepperNext color="primary" type="submit">{{ buttonTitle }}</button>
+                                        <button mat-raised-button matStepperNext color="primary" type="submit">
+                                            {{ isEditting ? 'Update Employee' : 'Register Employee' }}
+                                        </button>
                                     </div>
                             </mat-step>
                             <mat-step [editable]="complete">
                               <ng-template matStepLabel>Done</ng-template>
                               <h2>{{ completeMessage }}</h2>
                               <div>
-                                <button mat-raised-button color="primary" type="button" (click)="stepper.reset();thisFormGroup.reset()">Create New Employee</button>
-                                <a mat-button routerLink="/home/all-employee">Done</a>
+                                <button mat-raised-button color="primary" type="button" 
+                                    (click)="stepper.reset();thisFormGroup.reset()">
+                                    Create New Employee
+                                </button>
+                                <button mat-button type="button" (click)="exitPage()">
+                                    Done
+                                </button>
                               </div>
                             </mat-step>
                           </mat-horizontal-stepper>

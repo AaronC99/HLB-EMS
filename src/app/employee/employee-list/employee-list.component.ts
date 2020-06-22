@@ -1,17 +1,22 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { EmployeeService } from '../service/employee.service';
 import { MatSort } from '@angular/material/sort';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
+import { Router } from '@angular/router';
+import { Employee } from 'src/app/model/Employee.model';
+import { AuthModel } from 'src/app/model/Authentication.model';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-employee-list',
   templateUrl: './employee-list.component.html',
   styleUrls: ['./employee-list.component.scss']
 })
-export class EmployeeListComponent implements OnInit {
+export class EmployeeListComponent implements OnInit,OnDestroy {
   displayedColumns: string[] = ['name', 'domainId', 'email','role','schedule','department','status'];
   statusList = [
     {id: 0, value: 'All'},
@@ -26,24 +31,30 @@ export class EmployeeListComponent implements OnInit {
   dateList = [];
   EMPLOYEE_DATA:any = [];
   dataSource:any = new MatTableDataSource<any>(); 
-  currentUserId:any;
+  currentUser:AuthModel;
   searchForm = new FormGroup ({
     status: new FormControl(),
     dateSelected: new FormControl()
   });
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  destroy$ : Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private formBuilder:FormBuilder,
-    private employeeService: EmployeeService) {
-      let _currUserObj:any = JSON.parse(localStorage.getItem('currentUser'));
-      this.currentUserId = _currUserObj.username;
+    private employeeService: EmployeeService,
+    private router:Router) {
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
    }
 
   ngOnInit(): void {
     this.displayMonths();
     this.getEmployeeRecords();
     this.createForm();
+  }
+
+  ngOnDestroy(){
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 
   public createForm(){
@@ -69,25 +80,27 @@ export class EmployeeListComponent implements OnInit {
   }
 
   public getEmployeeRecords(){
-    this.employeeService.getAllEmployees(this.currentUserId).subscribe(data =>{
-      this.EMPLOYEE_DATA = data;
-      let date = [this.dateList[this.dateList.length - 1]];
-      let dateString = date[0].split('-',2);
-      let month = dateString[0];
-      let year = dateString[1];
-      let period = parseInt(moment().month(month).format("M")) - 1;
-      let filteredArray:any = [];
-      this.EMPLOYEE_DATA.forEach(element => {
-        element.timesheet_approval.forEach(timesheetObj => {
-          if (timesheetObj.period_number === period.toString() && timesheetObj.year === year){
-            filteredArray = timesheetObj;
-          }
+    this.employeeService.getAllEmployees(this.currentUser.username)
+    .pipe(takeUntil(this.destroy$))
+      .subscribe((data) => {
+        this.EMPLOYEE_DATA = data;
+        let date = [this.dateList[this.dateList.length - 1]];
+        let dateString = date[0].split('-',2);
+        let month = dateString[0];
+        let year = dateString[1];
+        let period = parseInt(moment().month(month).format("M")) - 1;
+        let filteredArray:any = [];
+        this.EMPLOYEE_DATA.forEach(element => {
+          element.timesheet_approval.forEach(timesheetObj => {
+            if (timesheetObj.period_number === period.toString() && timesheetObj.year === year){
+              filteredArray = timesheetObj;
+            }
+          });
+          element.timesheet_approval = filteredArray;
         });
-        element.timesheet_approval = filteredArray;
+        this.dataSource = new MatTableDataSource(this.EMPLOYEE_DATA);
+        this.dataSource.sort = this.sort;
       });
-      this.dataSource = new MatTableDataSource(this.EMPLOYEE_DATA);
-      this.dataSource.sort = this.sort;
-    });
   }
 
   applyFilter(event: Event) {
@@ -108,7 +121,7 @@ export class EmployeeListComponent implements OnInit {
     let month = date[0];
     let year = date[1];
     let period = parseInt(moment().month(month).format("M")) - 1;
-    this.employeeService.getAllEmployees(this.currentUserId)
+    this.employeeService.getAllEmployees(this.currentUser.username)
       .subscribe( data =>{
         this.EMPLOYEE_DATA = data;
         // If timesheet status is Pending
@@ -170,4 +183,11 @@ export class EmployeeListComponent implements OnInit {
       });
   }
 
+  public approveTimesheet(currentUser){
+    let timesheet = currentUser.timesheet_approval;
+    let period = timesheet.period_number;
+    let year = timesheet.year;
+    let link = `timesheet-approval/${currentUser.domain_id}/${period}/${year}`;
+    this.router.navigateByUrl(link);
+  }
 }

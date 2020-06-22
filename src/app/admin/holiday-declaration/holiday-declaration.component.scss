@@ -8,20 +8,41 @@ button{
     padding: 5px 0px;
 }
 mat-card-title{
-    text-align: center;
     font-family: 'Ubuntu', sans-serif;
     text-transform: uppercase;
 }
-.date-picker,button{
+mat-card-title,.date-picker,button,.custom-day{
     text-align: center;
+}
+ngb-datepicker{
+    width: 100%;
+}
+:host ::ng-deep .ngb-dp-day, 
+:host ::ng-deep .ngb-dp-weekday,.custom-day{
+    width: 5.5rem;
+    height: 2rem;
+}
+h2,.custom-day{
+    font-family: 'Sen', sans-serif;
+}
+.date-label{
+    background-color: #0275d8;
+    color: white;
+    border-radius: 20px;
+    padding: 0px 20px;
+}
+.error-message{
+    color: red;
+    padding: 0px 10px;
+    font-size: smaller;
+}
+.date-picker,button{
     margin-top: 20px;
 }
 .custom-day {
-    text-align: center;
     padding: 0.185rem 0.25rem;
     display: inline-block;
-    height: 2rem;
-    width: 2rem;
+    font-size: 20px;
 }
 .custom-day.focused {
     background-color: #e6e6e6;
@@ -35,4 +56,7 @@ mat-card-title{
 }
 mat-form-field,button{
     width:100%
+}
+.custom-day.exist{
+    color: lightgray;
 }

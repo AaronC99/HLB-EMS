@@ -1,0 +1,53 @@
+#datepicker-card{
+    margin: 50px;
+}
+mat-card ,h2,button{
+    border-radius: 20px;
+}
+mat-card-title,h1,button{
+    font-family: 'Ubuntu',sans-serif;
+}
+mat-card-title,mat-card-content{
+    text-align: center;
+}
+h2,.custom-day {
+    font-family: 'Sen',sans-serif;
+}
+.title{
+    margin: 16px 0px;
+}
+.custom-day {
+    padding: 0.185rem 0.25rem;
+    display: inline-block;
+    height: 2rem;
+    width: 2rem;
+    font-size: 20px;
+}
+.custom-day.focused {
+    background-color: #e6e6e6;
+}
+.classSelected,
+h2
+{
+  background-color: coral!important;
+  color: white;
+}
+button{
+    width: 100%;
+    margin-top: 10px;
+    font-size: larger;
+    padding: 5px 0px;
+}
+.edit-btn:hover{
+    color:#3f51b5;
+    background-color: white;
+    border: 2px solid #3f51b5;
+}
+.del-btn:hover{
+    color:#f44336;
+    background-color: white;
+    border: 2px solid #f44336;
+}
+.details{
+    margin-top: 20px;
+}

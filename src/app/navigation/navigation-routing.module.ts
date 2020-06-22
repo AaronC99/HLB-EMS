@@ -9,6 +9,15 @@ import { EmployeeListComponent } from '../employee/employee-list/employee-list.c
 import { AllEmployeeListComponent } from '../admin/all-employee-list/all-employee-list.component';
 import { HolidayDeclarationComponent } from '../admin/holiday-declaration/holiday-declaration.component';
 import { LeaveApplicationComponent } from '../employee/leave-application/leave-application.component';
+import { AllHolidaysComponent } from '../maintenance/all-holidays/all-holidays.component';
+import { ChangePasswordComponent } from '../employee/change-password/change-password.component';
+import { AllDepartmentsComponent } from '../maintenance/all-departments/all-departments.component';
+import { CreateDepartmentComponent } from '../maintenance/create-department/create-department.component';
+import { AllScheduleComponent } from '../maintenance/all-schedule/all-schedule.component';
+import { CreateScheduleComponent } from '../maintenance/create-schedule/create-schedule.component';
+import { ManagerDashboardComponent } from '../employee/manager-dashboard/manager-dashboard.component';
+import { LateReportComponent } from '../employee/late-report/late-report.component';
+import { EmployeeDashboardComponent } from '../employee/employee-dashboard/employee-dashboard.component';
 
 const routes: Routes = [
   { 
@@ -55,6 +64,54 @@ const routes: Routes = [
       {
         path:'leave-application',
         component: LeaveApplicationComponent
+      },
+      {
+        path: 'all-holiday',
+        component: AllHolidaysComponent
+      },
+      {
+        path: 'edit-holiday/:holidayId',
+        component: HolidayDeclarationComponent
+      },
+      {
+        path: 'new-password-page/:employeeId',
+        component: ChangePasswordComponent
+      },
+      {
+        path: 'all-departments',
+        component: AllDepartmentsComponent
+      },
+      {
+        path:'new-department',
+        component: CreateDepartmentComponent
+      },
+      {
+        path: 'edit-department/:deptId&:deptName',
+        component: CreateDepartmentComponent
+      },
+      {
+        path: 'all-schedules',
+        component: AllScheduleComponent
+      },
+      {
+        path: 'new-schedule',
+        component: CreateScheduleComponent
+      },
+      {
+        path: 'edit-schedule/:skdId&:skdName',
+        component: CreateScheduleComponent
+      },
+      {
+        path: 'manager/dashboard',
+        component: ManagerDashboardComponent
+      },
+      {
+        path:'manager/all-report/:reportType',
+        component: LateReportComponent
+      },
+      {
+        path: 'employee/dashboard',
+        component: EmployeeDashboardComponent
       }
     ]}
 ];
