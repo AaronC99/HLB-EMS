@@ -28,6 +28,7 @@
     "angular-md5": "^0.1.10",
     "bn-ng-idle": "^1.0.1",
     "bootstrap": "^4.4.1",
+    "express": "^4.17.1",
     "highcharts": "^8.1.0",
     "jquery": "^3.4.1",
     "md5": "^2.2.1",
