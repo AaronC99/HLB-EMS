@@ -1,17 +1,45 @@
 .row{
     margin: 50px;
 }
-.employee-list-card{
+.employee-list-card,.pending-btn{
     border-radius: 20px;
 }
-mat-card-title{
+mat-card{
+    background-image: linear-gradient(to top, #dfe9f3 0%, white 100%);
+}
+mat-card-title,h2{
     text-align: center;
+}
+th,td,mat-card-title,h2,.pending-btn{
     font-family: 'Ubuntu', sans-serif;
+}
+mat-card-title{
     text-transform: uppercase;
 }
 mat-card-content{
     padding: 20px;
 }
+mat-form-field{
+    font-size:15px;
+}
 table, .filter-textbox{
     width: 100%;
+}
+th{
+    color: black;
+}
+th,td{
+    font-size: 20px;
+}
+.dropdown-list{
+    width:50%;
+}
+h2{
+    color:red;
+}
+th,h2{
+    font-weight: bold;
+}
+.pending-btn:hover{
+    background-color: green;
 }

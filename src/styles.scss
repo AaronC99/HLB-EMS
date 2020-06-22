@@ -11,3 +11,24 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
 }
+
+.notif-success{
+    background-image: linear-gradient(to right, #43e97b 0%, #38f9d7 100%);
+    font-family: 'Sen', sans-serif;
+    color: black;
+    .mat-simple-snackbar-action {
+        color: black;
+    }
+}
+
+.notif-failure{
+    background: linear-gradient(to right, #ed213a, #93291e);
+    font-family: 'Sen', sans-serif;
+    color: white;
+    .mat-simple-snackbar-action {
+        color: white;
+    }
+}
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';

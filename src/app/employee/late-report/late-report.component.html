@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col-12">
+        <mat-card>
+            <mat-card-title>
+                {{ reportType }} Report
+            </mat-card-title>
+            <div class="row justify-content-around">
+                <div class="col-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Search Employee Name</mat-label>
+                        <input matInput placeholder="Ex: Jane Doe..." [(ngModel)]="searchText">
+                    </mat-form-field>
+                </div>
+                <div class="col-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Filter By...</mat-label>
+                        <mat-select>
+                            <mat-option *ngFor="let searchValue of searchList" [value]="searchValue" 
+                            (click)="filterBy(searchValue)"> 
+                                {{ searchValue }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+</div>
+<div class="row">
+    <div class="col-4" *ngFor="let employee of deptReport | filter: searchText">
+        <mat-card>
+            <div id="{{employee.domain_id}}-report"></div>
+        </mat-card>
+    </div> 
+</div>

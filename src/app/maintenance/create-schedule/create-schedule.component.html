@@ -1,0 +1,106 @@
+<div class="row justify-content-center">
+    <mat-card>
+        <mat-card-title>
+            {{ newSchedule ? 'Create Schedule' : 'Edit Schedule'}}
+        </mat-card-title>
+        <form [formGroup]="newSkdForm" (ngSubmit)="onSubmit()">
+            <mat-card-content>
+                <div class="row justify-content-center">
+    
+                    <div class="col-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Schedule Name</mat-label>
+                            <input matInput placeholder="Enter Schedule Name" formControlName="skdName" 
+                            (blur)="validateSkd()" required>
+                            <mat-error *ngIf="newSkdForm.invalid">
+                                {{ getErrorMessage() }}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+    
+                    <div class="col-12">
+                        <h2>Select Start Time:</h2>
+                    </div>
+
+                    <div class="col-6">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Start Hour</mat-label>
+                            <mat-select formControlName="startHour" required>
+                                <mat-option *ngFor ="let hrs of hours" [value]="hrs">
+                                    {{ hrs }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="newSkdForm.invalid">
+                                {{ getErrorMessage() }}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-6">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Start Minutes</mat-label>
+                            <mat-select formControlName="startMin" required>
+                                <mat-option *ngFor ="let min of minutes" [value]="min">
+                                    {{ min }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="newSkdForm.invalid">
+                                {{ getErrorMessage() }}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-12">
+                        <h2>Select End Time:</h2>
+                    </div>
+    
+                    <div class="col-6">
+                        <mat-form-field appearance="fill">
+                            <mat-label>End Hours</mat-label>
+                            <mat-select formControlName="endHour" required>
+                                <mat-option *ngFor ="let hrs of hours" [value]="hrs">
+                                    {{ hrs }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="newSkdForm.invalid">
+                                {{ getErrorMessage() }}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-6">
+                        <mat-form-field appearance="fill">
+                            <mat-label>End Minutes</mat-label>
+                            <mat-select formControlName="endMin" required>
+                                <mat-option *ngFor ="let min of minutes" [value]="min">
+                                    {{ min }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="newSkdForm.invalid">
+                                {{ getErrorMessage() }}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+    
+                    <div class="col-12">
+                        <h2>Select Days of Work: </h2> 
+                        <mat-selection-list #days [formControl]="daysOfWork">
+                            <mat-list-option *ngFor="let days of daysInWeek" [value]="days">
+                                {{ days }}
+                            </mat-list-option>
+                        </mat-selection-list>
+                    </div>
+
+                </div>
+            </mat-card-content>
+            <mat-card-actions>
+                <button class="submit-btn" mat-raised-button [disabled]="newSkdForm.invalid">
+                    {{ newSchedule ? 'Create Schedule' : 'Edit Schedule'}}
+                </button>
+            </mat-card-actions>
+        </form>
+        <div class="error-message" *ngIf="!selectedDays && selectedDays !== null">
+            <h2> You must select days of work! </h2>
+        </div>
+    </mat-card>
+</div>

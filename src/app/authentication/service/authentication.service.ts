@@ -1,36 +1,95 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Router } from '@angular/router';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Employee } from 'src/app/employee/employee';
+import { AuthModel } from 'src/app/model/Authentication.model';
+import { BnNgIdleService } from 'bn-ng-idle';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthenticationService {
   private REST_API_SERVER = "http://localhost:3000";
   public loggedIn = new BehaviorSubject<boolean>(false);
-  public isEmployee:boolean = true;
-  get isLoggedIn(){
+  public role: string;
+  private _authObj: AuthModel = new AuthModel();
+  private _authSubj: BehaviorSubject<AuthModel>;
+  private loginErrorSubject = new Subject<string>();
+  public isIdle = new BehaviorSubject<boolean>(false);
+  public ipAddress = new BehaviorSubject<string>('');
+
+  constructor(
+    private httpClient: HttpClient,
+    private bnIdle: BnNgIdleService
+  ) {
+    this._authSubj = new BehaviorSubject<AuthModel>(JSON.parse(localStorage.getItem('currentUser')));
+    this._authSubj = new BehaviorSubject(this._authObj);
+    this._authSubj.next(this._authObj);
+   }
+
+  getLoginErrors():Subject<string>{
+    return this.loginErrorSubject;
+  } 
+  get isLoggedIn() {
     return this.loggedIn.asObservable();
   }
-  constructor(
-    private router:Router,
-    private httpClient: HttpClient
-  ) { }
 
-  public getLoginDetails(loginID:string, pwd:string){
-    return this.httpClient.get(this.REST_API_SERVER+'/login/'+loginID+'/'+pwd);
+  get userAuthDetails() {
+    return this._authSubj.asObservable();
   }
 
-  validateUser(domainId:String, domainPass:String){
-    this.getLoginDetails(String(domainId),String(domainPass)).subscribe((data)=>{
-      console.log(data);
-      if (data !== null){
-        this.loggedIn.next(true);
-        this.router.navigateByUrl('/home');
-      }else 
-        this.loggedIn.next(false);
+  get currentUserValue(): AuthModel {
+    return this._authSubj.value;
+  }
+
+  get userIsIdle(){
+    return this.isIdle.asObservable();
+  }
+
+  get userIpAdrress(){
+    this.getIpAddress();
+    return this.ipAddress.asObservable();
+  }
+
+  verifyUserIdle(){
+    const seconds = 60;
+    const minutes = 60;
+    const idlePeriod = minutes * seconds;
+    this.bnIdle.startWatching(idlePeriod).subscribe((isIdle:boolean) => {
+      if (isIdle){
+        this.isIdle.next(true);
+      }
     });
+  }
+
+  getIpAddress(){
+    this.httpClient.get("http://api.ipify.org/?format=json")
+    .subscribe((res:any)=>{
+      this.ipAddress.next(res.ip);
+    });
+  }
+
+  getLoginDetails = (loginID: string, pwd: string) => {
+    this.httpClient.get(this.REST_API_SERVER+'/login/'+loginID+'/'+pwd)
+    .subscribe((data) => {
+      if (data === null) {
+        this.loginErrorSubject.next("Invalid User");
+        this.loggedIn.next(false);
+      } else {
+        this.role = data['role'];
+        this._authObj = {
+          username: loginID, 
+          role: this.role
+        };
+        localStorage.setItem('currentUser',JSON.stringify(this._authObj));
+        this._authSubj.next(this._authObj);
+        this.loggedIn.next(true);
+      }
+    },error => {
+      this.loginErrorSubject.next(error.message);
+    });    
+  }
+
+  logout(){
+    localStorage.removeItem('currentUser');
+    this.loggedIn.next(false);
+    this._authSubj.next(new AuthModel());
   }
 }

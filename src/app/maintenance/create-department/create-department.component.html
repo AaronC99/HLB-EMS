@@ -1,0 +1,48 @@
+<mat-card class="card">
+    <mat-card-title>
+        {{ newDept ? 'Create Department' : 'Edit Department'}}
+    </mat-card-title>
+    <form [formGroup]="newDeptForm" (ngSubmit)="onSubmit()">
+        <mat-card-content>
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Department Name</mat-label>
+                        <input matInput placeholder="Enter Department Name" formControlName="deptName" 
+                        (blur)="validateDept()" required>
+                        <mat-error *ngIf="newDeptForm.invalid">
+                            {{ getErrorMessage() }}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-12">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Department Head</mat-label>
+                        <mat-select formControlName="deptHead" required>
+                            <mat-option *ngFor="let manager of allManagers" [value]="manager._id">
+                                {{ manager.name }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="newDeptForm.invalid">
+                            {{ getErrorMessage() }}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-12">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Department Level</mat-label>
+                        <input matInput placeholder="Ex: 1,2,3,4A,..." formControlName="level" required autocomplete="off">
+                        <mat-error *ngIf="newDeptForm.invalid">
+                            {{ getErrorMessage() }}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button class="submit-btn" mat-raised-button [disabled]="newDeptForm.invalid">
+                {{ newDept ? 'Create Department' : 'Edit Department'}}
+            </button>
+        </mat-card-actions>
+    </form>
+</mat-card>

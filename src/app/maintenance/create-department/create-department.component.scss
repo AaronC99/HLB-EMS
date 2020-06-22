@@ -1,0 +1,39 @@
+.row{
+    margin:50px;
+}
+.card{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+mat-card-title,mat-card-actions{
+    text-align: center;
+}
+mat-card-title{
+    font-family: 'Ubuntu',sans-serif;
+}
+mat-form-field{
+    width: 100%;
+    font-size: larger;
+    margin-top: 10px;
+}
+.submit-btn, .card{
+    border-radius: 20px;
+}
+.submit-btn{
+    font-family: 'Sen', sans-serif;
+    font-size: larger;
+    padding-left:20px;
+    padding-right:20px;
+}
+.submit-btn:enabled{
+    background-color: #2b5876;
+    color: white;
+    border: 1px solid  #2b5876;
+}
+.submit-btn:hover:enabled{
+    border:1px solid #4e4376;
+    color: #2b5876;
+    background-color: white;;
+}

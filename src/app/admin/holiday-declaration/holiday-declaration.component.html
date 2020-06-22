@@ -1,0 +1,66 @@
+<div class="row justify-content-center">
+    <div class="col">
+        <mat-card>
+            <mat-card-title>
+                <div *ngIf="newRecord">
+                    Create New Holiday
+                </div>
+                <div *ngIf="!newRecord">
+                    Edit Holiday: {{ holiday.holiday_name }}
+                </div>
+            </mat-card-title>
+            <div class="row justify-content-center">
+                <div class="col-6">
+                    <form [formGroup]="createHolidayForm" (ngSubmit)="onSubmit()">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Holiday Name</mat-label>
+                            <input matInput formControlName="holidayName" required>
+                            <mat-error *ngIf="userInput.holidayName.invalid">
+                                Please Enter a Holiday Name
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Select Holiday Type</mat-label>
+                            <mat-select formControlName="holidayType" required>
+                              <mat-option *ngFor="let holiday of holidayTypes" [value]="holiday">
+                                  {{ holiday }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="userInput.holidayType.invalid">
+                                Please Select a Holiday Type
+                            </mat-error>
+                        </mat-form-field>
+                        <h2>Holiday Duration: 
+                            <span class="date-label">{{ startDate }} - {{ endDate }}</span>
+                            <span *ngIf="isDuplicate" class="error-message">*You selected existing holiday</span>
+                        </h2>
+                        <div class="date-picker">
+                            <ngb-datepicker #dp (dateSelect)="onDateSelection($event)" 
+                                [displayMonths]="1" 
+                                [dayTemplate]="t" 
+                                outsideDays="hidden" 
+                                [markDisabled]="isDisabled"
+                                [minDate]="minDate">
+                            </ngb-datepicker>
+                            
+                            <ng-template #t let-date let-disabled="disabled" let-focused="focused">
+                                <span class="custom-day"
+                                        [class.focused]="focused"
+                                        [class.range]="isRange(date)"
+                                        [class.faded]="isHovered(date) || isInside(date)"
+                                        [class.exist]="disabled"
+                                        (mouseenter)="hoveredDate = date"
+                                        (mouseleave)="hoveredDate = null">
+                                    {{ date.day }}
+                                </span>
+                            </ng-template>
+                        </div> 
+                        <button mat-raised-button color="primary" type="submit" [disabled]="createHolidayForm.invalid || isDuplicate">
+                            {{ getButtonType() }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+</div>

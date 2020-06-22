@@ -6,23 +6,30 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthenticationModule } from './authentication/module/authentication.module';
-import { EmployeeModule } from './employee/employee.module';
-import { AdminModule } from './admin/admin.module';
+import { EmployeeModule } from './employee/module/employee.module';
+import { AdminModule } from './admin/module/admin.module';
+import { NavigationModule } from './navigation/navigation.module';
+import { MaintenanceModule } from './maintenance/module/maintenance.module';
+import { BnNgIdleService } from 'bn-ng-idle'; 
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    AuthenticationModule,
+    AuthenticationModule.forRoot(),
     EmployeeModule,
-    AdminModule
+    AdminModule,
+    NavigationModule,
+    MaintenanceModule
   ],
-  providers: [],
+  providers: [
+    BnNgIdleService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

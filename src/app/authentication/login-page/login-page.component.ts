@@ -1,52 +1,75 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../service/authentication.service';
-// import {HeaderComponent } from '../header/header.component'
+
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss']
 })
-export class LoginPageComponent implements OnInit {
+export class LoginPageComponent {
   hide = true;
+  showErrorMessage = false;
   title = 'Employee Management System Login'
   placeholderName = 'Domain Name';
   placeholderPass = 'Domain Password';
   errorMessage = '*Incorrect Domain Name/Password';
-  login = true;
   loginForm = new FormGroup ({
     domainId: new FormControl(''),
     domainPass: new FormControl(''),
   });
+  returnUrl: '';
+
   constructor(
     private formBuilder:FormBuilder,
     private router:Router,
-    public authService:AuthenticationService
+    private route: ActivatedRoute,
+    private authService:AuthenticationService
     ) {
+    this.returnUrl = JSON.parse(localStorage.getItem('temproraryUrl')) || '/home';
     this.createForm();
+    this.authService.loggedIn.subscribe((data)=>{
+      if(data !== false){
+        this.authService.userAuthDetails.subscribe((data)=>{
+          if(data['role'] === 'Admin')
+            this.router.navigateByUrl('/home/all-employee');
+          else 
+            this.router.navigateByUrl(this.returnUrl);
+        });
+      }
+    });
+
+    this.authService.getLoginErrors().subscribe(error=>{
+      if (error !== null){
+        this.showErrorMessage = true;
+      }  
+    });
    }
 
-  ngOnInit(): void {
-  }
   createForm(){
     this.loginForm = this.formBuilder.group({
       domainId: ['',[Validators.required,Validators.pattern('[a-zA-Z ]*')]],
       domainPass: ['',[Validators.required]]
     });
   }
+  getDomainIdError(){
+    if(this.userInput.domainId.hasError('required'))
+      return 'Invalid Domain Id';
+    else return 'Invalid Domain Id';
+  }
+  getDomainPassError(){
+    if (this.userInput.domainPass.hasError('required'))
+      return 'Domain Password is required';
+  }
   get userInput(){
     return this.loginForm.controls;
   }
 
-  get isUser(){
-    return this.authService.validateUser(this.userInput.domainId.value,this.userInput.domainPass.value); 
+  /**
+   * Method for Loggin In
+   */
+  onSubmit() {
+    this.authService.getLoginDetails(this.userInput.domainId.value,this.userInput.domainPass.value);
   }
-  onSubmit(){
-    this.authService.validateUser(this.userInput.domainId.value,this.userInput.domainPass.value);
-    if (this.authService.loggedIn){
-      this.login = false;
-    }
-  }
-
 }

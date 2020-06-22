@@ -1,0 +1,54 @@
+.row{
+    margin:50px;
+}
+mat-card{
+    background-color: #CDDCDC;
+    background-image: radial-gradient(at 50% 100%, rgba(255,255,255,0.50) 0%, rgba(0,0,0,0.50) 100%), linear-gradient(to bottom, rgba(255,255,255,0.25) 0%, rgba(0,0,0,0.25) 100%);
+    background-blend-mode: screen, overlay;
+}
+mat-selection-list {
+    max-height: 250px;
+    overflow: auto;
+}
+mat-selection-list,mat-form-field,.submit-btn{
+    font-size: larger;
+}
+mat-card-title,mat-card-actions,.error-message{
+    text-align: center;
+}
+mat-card-title{
+    font-family: 'Ubuntu',sans-serif;
+}
+mat-form-field{
+    width: 100%;
+    margin-top: 10px;
+    color: black;
+}
+.submit-btn, mat-card,.error-message{
+    border-radius: 20px;
+}
+.submit-btn{
+    padding-left:20px;
+    padding-right:20px;
+}
+.submit-btn:enabled{
+    background-color: #2b5876;
+    color: white;
+    border: 1px solid  #2b5876;
+}
+.submit-btn:hover:enabled{
+    border:1px solid #4e4376;
+    color: #2b5876;
+    background-color: white;;
+}
+h2,.submit-btn,mat-selection-list,span{
+    font-family: 'Sen',sans-serif;
+}
+.error-message{
+    background-color: red;
+    color: white;
+    padding: 0px 10px;
+}
+h2{
+    margin: 0px;
+}

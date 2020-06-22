@@ -1,39 +1,72 @@
-.spacer {
-    flex: 1 1 auto;
+.navbar{
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
 }
-.nav-bar{
-    //height: 100vh;
-    .title,a{
-        font-family: 'Ubuntu', sans-serif;
-        margin-left: 40px;
-    }
-    a{
-        border-radius: 50px;
-        &:hover{
-            color: #3f51b5;
-            background-color: white;
-        }
-    }
-    .log-out{
-        &:hover{
-            color: #f44336;
-            background-color: white;
-        }
+.navbar-brand{
+    margin-left: 50px;
+    font-weight: bold;
+}
+.navbar-brand,a,button{
+    font-family: 'Ubuntu', sans-serif;
+    color: white;
+}
+.navbar-brand:hover{
+    color:white !important;
+    background-color: transparent !important;
+}
+button:focus{
+    outline: none;
+    border: 0;
+}
+a{
+    text-decoration: none !important;
+}
+a,button{
+    border-radius: 50px;
+    &:hover{
+        color: black;
+        background-color: white;
     }
 }
-// @media screen and (max-width: 700px) {
-//     .sidebar {
-//       width: 100%;
-//       height: auto;
-//       position: relative;
-//     }
-//     .sidebar a {float: left;}
-//     div.content {margin-left: 0;}
-//   }
-  
-//   @media screen and (max-width: 400px) {
-//     .sidebar a {
-//       text-align: center;
-//       float: none;
-//     }
-// }
+.log-out{
+    &:hover{
+        color: #f44336;
+        background-color: white;
+    }
+}
+::ng-deep .notif-menu.mat-menu-panel{
+    width: 35em;
+    max-width: none;
+    border-radius: 15px;
+}
+.notif-title{
+    border-radius: 20px;
+    background-color: #2c5364;
+    color: white;
+    font-weight: bold;
+    font-size: larger;
+    margin: 0px 10px;
+    padding: 0px 10px;
+    width: fit-content;
+}
+.notif-button{
+    margin: 5px;
+}
+.notif-title,h2{
+    font-family: 'Sens',sans-serif;
+}
+.notif-card{
+    box-shadow: none;
+    margin-top: 5px;
+    border-radius: 15px;
+}
+.notif-card:hover{
+    background-color: lightgrey;
+    cursor: pointer;
+}
+button.mat-menu-item{
+    color: black;
+}
+.cancel-btn:hover{
+    color: white;
+    background-color: #f44336;
+}

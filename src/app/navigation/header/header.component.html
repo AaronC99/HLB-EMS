@@ -1,70 +1,170 @@
-  <div class="nav-bar">
-    <mat-toolbar color="primary">
-      <mat-toolbar-row>
-        <!-- <button mat-icon-button (click)="sidenav.toggle()" fxShow="true" fxHide.gt-sm>
-            <mat-icon>menu</mat-icon>
-          </button> -->
-        <span class="title">{{ title }}</span>
-        <span class="spacer"></span>
-        <div fxShow="true" fxHide.lt-md="true">
-          <a routerLink="check-in-out" mat-button *ngIf="authService.loggedIn">
-            <mat-icon>input</mat-icon>
-            {{ clockIn_Out }}
-          </a> 
-          <a routerLink="timesheet" mat-button *ngIf="authService.loggedIn">
-            <mat-icon>calendar_today</mat-icon>
-            {{ timesheet }}
-          </a>
-          <a routerLink="employee-list" mat-button *ngIf="!authService.loggedIn">
-            <mat-icon>supervised_user_circle</mat-icon>
-            {{ employeeList }}
-          </a>
-          <a routerLink="my-account" mat-button *ngIf="authService.loggedIn">
-            <mat-icon>account_circle</mat-icon>
-            {{ account }}
-          </a>
-          <a routerLink="new-employee" mat-button *ngIf="!authService.loggedIn">
-            <mat-icon>add_circle</mat-icon>
-            {{ addEmployee }}
-          </a>
-          <a routerLink="" mat-raised-button color="warn" class="log-out" *ngIf="authService.loggedIn">
-            {{ logout }}
-          </a>
-        </div>
-      </mat-toolbar-row>
-    </mat-toolbar>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand">
+    {{ title }}
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <!--Notification-->
+      <li class="nav-item">
+        <button mat-icon-button matBadge="{{ notifsNum }}" class="notif-button"
+          [matBadgeHidden]="notifsNum === 0" matBadgeColor="warn" [matMenuTriggerFor]="viewNotif">
+          <mat-icon>notifications</mat-icon>
+        </button>
+        <mat-menu #viewNotif="matMenu" class="notif-menu">
+            <h3 class="notif-title">Notifications</h3>
+            <mat-card class="notif-card" *ngIf="notifsNum === 0">
+              <h2>No New Notification(s).</h2>
+            </mat-card>
+            <div *ngFor="let notif of notificationList.reverse()">
+              <mat-card class="notif-card">
+                <div class="row">
+                  <div class="col-10 align-self-center" (click)="openNotif(notif)">
+                    <h2>{{ notif.content }}</h2>
+                    <span>{{ convertTime(notif.time) }} | {{ notif.date}}-{{notif.year}}</span>
+                  </div>
+                  <div class="col-2 align-self-center">
+                    <button mat-icon-button class="cancel-btn" color="warn" (click)="removeNotif(notif);$event.stopPropagation();">
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </mat-card>
+            </div>
+        </mat-menu>
+      </li>
+    </ul>
 
-      <!-- <mat-sidenav-container fxFlexFill class="container">
-        <mat-sidenav #sidenav>
-          <mat-nav-list>
-            <a [routerLink]="['../check-in-out']" mat-list-item>
-              <mat-icon>input</mat-icon>
-              {{ clockIn_Out }}
-            </a>
-            <a href="#" mat-list-item>
-              <mat-icon>calendar_today</mat-icon>
-              {{ timesheet }}</a>
-            <a href="#" mat-list-item>
-              <mat-icon>account_circle</mat-icon>
-              {{ account }}
-            </a>
-            <a (click)="sidenav.toggle()" mat-list-item>
-              <mat-icon>close</mat-icon> Close
-            </a>
-          </mat-nav-list>
-        </mat-sidenav>
-      </mat-sidenav-container> -->
-      <!-- <div class="sidebar">
-        <a [routerLink]="['../check-in-out']" mat-list-item>
+    <ul class="navbar-nav ml-auto">
+      <!-- Manager Dashboards-->
+      <li class="nav-item" *ngIf="_authDetails.role==='Manager'">
+        <button mat-button [matMenuTriggerFor]="viewReport">
+          <mat-icon>view_list</mat-icon>
+          Dashboards
+        </button>
+        <mat-menu #viewReport="matMenu" class="dashboards">
+          <button mat-menu-item routerLink="manager/dashboard">
+            <mat-icon>dashboard</mat-icon>
+            <span>Main Report</span>
+          </button>
+          <button mat-menu-item routerLink="manager/all-report/Attendance">
+            <mat-icon>dashboard</mat-icon>
+            <span>Staff Reports</span>
+          </button>
+        </mat-menu>
+      </li>
+
+      <!--Employee Dashboard-->
+      <li class="nav-item" *ngIf="_authDetails.role==='Staff'">
+        <a routerLink="employee/dashboard" mat-button>
+          <mat-icon>dashboard</mat-icon>
+          Dashboard
+        </a>
+      </li>
+
+      <!--Clock In/Out Page-->
+      <li class="nav-item" *ngIf="_authDetails.role==='Manager' || _authDetails.role==='Staff'">
+        <a routerLink="check-in-out" mat-button>
           <mat-icon>input</mat-icon>
           {{ clockIn_Out }}
-        </a>
-        <a href="#" mat-list-item>
+        </a> 
+      </li>
+
+      <!--Timesheet Page-->
+      <li class="nav-item" *ngIf="_authDetails.role==='Manager' || _authDetails.role==='Staff'">
+        <a routerLink="timesheet" mat-button>
           <mat-icon>calendar_today</mat-icon>
-          {{ timesheet }}</a>
-        <a href="#" mat-list-item>
+          {{ timesheet }}
+        </a>
+      </li>
+        
+      <!--Manager Employee List-->
+      <li class="nav-item" *ngIf="_authDetails.role==='Manager'">
+        <a routerLink="employee-list" mat-button >
+          <mat-icon>supervised_user_circle</mat-icon>
+          {{ employeeList }}
+        </a>
+      </li>
+
+      <!--Leave Application Page-->
+      <li class="nav-item" *ngIf="_authDetails.role==='Staff'">
+        <a routerLink="leave-application" mat-button>
+          <mat-icon>work_off</mat-icon>
+          Apply Leave
+        </a>
+      </li>
+
+      <!--Account Page-->
+      <li class="nav-item" *ngIf="_authDetails.role==='Manager' || _authDetails.role==='Staff'">
+        <a routerLink="my-account/{{_authDetails.username}}" mat-button>
           <mat-icon>account_circle</mat-icon>
           {{ account }}
         </a>
-      </div> -->
+      </li>
+
+      <!--Admin View List-->
+      <li class="nav-item" *ngIf="_authDetails.role==='Admin'">
+        <button mat-button [matMenuTriggerFor]="view">
+          <mat-icon>view_list</mat-icon>
+          View
+        </button>
+
+        <mat-menu #view="matMenu">
+          <button mat-menu-item routerLink="all-employee">
+            <mat-icon>person</mat-icon>
+            <span>All Employee List</span>
+          </button>
+          <button mat-menu-item routerLink="all-departments">
+            <mat-icon>supervised_user_circle</mat-icon>
+            <span>All Department</span>
+          </button>
+          <button mat-menu-item routerLink="all-schedules">
+            <mat-icon>schedule</mat-icon>
+            <span>All Schedule</span>
+          </button>
+          <button mat-menu-item routerLink="all-holiday">
+            <mat-icon>event</mat-icon>
+            <span>All Holidays</span>
+          </button>
+        </mat-menu>
+      </li>
+
+      <!--Admin Create Page-->
+      <li class="nav-item" *ngIf="_authDetails.role==='Admin'">
+        <button mat-button [matMenuTriggerFor]="createMenu">
+          <mat-icon>add_circle</mat-icon>
+          Create
+        </button>
+
+        <mat-menu #createMenu="matMenu">
+          <button mat-menu-item routerLink="new-employee" (click)="newEmployeePage()">
+            <mat-icon>person_add</mat-icon>
+            <span>New Employee</span>
+          </button>
+          <button mat-menu-item routerLink="new-department" (click)="newDeptPage()">
+            <mat-icon>group_add</mat-icon>
+            <span>New Department</span>
+          </button>
+          <button mat-menu-item routerLink="new-schedule" (click)="newSchedulePage()">
+            <mat-icon>schedule</mat-icon>
+            <span>New Schedule</span>
+          </button>
+          <button mat-menu-item routerLink="holiday-declaration" (click)="newHolidayPage()">
+            <mat-icon>event</mat-icon>
+            <span>New Holiday</span>
+          </button>
+        </mat-menu>
+      </li>
+
+      <!--Logout Button-->
+      <li class="nav-item">
+        <a mat-raised-button color="warn" class="log-out" (click)="onLogOut()">
+          {{ logout }}
+        </a>
+      </li>
+    </ul>
   </div>
+</nav>

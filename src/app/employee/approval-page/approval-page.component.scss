@@ -1,0 +1,68 @@
+.row{
+    margin:50px;
+}
+button{
+    border-radius: 50px; 
+    padding:5px 20px;
+}
+.approve-btn:not([disabled]):hover{
+    background-color: rgb(63, 238, 20);
+    color:black;
+}
+.exit-btn:hover , 
+.reject-btn:not([disabled]):hover{
+    color:#f44336;
+    background-color: white;
+}
+mat-card{
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+mat-card-title , h1,h2{
+    font-family: 'Ubuntu', sans-serif;
+}
+mat-card-actions,.requested-message,.error-message{
+    text-align: center;
+}
+table{
+    width:100%
+}
+h2{
+    margin-top:15px;
+    margin-bottom: 0px;
+}
+.title{
+    width:150px;
+}
+.info{
+    background-color: #DBDBDB;
+    padding: 0px 10px;
+    border-radius: 50px;
+}
+.title, .info{
+    display:inline-block;
+}
+h1{
+    margin: 20px;
+}
+th, mat-card-title, h1{
+    font-weight: bold;
+}
+.error-message{
+    background-color: red;
+    color: white;
+    border-radius: 20px;
+    display: block;
+    padding: 10px 0px;
+}
+th, td{
+    font-size: 20px;
+    color: black;
+}
+.timesheet-table{
+    max-height: 700px;
+    overflow: auto;
+}
+.requested-message{
+    background-color: #A5FECB;
+}
