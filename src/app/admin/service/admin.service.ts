@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { Employee } from 'src/app/model/Employee.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
-  private REST_API_SERVER = "http://localhost:3000";
+  private REST_API_SERVER = environment.rest_api_url;
   private _userToEdit: BehaviorSubject<Employee>;
 
   constructor(

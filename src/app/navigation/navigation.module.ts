@@ -11,8 +11,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatCardModule } from '@angular/material/card';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
+import { environment } from 'src/environments/environment.prod';
 
-const config: SocketIoConfig = { url: 'http://localhost:3333', options: {} };
+const config: SocketIoConfig = { url: environment.websocket_api_url, options: {} };
 
 @NgModule({
   declarations: [

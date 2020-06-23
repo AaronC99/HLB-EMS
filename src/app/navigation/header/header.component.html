@@ -19,7 +19,7 @@
             <mat-card class="notif-card" *ngIf="notifsNum === 0">
               <h2>No New Notification(s).</h2>
             </mat-card>
-            <div *ngFor="let notif of notificationList.reverse()">
+            <div *ngFor="let notif of notificationList">
               <mat-card class="notif-card">
                 <div class="row">
                   <div class="col-10 align-self-center" (click)="openNotif(notif)">

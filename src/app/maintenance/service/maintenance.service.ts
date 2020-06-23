@@ -5,12 +5,13 @@ import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Department } from 'src/app/model/Department.model';
 import { Schedule } from 'src/app/model/Schedule.model';
+import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MaintenanceService {
-  private REST_API_SERVER = "http://localhost:3000";
+  private REST_API_SERVER = environment.rest_api_url;
   private _holidayToEdit: BehaviorSubject<Holiday>;
   private _deptToEdit: BehaviorSubject<Department>;
   private _skdToEdit: BehaviorSubject<Schedule>;

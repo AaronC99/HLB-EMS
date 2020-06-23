@@ -4,10 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "node server.js",
-    "build": "ng build",
+    "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "postinstall":"ng build --prod --configuration=production"
   },
   "private": true,
   "dependencies": {
@@ -28,6 +29,7 @@
     "angular-md5": "^0.1.10",
     "bn-ng-idle": "^1.0.1",
     "bootstrap": "^4.4.1",
+    "express": "^4.17.1",
     "highcharts": "^8.1.0",
     "jquery": "^3.4.1",
     "md5": "^2.2.1",
