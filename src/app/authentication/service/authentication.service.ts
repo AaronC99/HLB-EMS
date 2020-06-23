@@ -3,10 +3,11 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AuthModel } from 'src/app/model/Authentication.model';
 import { BnNgIdleService } from 'bn-ng-idle';
+import { environment } from 'src/environments/environment.prod';
 
 @Injectable()
 export class AuthenticationService {
-  private REST_API_SERVER = "http://localhost:3000";
+  private REST_API_SERVER = environment.rest_api_url;
   public loggedIn = new BehaviorSubject<boolean>(false);
   public role: string;
   private _authObj: AuthModel = new AuthModel();

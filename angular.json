@@ -100,7 +100,12 @@
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "enviromentSource":"enviroments/enviroment.ts",
+            "enviroments": {
+              "dev":"enviroments/enviroment.ts",
+              "prod":"enviroments/enviroment.prod.ts"
+            }
           }
         },
         "lint": {

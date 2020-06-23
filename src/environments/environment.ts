@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  rest_api_url: ''
+  rest_api_url: 'https://hlb-ems-api.herokuapp.com/',
+  websocket_api_url: 'https://hlb-ems-websocket.herokuapp.com/'
 };
 
 /*

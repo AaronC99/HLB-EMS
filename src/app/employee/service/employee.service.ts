@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NotificationService } from 'src/app/notification/notification.service';
+import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmployeeService {
-  private REST_API_SERVER = "http://localhost:3000";
+  private REST_API_SERVER = environment.rest_api_url;
 
   constructor(
     private httpClient: HttpClient,
